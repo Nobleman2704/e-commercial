@@ -2,9 +2,6 @@ package com.example.ecommercial.dao;
 
 import com.example.ecommercial.domain.enums.UserAuthority;
 import com.example.ecommercial.domain.enums.UserRole;
-import jakarta.persistence.Column;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import lombok.*;
 
 import java.time.LocalDateTime;
