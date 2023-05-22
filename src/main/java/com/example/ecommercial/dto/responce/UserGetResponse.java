@@ -1,4 +1,4 @@
-package com.example.ecommercial.dao;
+package com.example.ecommercial.dto.responce;
 
 import com.example.ecommercial.domain.enums.UserAuthority;
 import com.example.ecommercial.domain.enums.UserRole;
