@@ -35,6 +35,7 @@ public class UserEntity extends BaseEntity implements UserDetails {
     private List<UserRole> userRoles;
 
     @Enumerated(EnumType.STRING)
+
     private List<UserAuthority> userAuthorities;
 
     @Override
