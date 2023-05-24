@@ -1,4 +1,4 @@
-package com.example.ecommercial.service;
+package com.example.ecommercial.service.user;
 
 import com.example.ecommercial.dao.UserDao;
 import com.example.ecommercial.domain.entity.UserEntity;

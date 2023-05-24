@@ -2,13 +2,12 @@ package com.example.ecommercial.controller;
 
 import com.example.ecommercial.dto.request.UserCreatePostRequest;
 import com.example.ecommercial.dto.responce.BaseResponse;
-import com.example.ecommercial.service.UserService;
+import com.example.ecommercial.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
 
 @RestController
 @RequestMapping("/user")
