@@ -21,29 +21,18 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/test")
 public class TestController {
-    private final AuditingAwareImpl auditingAware;
-    private final UserDao userDao;
-    private final PasswordEncoder passwordEncoder;
 
-    @PreAuthorize("hasAnyRole('SUPER_ADMIN')")
-    @GetMapping("/home")
-    public ModelAndView test(){
-        ModelAndView modelAndView = new ModelAndView("home");
-        modelAndView.addObject("object", auditingAware.getCurrentAuditor().get());
-        return modelAndView;
-    }
-
-    @GetMapping("/add")
-    public String addUser(){
-        UserEntity userEntity = UserEntity.builder()
-                .name("Asadbek")
-                .username("nobleman")
-                .password(passwordEncoder.encode("1234"))
-                .userRoles(List.of(UserRole.SUPER_ADMIN))
-                .build();
-
-        userDao.save(userEntity);
-        return "user added";
-    }
+//    @GetMapping("/add")
+//    public String addUser(){
+//        UserEntity userEntity = UserEntity.builder()
+//                .name("Asadbek")
+//                .username("nobleman")
+//                .password(passwordEncoder.encode("1234"))
+//                .userRoles(List.of(UserRole.SUPER_ADMIN))
+//                .build();
+//
+//        userDao.save(userEntity);
+//        return "user added";
+//    }
 
 }

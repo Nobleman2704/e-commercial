@@ -2,10 +2,7 @@ package com.example.ecommercial.domain.entity;
 
 import com.example.ecommercial.domain.enums.UserAuthority;
 import com.example.ecommercial.domain.enums.UserRole;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -35,8 +32,13 @@ public class UserEntity extends BaseEntity implements UserDetails {
     private List<UserRole> userRoles;
 
     @Enumerated(EnumType.STRING)
-
     private List<UserAuthority> userAuthorities;
+
+    @OneToMany(mappedBy = "users", cascade = CascadeType.ALL)
+    private List<OrderEntity> orderEntities;
+
+    @OneToMany(mappedBy = "users", cascade = CascadeType.ALL)
+    private List<HistoryEntity> historyEntities;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

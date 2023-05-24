@@ -1,4 +1,4 @@
-package com.example.ecommercial.dto.responce;
+package com.example.ecommercial.domain.dto.response;
 
 import com.example.ecommercial.domain.enums.UserAuthority;
 import com.example.ecommercial.domain.enums.UserRole;
@@ -8,14 +8,13 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class UserGetResponse {
 
-    protected UUID id;
+    protected Long id;
 
     private String name;
 

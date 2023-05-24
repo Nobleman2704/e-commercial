@@ -7,5 +7,24 @@
 <body>
 <h1 th:text = "${object}"></h1>
 You are in home
+
+<select name="categories">
+    <th:body th:each = "categories: ${categories}">
+        <option th:value = "${categories}">erobivn</option>
+        <option>wepinvew</option>
+        <option>wepinvew</option>
+        <option>wepinvew</option>
+    </th:body>
+</select>
+
+<label for="option1">Option 1</label>
+<input type="checkbox" id="option1" name="option[]" value="option1">
+
+<label for="option2">Option 2</label>
+<input type="checkbox" id="option2" name="option[]" value="option2">
+
+<label for="option3">Option 3</label>
+<input type="checkbox" id="option3" name="option[]" value="option3">
+
 </body>
 </html>
