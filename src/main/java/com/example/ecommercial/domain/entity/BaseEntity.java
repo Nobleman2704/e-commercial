@@ -1,32 +1,32 @@
 package com.example.ecommercial.domain.entity;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.MappedSuperclass;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
+import jakarta.persistence.*;
+import lombok.*;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
+@Data
 @MappedSuperclass
+@EntityListeners(AuditingEntityListener.class)
 public abstract class BaseEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    protected UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    protected Long id;
 
-    @CreationTimestamp
+    @CreatedDate
     protected LocalDateTime createdDate;
 
-    @UpdateTimestamp
+    @LastModifiedDate
     protected LocalDateTime updatedDate;
+
+    @CreatedBy
+    protected String createdBy;
+
+    @LastModifiedBy
+    protected String lastModifiedBy;
 }
