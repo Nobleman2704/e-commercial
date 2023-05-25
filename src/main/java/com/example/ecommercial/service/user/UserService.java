@@ -80,15 +80,27 @@ public class UserService implements BaseService<
 
     @Override
     public BaseResponse<List<UserGetResponse>> getALl() {
-        List<UserEntity> userEntities = userDao.findAll().
-                stream()
-                .filter(userEntity -> !userEntity.getUserRoles().contains(UserRole.SUPER_ADMIN))
-                .toList();
+        List<UserEntity> userEntities = userDao.findAll();
         return BaseResponse.<List<UserGetResponse>>builder()
                 .status(200)
                 .message("success")
                 .data(modelMapper.map(userEntities,
                         new TypeToken<List<UserGetResponse>>(){}.getType()))
+                .build();
+    }
+
+    public BaseResponse<List<UserGetResponse>> getAllBotUsers(){
+        List<UserEntity> botUsers = userDao.findAll()
+                .stream()
+                .filter(userEntity -> userEntity.getUserRoles().contains(UserRole.USER))
+                .toList();
+        return BaseResponse.<List<UserGetResponse>>builder()
+                .status(200)
+                .message("success")
+                .data(
+                        modelMapper.map(botUsers,
+                                new TypeToken<List<UserGetResponse>>(){}.getType())
+                )
                 .build();
     }
 }

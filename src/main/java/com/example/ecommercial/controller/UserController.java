@@ -33,12 +33,7 @@ public class UserController {
             BindingResult bindingResult) {
         ModelAndView modelAndView = new ModelAndView("user-add-test");
         if (bindingResult.hasErrors()){
-            List<String> errorList = bindingResult.getAllErrors()
-                    .stream()
-                    .map(error -> error.getDefaultMessage() + "\n")
-                    .toList();
-
-            modelAndView.addObject("message", errorList);
+            modelAndView.addObject("message", extractAllErrors(bindingResult));
         }else {
             BaseResponse response = userService.save(userCreateRequest);
             modelAndView.addObject("message", response.getMessage());
@@ -52,12 +47,7 @@ public class UserController {
             BindingResult bindingResult) {
         ModelAndView modelAndView = new ModelAndView();
         if (bindingResult.hasErrors()){
-            List<String> errorList = bindingResult.getAllErrors()
-                    .stream()
-                    .map(error -> error.getDefaultMessage() + "\n")
-                    .toList();
-
-            modelAndView.addObject("message", errorList);
+            modelAndView.addObject("message", extractAllErrors(bindingResult));
         }else {
             BaseResponse response = userService.update(userUpdateRequest);
             modelAndView.addObject("message", response.getMessage());
@@ -70,16 +60,21 @@ public class UserController {
             @PathVariable("id") Long userId
     ){
         userService.delete(userId);
-        return new ModelAndView("user", "message", "deleted");
+        return new ModelAndView("viewName", "message", "deleted");
     }
 
     @GetMapping("/get_all")
     public ModelAndView getAllUsers(){
         BaseResponse<List<UserGetResponse>> response = userService.getALl();
-        ModelAndView modelAndView = new ModelAndView();
+        ModelAndView modelAndView = new ModelAndView("viewName");
         modelAndView.addObject("users", response.getData());
         return modelAndView;
     }
 
-
+    public static List<String> extractAllErrors(BindingResult bindingResult){
+        return bindingResult.getAllErrors()
+                .stream()
+                .map(error -> error.getDefaultMessage() + "\n")
+                .toList();
+    }
 }
