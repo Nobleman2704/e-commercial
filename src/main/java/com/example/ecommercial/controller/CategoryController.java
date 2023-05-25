@@ -26,13 +26,15 @@ public class CategoryController {
             @Valid @ModelAttribute("category")CategoryCreateRequest categoryCreateRequest,
             BindingResult bindingResult
             ){
-        ModelAndView modelAndView = new ModelAndView("viewName");
+        ModelAndView modelAndView = new ModelAndView("dashboard");
+        modelAndView.addObject("status", 1);
         if (bindingResult.hasErrors())
             modelAndView.addObject("message", extractAllErrors(bindingResult));
         else{
             BaseResponse response = categoryService.save(categoryCreateRequest);
             modelAndView.addObject("message", response.getMessage());
         }
+        modelAndView.addObject("categories", categoryService.getALl().getData());
         return modelAndView;
     }
 
@@ -53,7 +55,9 @@ public class CategoryController {
 
     @GetMapping("get_all")
     public ModelAndView getAllCategories(){
-        return new ModelAndView("viewName",
-                "categories", categoryService.getALl().getData());
+        ModelAndView modelAndView = new ModelAndView("dashboard");
+        modelAndView.addObject("categories", categoryService.getALl().getData());
+        modelAndView.addObject("status", 1);
+        return modelAndView;
     }
 }

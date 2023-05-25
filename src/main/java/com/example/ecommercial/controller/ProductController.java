@@ -57,8 +57,9 @@ public class ProductController {
 
     @GetMapping("/get_all")
     public ModelAndView getAllProducts(){
-        ModelAndView modelAndView = new ModelAndView("viewName");
+        ModelAndView modelAndView = new ModelAndView("dashboard");
         modelAndView.addObject("products", productService.getALl().getData());
+        modelAndView.addObject("status", 2);
         return modelAndView;
     }
 

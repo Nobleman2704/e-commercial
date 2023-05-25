@@ -29,6 +29,11 @@ public class CategoryService implements BaseService<
         ProductCategoryEntity productCategory = modelMapper
                 .map(categoryCreateRequest, ProductCategoryEntity.class);
 
+        Long categoryId = categoryCreateRequest.getParentId();
+
+        if (categoryId != null){
+            productCategory.setCategories(productCategoryDao.findById(categoryId).get());
+        }
         try {
             productCategoryDao.save(productCategory);
         } catch (Exception e) {

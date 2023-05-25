@@ -17,15 +17,15 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class ProductGetResponse {
-    private Long id;
-    private LocalDateTime createdDate;
-    private LocalDateTime updatedDate;
-    private String createdBy;
-    private String lastModifiedBy;
-    private String name;
-    private String description;
-    private double price;
-    private int amount;
-    private ProductCategoryEntity categories;
-    private List<OrderEntity> orderEntities;
+    Long id;
+    LocalDateTime createdDate;
+    LocalDateTime updatedDate;
+    String createdBy;
+    String lastModifiedBy;
+    String name;
+    String description;
+    double price;
+    int amount;
+    ProductCategoryEntity categories;
+    List<OrderEntity> orderEntities;
 }

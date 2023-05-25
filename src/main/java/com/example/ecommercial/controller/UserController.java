@@ -21,11 +21,10 @@ import java.util.List;
 public class UserController {
     private final UserService userService;
 
-    @GetMapping("/add_user_test")
+        @GetMapping("/add_user_test")
     public ModelAndView getUserAddPage(){
         return new ModelAndView("user-add-test");
     }
-
 
     @PostMapping("/add")
     public ModelAndView addUser(
@@ -66,8 +65,9 @@ public class UserController {
     @GetMapping("/get_all")
     public ModelAndView getAllUsers(){
         BaseResponse<List<UserGetResponse>> response = userService.getALl();
-        ModelAndView modelAndView = new ModelAndView("viewName");
+        ModelAndView modelAndView = new ModelAndView("dashboard");
         modelAndView.addObject("users", response.getData());
+        modelAndView.addObject("status", 4);
         return modelAndView;
     }
 
