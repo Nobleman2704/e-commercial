@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+<style>
+  .navbar{
+      width: 100%;
+      height: 40px;
+      background-color: #34495E;
+      text-align: center;
+      color: white;
+      font-family: sans-serif;
+      font-weight: 700;
+      font-size: 32px;
+      padding-top: 6px;
+  }
+  .row{
+      display: flex;
+      flex-direction: row;
+      width: 1400px;
+      height: 690px;
+      margin: 0 auto;
+  }
+  .left-page{
+      width: 20%;
+      height: 100%;
+      background-color: #5D6D7E;
+  }
+  .right-page{
+      width: 80%;
+      height: 100%;
+      background-color: #e3e3e3;
+  }
+  .left-page-h1{
+      text-align: center;
+      color: white;
+      font-weight: 700;
+      font-family: sans-serif;
+  }
+  .hr{
+      width: 90%;
+  }
+  .left-page-h3{
+      text-align: center;
+      font-weight: 400;
+      font-family: sans-serif;
+  }
+  .hr2{
+      margin-top: 300px;
+  }
+  .h3-a{
+      text-decoration: none;
+      color: white;
+  }
+  .h3-a:hover{
+      color: #283747;
+  }
+  .right-page{
+      background-image: url("https://eticket.railway.uz/assets/my-images/bg.png");
+  }
+
+  .table {
+      margin: 0 auto;
+      margin-top: 20px;
+      border-radius: 10px;
+  }
+  .t1{
+      width: 50%;
+  }
+  .t2{
+      width: 70%;
+  }
+  .t3{
+      width: 55%;
+      margin-top: 40px;
+  }
+  .t4{
+      width: 60%;
+  }
+  .h3-button{
+      text-align: center;
+      font-weight: 400;
+      font-family: sans-serif;
+      font-size: 19px;
+      border: none;
+      background: none;
+  }
+  .table-head{
+      border-radius: 10px;
+      border: none;
+      background-color: white;
+      margin: 0 auto;
+  }
+  .table-tr{
+      font-family: Segoe UI,sans-serif;
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 20px;
+      border-radius: 10px;
+  }
+  .table-th{
+      height: 40px;
+      padding-left: 10px;
+      padding-right: 10px;
+  }
+  .table-body{
+      border-radius: 10px;
+      margin: 0 auto;
+  }
+  .tbody-tr{
+      background-color: rgba(0,0,0,0.11);
+      font-family: Segoe UI,sans-serif;
+      font-weight: 400;
+      font-size: 24px;
+      line-height: 20px;
+      border-radius: 10px;
+      text-align: center
+  }
+  .tbody-td{
+      height: 40px;
+      border-radius: 5px;
+      padding-left: 25px;
+      padding-right: 25px;
+  }
+  .tbody-category-td{
+      height: 40px;
+      border-radius: 8px;
+  }
+  .tbody-category-td-a{
+      height: 30px;
+      background-color: #187cee;
+      padding-left: 30px;
+      padding-right: 30px;
+      border: none;
+      color: white;
+      border-radius: 8px;
+  }
+  .cat-add-btn{
+      height: 40px;
+      border-radius: 8px;
+      background-color: #187cee;
+      color: white;
+      font-family: Segoe UI,sans-serif;
+      font-weight: 700;
+      font-size: 22px;
+      line-height: 20px;
+      text-align: center;
+      border: none;
+      margin-bottom: 10px;
+  }
+
+  .modal {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      padding-top: 100px;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgb(0,0,0);
+      background-color: rgba(0,0,0,0.4);
+  }
+
+  .modal-content {
+      position: relative;
+      background-color: #fefefe;
+      margin: auto;
+      padding: 0;
+      border: 1px solid #888;
+      width: 30%;
+      box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+      -webkit-animation-name: animatetop;
+      -webkit-animation-duration: 0.4s;
+      animation-name: animatetop;
+      animation-duration: 0.4s
+  }
+
+  @-webkit-keyframes animatetop {
+      from {top:-300px; opacity:0}
+      to {top:0; opacity:1}
+  }
+
+  @keyframes animatetop {
+      from {top:-300px; opacity:0}
+      to {top:0; opacity:1}
+  }
+
+  .close {
+      color: white;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+  }
+
+  .close:hover,
+  .close:focus {
+      color: #000;
+      text-decoration: none;
+      cursor: pointer;
+  }
+
+  .modal-header {
+      padding: 2px 16px;
+      background-color: #3e5267;
+      color: white;
+  }
+
+  .modal-body {padding: 20px 16px;}
+
+  .modal-footer {
+      padding: 10px 16px;
+      background-color: #3e5267;
+      color: white;
+  }
+  .table1-label{
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 15px;
+  }
+  .table1-input{
+      margin-top: 8px;
+      width: 80%;
+      font-size: 20px;
+  }
+  .table1-modal-add-btn{
+      width: 100px;
+      height: 30px;
+      border: none;
+      background-color: #ffffff;
+      color: #368aa8;
+      margin-left: 76%;
+      border-radius: 5px;
+      font-size: 15px;
+  }
+
+</style>
+
+<body>
+
+<div class="navbar">
+    <i class="fa fa-user-circle" aria-hidden="true"></i> Admin
+</div>
+
+<div class="row">
+    <div class="left-page">
+        <h1 class="left-page-h1"><b>G-21</b></h1>
+        <hr class="hr">
+
+        <h3 class="left-page-h3">
+            <button class="h3-button">
+                <a href="/category/get_all" class="h3-a">Category</a>
+            </button>
+        </h3>
+        <hr class="hr">
+
+        <h3 class="left-page-h3">
+            <button class="h3-button">
+                <a href="/product/get_all" class="h3-a">Product</a>
+            </button>
+        </h3>
+        <hr class="hr">
+
+        <h3 class="left-page-h3">
+            <button class="h3-button">
+                <a href="/order/get_all" class="h3-a">Orders</a>
+            </button>
+        </h3>
+        <hr class="hr">
+
+        <hr class="hr hr2">
+        <h3 class="left-page-h3">
+            <button class="h3-button">
+                <a href="/user/get_all" class="h3-a"> <i class="fa fa-user-circle" aria-hidden="true"></i> Employees</a>
+            </button>
+        </h3>
+        <hr class="hr">
+    </div>
+
+
+
+    <div th:if="${status == 1}" class="right-page">
+<h1 th:text="${message}"></h1>
+        <button id="addCategory" class="cat-add-btn">Add category</button>
+
+        <form method="post" action="/category/add">
+            <div id="addCategoryModal" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <span style="margin: 0 auto" class="close">&times;</span>
+                        <h4 style="font-size: 20px">Add category</h4>
+                    </div>
+                    <div class="modal-body">
+                        <label class="table1-label">Name:</label> <br>
+                        <input type="text" placeholder="name" class="table1-input" name="name">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="table1-modal-add-btn"><b>add</b></button>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <script>
+            var modal = document.getElementById("addCategoryModal");
+
+            var btn = document.getElementById("addCategory");
+
+            var span = document.getElementsByClassName("close")[0];
+
+            btn.onclick = function() {
+                modal.style.display = "block";
+            }
+
+            span.onclick = function() {
+                modal.style.display = "none";
+            }
+
+            window.onclick = function(event) {
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                }
+            }
+        </script>
+
+        <table id="table1" class="table t1">
+
+            <thead class="table-head">
+            <tr class="table-tr">
+                <th class="table-th">id</th>
+                <th class="table-th">name</th>
+                <th class="table-th">add child category</th>
+                <th class="table-th">edit category</th>
+            </tr>
+            </thead>
+            <tbody th:each="category:${categories}" class="table-body">
+            <tr class="tbody-tr">
+                <td th:text="${category.id}" class="tbody-td"></td>
+                <td th:text="${category.name}" class="tbody-td"></td>
+                <td class="tbody-category-td">
+                    <button th:attr="add-data-id=${category.id}" onclick="openModal(this)" class="tbody-category-td-a">add</button>
+                </td>
+                <td class="tbody-category-td">
+                    <button th:attr="edit-data-id=${category.id}" onclick="openModal(this)" class="tbody-category-td-a">edit</button>
+                </td>
+            </tr>
+            </tbody>
+
+            <form method="post" th:action="@{/category/add}">
+                <div id="addModal" class="modal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <span style="margin: 0 auto" class="close">&times;</span>
+                            <h4 style="font-size: 20px">Add category</h4>
+                        </div>
+                        <div class="modal-body">
+                            <label class="table1-label">Name:</label> <br>
+                            <input type="text" placeholder="name" class="table1-input" name="name">
+                            <input type="hidden" id="categoryId" name="parentId">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" onclick="saveProduct()" class="table1-modal-add-btn"><b>add</b></button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            <form method="post" th:action="@{/category/edit}">
+                <div id="editModal" class="modal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <span style="margin: 0 auto" class="close">&times;</span>
+                            <h4 style="font-size: 20px">Edit category</h4>
+                        </div>
+
+                        <div class="modal-body">
+                            <label class="table1-label">Name:</label> <br>
+                            <input type="text" placeholder="name" class="table1-input" name="name">
+                            <input type="hidden" id="editCategoryId" name="parentId">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" onclick="saveProduct()" class="table1-modal-add-btn"><b>add</b></button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            <script th:inline="javascript">
+                function openModal(button) {
+                    var productId = button.getAttribute("add-data-id");
+                    var modal = document.getElementById("addModal");
+                    modal.style.display = "block";
+                    document.getElementById("categoryId").value = productId;
+                }
+                function saveProduct() {
+                }
+            </script>
+
+            <script th:inline="javascript">
+                function openModal(button) {
+                    var productId = button.getAttribute("edit-data-id");
+                    var modal = document.getElementById("editModal");
+                    modal.style.display = "block";
+                    document.getElementById("editCategoryId").value = productId;
+                }
+                function saveProduct() {
+                }
+            </script>
+
+        </table>
+
+    </div>
+
+    <div th:if="${status == 2}" class="right-page">
+
+        <button class="cat-add-btn">Add product</button>
+
+        <table id="table2" class="table t2">
+
+            <thead class="table-head">
+            <tr class="table-tr">
+                <th class="table-th">id</th>
+                <th class="table-th">name</th>
+                <th class="table-th">price</th>
+                <th class="table-th">amount</th>
+                <th class="table-th">edit</th>
+                <th class="table-th">delete</th>
+                <th class="table-th">info</th>
+            </tr>
+            </thead>
+
+            <tbody th:each="product:${products}" class="table-body">
+
+            <tr class="tbody-tr">
+                <td th:text="product.id" class="tbody-td"></td>
+                <td th:text="product.name" class="tbody-td"></td>
+                <td th:text="product.price" class="tbody-td"></td>
+                <td th:text="product.amount" class="tbody-td"></td>
+                <td class="tbody-category-td"><a href="#" class="tbody-category-td-a">edit</a></td>
+                <td class="tbody-category-td"><a href="#" class="tbody-category-td-a">delete</a></td>
+                <td class="tbody-category-td"><a href="#" class="tbody-category-td-a">info</a></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div th:if="${status == 3}" class="right-page">
+        <table id="table3" class="table t3">
+
+            <thead class="table-head">
+            <tr class="table-tr">
+                <th class="table-th">id</th>
+                <th class="table-th">username</th>
+                <th class="table-th">total price</th>
+                <th class="table-th">created date</th>
+                <th class="table-th">info</th>
+            </tr>
+            </thead>
+            <tbody class="table-body">
+
+            <tr class="tbody-tr">
+                <td class="tbody-td">1</td>
+                <td class="tbody-td">John</td>
+                <td class="tbody-td">13.000$</td>
+                <td class="tbody-td">12.05.2023</td>
+                <td class="tbody-category-td"><a href="#" class="tbody-category-td-a">info</a></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div th:if="${status == 4}" class="right-page">
+
+        <button class="cat-add-btn">Add employee</button>
+
+        <table id="table4" class="table t4">
+
+            <thead class="table-head">
+            <tr class="table-tr">
+                <th class="table-th">id</th>
+                <th class="table-th">name</th>
+                <th class="table-th">username</th>
+                <th class="table-th">role</th>
+                <th class="table-th">info</th>
+            </tr>
+            </thead>
+
+            <tbody class="table-body">
+
+            <tr th:each="user:${users}" class="tbody-tr">
+                <td th:text="${user.id}" class="tbody-td"></td>
+                <td th:text="${user.name}" class="tbody-td"></td>
+                <td th:text="${user.username}" class="tbody-td"></td>
+                <td class="tbody-td"></td>
+                <td class="tbody-category-td"><a href="#" class="tbody-category-td-a">info</a></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+</body>
+</html>
