@@ -13,20 +13,14 @@ import java.util.UUID;
 @NoArgsConstructor
 @Builder
 public class UserGetResponse {
-
-    protected Long id;
-
+    private Long id;
+    private LocalDateTime createdDate;
+    private LocalDateTime updatedDate;
+    private String createdBy;
+    private String lastModifiedBy;
     private String name;
-
     private String username;
-
     private String password;
-
     private List<UserRole> userRoles;
-
     private List<UserAuthority> userAuthorities;
-
-    protected LocalDateTime createdDate;
-
-    protected LocalDateTime updatedDate;
 }
