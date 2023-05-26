@@ -2,6 +2,7 @@ package com.example.ecommercial.domain.entity;
 
 import com.example.ecommercial.domain.enums.UserAuthority;
 import com.example.ecommercial.domain.enums.UserRole;
+import com.example.ecommercial.domain.enums.UserState;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,6 +28,9 @@ public class UserEntity extends BaseEntity implements UserDetails {
     private String username;
 
     private String password;
+
+    @Enumerated(EnumType.STRING)
+    private UserState userState;
 
     @Enumerated(EnumType.STRING)
     private List<UserRole> userRoles;

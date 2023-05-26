@@ -28,23 +28,23 @@ public class TestController {
     private final PasswordEncoder passwordEncoder;
     private final UserDao userDao;
 
-    @GetMapping("/add")
-    public String addUser(){
-        UserEntity userEntity = UserEntity.builder()
-                .name("Asadbek")
-                .username("nobleman")
-                .password(passwordEncoder.encode("1234"))
-                .userRoles(List.of(UserRole.SUPER_ADMIN))
-                .build();
+//    @GetMapping("/add")
+//    public String addUser(){
+//        UserEntity userEntity = UserEntity.builder()
+//                .name("Asadbek")
+//                .username("nobleman")
+//                .password(passwordEncoder.encode("1234"))
+//                .userRoles(List.of(UserRole.SUPER_ADMIN))
+//                .build();
+//
+//        userDao.save(userEntity);
+//        return "user added";
+//    }
 
-        userDao.save(userEntity);
-        return "user added";
-    }
 
-
-    @GetMapping("/dashboard-page")
-    public ModelAndView getPage(){
-        return new ModelAndView("dashboard");
-    }
+//    @GetMapping("/dashboard-page")
+//    public ModelAndView getPage(){
+//        return new ModelAndView("dashboard");
+//    }
 
 }

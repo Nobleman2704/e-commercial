@@ -3,28 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <title>Home</title>
+    <style>
+        /* CSS styles for the dropdown */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+
+        .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+    </style>
 </head>
 <body>
-<h1 th:text = "${object}"></h1>
-You are in home
+<h2>Dropdown Menu Example</h2>
 
-<select name="categories">
-    <th:body th:each = "categories: ${categories}">
-        <option th:value = "${categories}">erobivn</option>
-        <option>wepinvew</option>
-        <option>wepinvew</option>
-        <option>wepinvew</option>
-    </th:body>
-</select>
-
-<label for="option1">Option 1</label>
-<input type="checkbox" id="option1" name="option[]" value="option1">
-
-<label for="option2">Option 2</label>
-<input type="checkbox" id="option2" name="option[]" value="option2">
-
-<label for="option3">Option 3</label>
-<input type="checkbox" id="option3" name="option[]" value="option3">
+<!-- Dropdown container -->
+<div class="dropdown">
+    <button class="dropbtn">Menu</button>
+    <!-- Dropdown content -->
+    <div class="dropdown-content">
+        <a href="#">Option 1</a>
+        <a href="#">Option 2</a>
+        <a href="#">Option 3</a>
+    </div>
+</div>
 
 </body>
 </html>

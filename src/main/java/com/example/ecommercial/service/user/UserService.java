@@ -6,14 +6,17 @@ import com.example.ecommercial.domain.dto.response.UserGetResponse;
 import com.example.ecommercial.domain.entity.UserEntity;
 import com.example.ecommercial.domain.dto.request.UserCreateAndUpdateRequest;
 import com.example.ecommercial.domain.enums.UserRole;
+import com.example.ecommercial.domain.enums.UserState;
 import com.example.ecommercial.service.BaseService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.telegram.telegrambots.meta.api.objects.User;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -103,5 +106,28 @@ public class UserService implements BaseService<
                                 new TypeToken<List<UserGetResponse>>(){}.getType())
                 )
                 .build();
+    }
+
+    public BaseResponse<UserState> getUserState(Long chatId) {
+        Optional<UserEntity> optionalUser = userDao.findById(chatId);
+        if (optionalUser.isPresent()){
+            return BaseResponse.<UserState>builder()
+                    .data(optionalUser.get().getUserState())
+                    .status(200)
+                    .build();
+        }
+        return BaseResponse.<UserState>builder()
+                .status(404)
+                .build();
+    }
+
+    public void saveBotUser(Long chatId, User user) {
+        UserEntity userEntity = UserEntity.builder()
+                .name(user.getUserName())
+                .username(user.getUserName())
+                .userState(UserState.REGISTERED)
+                .build();
+        userEntity.setId(chatId);
+        userDao.save(userEntity);
     }
 }
