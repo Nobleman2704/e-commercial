@@ -13,7 +13,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserUpdateRequest {
+public class UserCreateAndUpdateRequest {
 
     private Long id;
 

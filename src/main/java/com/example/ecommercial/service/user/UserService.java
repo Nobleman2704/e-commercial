@@ -1,7 +1,6 @@
 package com.example.ecommercial.service.user;
 
 import com.example.ecommercial.dao.UserDao;
-import com.example.ecommercial.domain.dto.request.UserUpdateRequest;
 import com.example.ecommercial.domain.dto.response.BaseResponse;
 import com.example.ecommercial.domain.dto.response.UserGetResponse;
 import com.example.ecommercial.domain.entity.UserEntity;
@@ -45,7 +44,7 @@ public class UserService implements BaseService<
     }
 
     @Override
-    public BaseResponse update(UserUpdateRequest userUpdateRequest) {
+    public BaseResponse update(UserCreateAndUpdateRequest userUpdateRequest) {
         Long userId = userUpdateRequest.getId();
         UserEntity userEntity = userDao.findById(userId).get();
         modelMapper.map(userUpdateRequest, userEntity);

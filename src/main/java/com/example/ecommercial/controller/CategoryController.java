@@ -40,7 +40,7 @@ public class CategoryController {
 
     @PostMapping("/update")
     public ModelAndView updateCategory(
-            @Valid @ModelAttribute("category")CategoryUpdateRequest categoryUpdateRequest,
+            @Valid @ModelAttribute("category") CategoryCreateAndUpdateRequest categoryUpdateRequest,
             BindingResult bindingResult
             ){
         ModelAndView modelAndView = new ModelAndView("dashboard");
