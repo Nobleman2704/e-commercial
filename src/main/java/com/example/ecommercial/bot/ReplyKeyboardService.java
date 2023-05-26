@@ -1,6 +1,7 @@
 package com.example.ecommercial.bot;
 
 import com.example.ecommercial.domain.dto.response.ProductCategoryGetResponse;
+import com.example.ecommercial.domain.dto.response.ProductGetResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -58,7 +59,7 @@ public class ReplyKeyboardService {
         return replyKeyboardMarkup;
     }
 
-    public InlineKeyboardMarkup parseIntoInlineKeyboardMarkup(
+    public ReplyKeyboard parseCategoriesIntoInlineKeyboardMarkup(
             List<ProductCategoryGetResponse> categories) {
         List<List<InlineKeyboardButton>> buttons = new LinkedList<>();
         for (ProductCategoryGetResponse category : categories) {
@@ -73,6 +74,24 @@ public class ReplyKeyboardService {
             ProductCategoryGetResponse category) {
         InlineKeyboardButton button = new InlineKeyboardButton(category.getName());
         button.setCallbackData(category.getId().toString());
+        return List.of(button);
+    }
+
+    public ReplyKeyboard parseProductsIntoInlineKeyboardMarkup(
+            List<ProductGetResponse> products) {
+        List<List<InlineKeyboardButton>> buttons = new LinkedList<>();
+
+        for (ProductGetResponse product : products) {
+            buttons.add(createProductButton(product));
+        }
+        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
+        inlineKeyboardMarkup.setKeyboard(buttons);
+        return inlineKeyboardMarkup;
+    }
+
+    private List<InlineKeyboardButton> createProductButton(ProductGetResponse product) {
+        InlineKeyboardButton button = new InlineKeyboardButton(product.getName());
+        button.setCallbackData(product.getId().toString());
         return List.of(button);
     }
 }

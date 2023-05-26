@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Queue;
 
 @Data
 @AllArgsConstructor
@@ -21,12 +22,12 @@ public class ProductCategoryEntity extends BaseEntity{
     @JoinColumn(name = "parent_id")
     private ProductCategoryEntity categories;
 
-    @OneToMany(mappedBy = "categories")
+    @OneToMany(mappedBy = "categories", fetch = FetchType.EAGER)
     private List<ProductCategoryEntity> productCategories;
 
-    @OneToMany(mappedBy = "categories")
+    @OneToMany(mappedBy = "categories", fetch = FetchType.EAGER)
     private List<ProductEntity> productEntities;
 
-    @OneToMany(mappedBy = "categories")
+    @OneToMany(mappedBy = "categories", fetch = FetchType.LAZY)
     private List<HistoryEntity> historyEntities;
 }

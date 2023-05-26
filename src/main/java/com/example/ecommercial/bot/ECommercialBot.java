@@ -17,6 +17,8 @@ import java.util.concurrent.Executors;
 @Component
 @RequiredArgsConstructor
 public class ECommercialBot extends TelegramLongPollingBot {
+
+
     private final ExecutorService executorService = Executors.newCachedThreadPool();
     private final BotService botService;
 
@@ -50,8 +52,6 @@ public class ECommercialBot extends TelegramLongPollingBot {
                 String text = message.getText();
                 Long chatId = message.getChatId();
 
-//                SendMessage sendMessage = new SendMessage(chatId.toString(), text);
-
                 UserState userState = botService.checkState(chatId);
 
 
@@ -64,7 +64,7 @@ public class ECommercialBot extends TelegramLongPollingBot {
                         else
                             sendMessage = botService.shareContact(chatId);
                     }
-                    case REGISTERED -> {
+                    case REGISTERED, IDLE -> {
                         userState = botService.navigateMenu(text, chatId);
                         switch (userState){
                             case CATEGORIES -> sendMessage = botService.getCategories(chatId);
@@ -72,11 +72,13 @@ public class ECommercialBot extends TelegramLongPollingBot {
                             case ORDERS_HISTORY -> sendMessage = botService.getHistories(chatId);
                         }
                     }
+
+                    case CATEGORIES -> sendMessage = botService.getMenu(chatId);
                 }
                 try {
                     execute(sendMessage);
                 } catch (TelegramApiException e) {
-                    throw new RuntimeException(e);
+                    System.out.println(e.getMessage());
                 }
             }
         });

@@ -16,17 +16,17 @@ import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 public class StartBotController {
     private final ECommercialBot eCommercialBot;
 
-    @GetMapping
-    public String startBot(){
-        try {
-            TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
-            botsApi.registerBot(eCommercialBot);
-            System.out.println("started");
-        } catch (TelegramApiException e) {
-            throw new RuntimeException(e);
-        }
-        return "home";
-    }
+//    @GetMapping
+//    public String startBot(){
+//        try {
+//            TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
+//            botsApi.registerBot(eCommercialBot);
+//            System.out.println("started");
+//        } catch (TelegramApiException e) {
+//            throw new RuntimeException(e);
+//        }
+//        return "home";
+//    }
 
 
 }

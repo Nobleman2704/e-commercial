@@ -2,8 +2,10 @@ package com.example.ecommercial.bot;
 
 import com.example.ecommercial.domain.dto.response.BaseResponse;
 import com.example.ecommercial.domain.dto.response.ProductCategoryGetResponse;
+import com.example.ecommercial.domain.dto.response.ProductGetResponse;
 import com.example.ecommercial.domain.enums.UserState;
 import com.example.ecommercial.service.category.CategoryService;
+import com.example.ecommercial.service.product.ProductService;
 import com.example.ecommercial.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,6 +23,7 @@ public class BotService {
     private final ReplyKeyboardService keyboardService;
     private final CategoryService categoryService;
     private final ReplyKeyboardService replyKeyboardService;
+    private final ProductService productService;
 
     public UserState checkState(Long chatId) {
         BaseResponse<UserState> response = userService.getUserState(chatId);
@@ -38,7 +41,6 @@ public class BotService {
 
     public SendMessage registerUser(Long chatId, User user) {
         userService.saveBotUser(chatId, user);
-
         SendMessage sendMessage = new SendMessage(
                 chatId.toString(), user.getFirstName() + " has been saved");
         sendMessage.setReplyMarkup(keyboardService.mainMenu());
@@ -46,7 +48,7 @@ public class BotService {
     }
 
 
-    public UserState navigateMenu(String request, Long userId) {
+    public UserState navigateMenu(String request, Long chatId) {
         UserState userState;
         switch (request) {
             case "📋 Categories" -> userState = UserState.CATEGORIES;
@@ -56,7 +58,7 @@ public class BotService {
 //            case "💸 Add balance" -> userState = UserState.ADD_BALANCE;
             default -> userState = UserState.IDLE;
         }
-        userService.updateState(userId, userState);
+        userService.updateState(chatId, userState);
         return userState;
     }
 
@@ -70,7 +72,8 @@ public class BotService {
             sendMessage.setText("There is no categories");
         }else {
             sendMessage.setReplyMarkup(replyKeyboardService
-                    .parseIntoInlineKeyboardMarkup(categories));
+                    .parseCategoriesIntoInlineKeyboardMarkup(categories));
+            sendMessage.setText("categories");
         }
         return sendMessage;
     }
@@ -83,7 +86,26 @@ public class BotService {
         return null;
     }
 
-    public SendMessage getProductsByCategoryId(Long data, Long chatId) {
-        return null;
+    public SendMessage getProductsByCategoryId(Long categoryId, Long chatId) {
+        SendMessage sendMessage = new SendMessage();
+        sendMessage.setChatId(chatId);
+        BaseResponse<List<ProductGetResponse>> response =
+                productService.getProductsByCategoryId(categoryId);
+        List<ProductGetResponse> products = response.getData();
+        if (products.isEmpty()){
+            sendMessage.setText("There is no products by this category");
+        }else {
+            sendMessage.setReplyMarkup(replyKeyboardService
+                    .parseProductsIntoInlineKeyboardMarkup(products));
+        }
+        return sendMessage;
+    }
+
+    public SendMessage getMenu(Long chatId) {
+        SendMessage sendMessage = new SendMessage(
+                chatId.toString(), "Menu");
+        sendMessage.setReplyMarkup(keyboardService.mainMenu());
+        userService.updateState(chatId, UserState.REGISTERED);
+        return sendMessage;
     }
 }

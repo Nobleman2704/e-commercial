@@ -29,5 +29,4 @@ public class ProductCategoryGetResponse {
     private ProductCategoryEntity categories;
     private List<ProductCategoryEntity> productCategories;
     private List<ProductEntity> productEntities;
-    private List<HistoryEntity> historyEntities;
 }
