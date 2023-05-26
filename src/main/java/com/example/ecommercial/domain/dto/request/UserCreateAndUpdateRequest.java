@@ -4,14 +4,19 @@ import com.example.ecommercial.domain.enums.UserAuthority;
 import com.example.ecommercial.domain.enums.UserRole;
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.Pattern;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
-public class UserCreateRequest {
+public class UserCreateAndUpdateRequest {
+
+    private Long id;
+
     @Pattern(regexp = "^[a-zA-Z]{4,15}$",
             message = "name length should be at least 4 max 20 characters " +
                     "and it should only contains letters")

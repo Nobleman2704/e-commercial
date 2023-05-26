@@ -1,11 +1,11 @@
 package com.example.ecommercial.controller;
 
-import com.example.ecommercial.domain.dto.request.UserCreateRequest;
-import com.example.ecommercial.domain.dto.request.UserUpdateRequest;
+import com.example.ecommercial.domain.dto.request.UserCreateAndUpdateRequest;
 import com.example.ecommercial.domain.dto.response.BaseResponse;
 import com.example.ecommercial.domain.dto.response.UserGetResponse;
 import com.example.ecommercial.service.user.UserService;
 import jakarta.validation.Valid;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.validation.BindingResult;
@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/user")
@@ -28,38 +29,66 @@ public class UserController {
 
     @PostMapping("/add")
     public ModelAndView addUser(
-            @Valid @ModelAttribute ("user") UserCreateRequest userCreateRequest,
+            @Valid @ModelAttribute ("user") UserCreateAndUpdateRequest userCreateAndUpdateRequest,
             BindingResult bindingResult) {
-        ModelAndView modelAndView = new ModelAndView("user-add-test");
+        ModelAndView modelAndView = new ModelAndView("dashboard");
+        modelAndView.addObject("status", 4);
         if (bindingResult.hasErrors()){
             modelAndView.addObject("message", extractAllErrors(bindingResult));
         }else {
-            BaseResponse response = userService.save(userCreateRequest);
+            BaseResponse response = userService.save(userCreateAndUpdateRequest);
             modelAndView.addObject("message", response.getMessage());
         }
+        modelAndView.addObject("users", userService.getALl().getData());
         return modelAndView;
     }
 
-    @PutMapping("/update")
+    @PostMapping("/update")
     public ModelAndView updateUser(
-            @Valid @ModelAttribute ("user") UserUpdateRequest userUpdateRequest,
+            @Valid @ModelAttribute ("user") UserCreateAndUpdateRequest userUpdateRequest,
             BindingResult bindingResult) {
         ModelAndView modelAndView = new ModelAndView();
+        String viewName;
         if (bindingResult.hasErrors()){
             modelAndView.addObject("message", extractAllErrors(bindingResult));
+            viewName = "userUpdatePage";
         }else {
             BaseResponse response = userService.update(userUpdateRequest);
             modelAndView.addObject("message", response.getMessage());
+            modelAndView.addObject("status", 4);
+            modelAndView.addObject("users", userService.getALl().getData());
+            viewName = "dashboard";
         }
+        modelAndView.setViewName(viewName);
         return modelAndView;
     }
 
-    @DeleteMapping("/delete/{id}")
+    @GetMapping("/update-page/{id}")
+    public ModelAndView inUpdatePage(@PathVariable("id") Long id){
+            ModelAndView modelAndView = new ModelAndView("userUpdatePage");
+        UserGetResponse data = userService.getById(id).getData();
+        modelAndView.addObject("user", data);
+            return modelAndView;
+    }
+
+    @GetMapping("/employees-page")
+    public ModelAndView employeesPage(){
+        ModelAndView modelAndView = new ModelAndView("dashboard");
+        modelAndView.addObject("users", userService.getALl().getData());
+        modelAndView.addObject("status", 4);
+        return modelAndView;
+    }
+
+    @GetMapping("/delete/{id}")
     public ModelAndView delete(
             @PathVariable("id") Long userId
     ){
         userService.delete(userId);
-        return new ModelAndView("viewName", "message", "deleted");
+
+        ModelAndView modelAndView = new ModelAndView("dashboard", "message", "deleted");
+        modelAndView.addObject("status", 4);
+        modelAndView.addObject("users", userService.getALl().getData());
+        return modelAndView;
     }
 
     @GetMapping("/get_all")
@@ -74,7 +103,7 @@ public class UserController {
     public static List<String> extractAllErrors(BindingResult bindingResult){
         return bindingResult.getAllErrors()
                 .stream()
-                .map(error -> error.getDefaultMessage() + "\n")
+                .map(error -> error.getDefaultMessage() + "\n\n")
                 .toList();
     }
 }
