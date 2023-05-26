@@ -1,5 +1,6 @@
 package com.example.ecommercial.config;
 
+import com.example.ecommercial.bot.ECommercialBot;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.context.annotation.Bean;
@@ -11,11 +12,15 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.telegram.telegrambots.meta.TelegramBotsApi;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 
 @Configuration
 @RequiredArgsConstructor
 @EnableWebSecurity
 public class SecurityConfiguration {
+    private final ECommercialBot eCommercialBot;
     private final PasswordEncoder passwordEncoder;
     private final UserDetailsService userDetailsService;
     private final String[] WHITE_LIST = {
@@ -37,6 +42,13 @@ public class SecurityConfiguration {
     }
     @Bean
     public AuthenticationManager authManager(HttpSecurity http) throws Exception {
+        try {
+            TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
+            botsApi.registerBot(eCommercialBot);
+            System.out.println("started");
+        } catch (TelegramApiException e) {
+            throw new RuntimeException(e);
+        }
         AuthenticationManagerBuilder authenticationManagerBuilder =
                 http.getSharedObject(AuthenticationManagerBuilder.class);
         authenticationManagerBuilder.userDetailsService(userDetailsService)

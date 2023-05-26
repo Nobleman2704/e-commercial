@@ -14,7 +14,9 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.stereotype.Service;
 
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 @Service
 @RequiredArgsConstructor
@@ -77,4 +79,28 @@ public class ProductService implements BaseService<
                 .build();
     }
 
+    public BaseResponse<List<ProductGetResponse>> getProductsByCategoryId(Long categoryId) {
+        ProductCategoryEntity category = categoryDao.findById(categoryId).get();
+        List<ProductEntity> products = getCategoryProducts(category, new LinkedList<>());
+        return BaseResponse.<List<ProductGetResponse>>builder()
+                .data(modelMapper.map(products, new TypeToken<List<ProductGetResponse>>(){}.getType()))
+                .build();
+    }
+
+    private List<ProductEntity> getCategoryProducts(
+            ProductCategoryEntity category,
+            LinkedList<ProductEntity> products) {
+        List<ProductEntity> productEntities = category.getProductEntities();
+        List<ProductCategoryEntity> categories = category.getProductCategories();
+        if (productEntities !=null){
+            products.addAll(productEntities);
+        }
+        if (categories==null){
+            return products;
+        }
+        for (ProductCategoryEntity categoryEntity : categories) {
+            products.addAll(getCategoryProducts(categoryEntity, products));
+        }
+        return products;
+    }
 }
