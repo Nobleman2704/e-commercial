@@ -109,7 +109,7 @@ public class UserService implements BaseService<
     }
 
     public BaseResponse<UserState> getUserState(Long chatId) {
-        Optional<UserEntity> optionalUser = userDao.findById(chatId);
+        Optional<UserEntity> optionalUser = userDao.findUserEntitiesByChatId(chatId);
         if (optionalUser.isPresent()){
             return BaseResponse.<UserState>builder()
                     .data(optionalUser.get().getUserState())
@@ -126,8 +126,12 @@ public class UserService implements BaseService<
                 .name(user.getUserName())
                 .username(user.getUserName())
                 .userState(UserState.REGISTERED)
+                .chatId(chatId)
                 .build();
-        userEntity.setId(chatId);
         userDao.save(userEntity);
+    }
+
+    public void updateState(Long userId, UserState userState) {
+        userDao.updateUserStateByChatId(userId, userState);
     }
 }
