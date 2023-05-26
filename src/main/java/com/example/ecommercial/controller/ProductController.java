@@ -1,20 +1,15 @@
 package com.example.ecommercial.controller;
 
-import com.example.ecommercial.domain.dto.request.ProductUpdateRequest;
-import com.example.ecommercial.domain.entity.ProductEntity;
+import com.example.ecommercial.domain.dto.request.ProductCreateAndUpdateRequest;
 import com.example.ecommercial.domain.dto.response.BaseResponse;
-import com.example.ecommercial.domain.dto.request.ProductCreateRequest;
 import com.example.ecommercial.service.product.ProductService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-
-import java.util.List;
 
 import static com.example.ecommercial.controller.UserController.extractAllErrors;
 
@@ -28,7 +23,7 @@ public class ProductController {
 
     @PostMapping("/add")
     public ModelAndView addProduct(
-            @Valid @ModelAttribute ProductCreateRequest productCreateRequest,
+            @Valid @ModelAttribute ProductCreateAndUpdateRequest productCreateRequest,
             BindingResult bindingResult){
         ModelAndView modelAndView = new ModelAndView();
         if (bindingResult.hasErrors()){
@@ -42,7 +37,7 @@ public class ProductController {
 
     @PutMapping("/update")
     public ModelAndView updateProduct(
-            @Valid @ModelAttribute("product")ProductUpdateRequest productUpdateRequest,
+            @Valid @ModelAttribute("product")ProductCreateAndUpdateRequest productUpdateRequest,
             BindingResult bindingResult
             ){
         ModelAndView modelAndView = new ModelAndView();

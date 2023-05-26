@@ -1,8 +1,7 @@
 package com.example.ecommercial.service.product;
 
 import com.example.ecommercial.dao.ProductDao;
-import com.example.ecommercial.domain.dto.request.ProductCreateRequest;
-import com.example.ecommercial.domain.dto.request.ProductUpdateRequest;
+import com.example.ecommercial.domain.dto.request.ProductCreateAndUpdateRequest;
 import com.example.ecommercial.domain.dto.response.BaseResponse;
 import com.example.ecommercial.domain.dto.response.ProductGetResponse;
 import com.example.ecommercial.domain.entity.ProductEntity;
@@ -17,14 +16,13 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class ProductService implements BaseService<
-        ProductCreateRequest,
-        BaseResponse,
-        ProductUpdateRequest> {
+        ProductCreateAndUpdateRequest,
+        BaseResponse> {
     private final ProductDao productDao;
     private final ModelMapper modelMapper;
 
     @Override
-    public BaseResponse save(ProductCreateRequest productCreateRequest) {
+    public BaseResponse save(ProductCreateAndUpdateRequest productCreateRequest) {
         ProductEntity product = modelMapper.map(productCreateRequest, ProductEntity.class);
         try {
             productDao.save(product);
@@ -40,7 +38,7 @@ public class ProductService implements BaseService<
     }
 
     @Override
-    public BaseResponse update(ProductUpdateRequest update) {
+    public BaseResponse update(ProductCreateAndUpdateRequest update) {
         return null;
     }
 

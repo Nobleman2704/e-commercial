@@ -1,7 +1,7 @@
 package com.example.ecommercial.controller;
 
-import com.example.ecommercial.domain.dto.request.CategoryCreateRequest;
-import com.example.ecommercial.domain.dto.request.CategoryUpdateRequest;
+import com.example.ecommercial.domain.dto.request.CategoryCreateAndUpdateRequest;
+import com.example.ecommercial.domain.dto.request.UserCreateAndUpdateRequest;
 import com.example.ecommercial.domain.dto.response.BaseResponse;
 import com.example.ecommercial.service.category.CategoryService;
 import jakarta.validation.Valid;
@@ -23,7 +23,7 @@ public class CategoryController {
 
     @PostMapping("/add")
     public ModelAndView addCategory(
-            @Valid @ModelAttribute("category")CategoryCreateRequest categoryCreateRequest,
+            @Valid @ModelAttribute("category") CategoryCreateAndUpdateRequest createAndUpdateRequest,
             BindingResult bindingResult
             ){
         ModelAndView modelAndView = new ModelAndView("dashboard");
@@ -31,25 +31,27 @@ public class CategoryController {
         if (bindingResult.hasErrors())
             modelAndView.addObject("message", extractAllErrors(bindingResult));
         else{
-            BaseResponse response = categoryService.save(categoryCreateRequest);
+            BaseResponse response = categoryService.save(createAndUpdateRequest);
             modelAndView.addObject("message", response.getMessage());
         }
         modelAndView.addObject("categories", categoryService.getALl().getData());
         return modelAndView;
     }
 
-    @PutMapping("/update")
+    @PostMapping("/update")
     public ModelAndView updateCategory(
             @Valid @ModelAttribute("category")CategoryUpdateRequest categoryUpdateRequest,
             BindingResult bindingResult
             ){
-        ModelAndView modelAndView = new ModelAndView("viewName");
+        ModelAndView modelAndView = new ModelAndView("dashboard");
+        modelAndView.addObject("status", 1);
         if (bindingResult.hasErrors())
             modelAndView.addObject("message", extractAllErrors(bindingResult));
         else {
             BaseResponse response = categoryService.update(categoryUpdateRequest);
             modelAndView.addObject("message", response.getMessage());
         }
+        modelAndView.addObject("categories", categoryService.getALl().getData());
         return modelAndView;
     }
 

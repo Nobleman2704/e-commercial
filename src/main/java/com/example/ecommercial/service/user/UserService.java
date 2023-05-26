@@ -5,7 +5,7 @@ import com.example.ecommercial.domain.dto.request.UserUpdateRequest;
 import com.example.ecommercial.domain.dto.response.BaseResponse;
 import com.example.ecommercial.domain.dto.response.UserGetResponse;
 import com.example.ecommercial.domain.entity.UserEntity;
-import com.example.ecommercial.domain.dto.request.UserCreateRequest;
+import com.example.ecommercial.domain.dto.request.UserCreateAndUpdateRequest;
 import com.example.ecommercial.domain.enums.UserRole;
 import com.example.ecommercial.service.BaseService;
 import lombok.RequiredArgsConstructor;
@@ -19,29 +19,28 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class UserService implements BaseService<
-        UserCreateRequest,
-        BaseResponse,
-        UserUpdateRequest> {
+        UserCreateAndUpdateRequest,
+        BaseResponse> {
 
     private final UserDao userDao;
     private final ModelMapper modelMapper;
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public BaseResponse save(UserCreateRequest userCreateRequest){
-        UserEntity userEntity = modelMapper.map(userCreateRequest,UserEntity.class);
+    public BaseResponse save(UserCreateAndUpdateRequest CategoryCreateAndUpdateRequest){
+        UserEntity userEntity = modelMapper.map(CategoryCreateAndUpdateRequest,UserEntity.class);
         userEntity.setPassword(passwordEncoder.encode(userEntity.getPassword()));
         try {
             userDao.save(userEntity);
         }catch (Exception e){
             return BaseResponse.builder()
-                    .message(userCreateRequest.getUsername()+" already exists")
+                    .message(CategoryCreateAndUpdateRequest.getUsername()+" already exists")
                     .status(401)
                     .build();
         }
         return BaseResponse.builder()
                 .status(200)
-                .message(userCreateRequest.getUsername()+" successfully added")
+                .message(CategoryCreateAndUpdateRequest.getUsername()+" successfully added")
                 .build();
     }
 
@@ -50,6 +49,7 @@ public class UserService implements BaseService<
         Long userId = userUpdateRequest.getId();
         UserEntity userEntity = userDao.findById(userId).get();
         modelMapper.map(userUpdateRequest, userEntity);
+        userEntity.setPassword(passwordEncoder.encode(userUpdateRequest.getPassword()));
         try {
             userDao.save(userEntity);
         } catch (Exception e) {
@@ -74,8 +74,10 @@ public class UserService implements BaseService<
     }
 
     @Override
-    public BaseResponse getById(Long id) {
-        return null;
+    public BaseResponse<UserGetResponse> getById(Long id) {
+        UserEntity userEntity = userDao.findById(id).get();
+        UserGetResponse userGetResponse = modelMapper.map(userEntity, UserGetResponse.class);
+        return new BaseResponse<>(200, "Success", userGetResponse);
     }
 
     @Override

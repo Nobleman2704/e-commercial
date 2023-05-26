@@ -1,11 +1,10 @@
 package com.example.ecommercial.service.category;
 
 import com.example.ecommercial.dao.ProductCategoryDao;
-import com.example.ecommercial.domain.dto.request.CategoryCreateRequest;
-import com.example.ecommercial.domain.dto.request.CategoryUpdateRequest;
+import com.example.ecommercial.domain.dto.request.CategoryCreateAndUpdateRequest;
+import com.example.ecommercial.domain.dto.request.UserCreateAndUpdateRequest;
 import com.example.ecommercial.domain.dto.response.BaseResponse;
 import com.example.ecommercial.domain.dto.response.ProductCategoryGetResponse;
-import com.example.ecommercial.domain.dto.response.ProductGetResponse;
 import com.example.ecommercial.domain.entity.ProductCategoryEntity;
 import com.example.ecommercial.service.BaseService;
 import lombok.RequiredArgsConstructor;
@@ -18,18 +17,17 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class CategoryService implements BaseService<
-        CategoryCreateRequest,
-        BaseResponse,
-        CategoryUpdateRequest> {
+        CategoryCreateAndUpdateRequest,
+        BaseResponse> {
     private final ProductCategoryDao productCategoryDao;
     private final ModelMapper modelMapper;
 
     @Override
-    public BaseResponse save(CategoryCreateRequest categoryCreateRequest) {
+    public BaseResponse save(CategoryCreateAndUpdateRequest createAndUpdateRequest) {
         ProductCategoryEntity productCategory = modelMapper
-                .map(categoryCreateRequest, ProductCategoryEntity.class);
+                .map(createAndUpdateRequest, ProductCategoryEntity.class);
 
-        Long categoryId = categoryCreateRequest.getParentId();
+        Long categoryId = createAndUpdateRequest.getParentId();
 
         if (categoryId != null){
             productCategory.setCategories(productCategoryDao.findById(categoryId).get());
@@ -49,7 +47,7 @@ public class CategoryService implements BaseService<
     }
 
     @Override
-    public BaseResponse update(CategoryUpdateRequest categoryUpdateRequest) {
+    public BaseResponse update(CategoryCreateAndUpdateRequest categoryUpdateRequest) {
         Long id = categoryUpdateRequest.getId();
         ProductCategoryEntity productCategory = productCategoryDao
                 .findById(id).get();
