@@ -12,6 +12,9 @@ public class AuditingAwareImpl implements AuditorAware<String> {
     @Override
     public Optional<String> getCurrentAuditor() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication==null){
+            return Optional.of("bot");
+        }
         return Optional.of(authentication.getName());
     }
 }

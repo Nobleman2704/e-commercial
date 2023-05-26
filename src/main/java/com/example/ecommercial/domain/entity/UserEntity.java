@@ -32,6 +32,8 @@ public class UserEntity extends BaseEntity implements UserDetails {
     @Enumerated(EnumType.STRING)
     private UserState userState;
 
+    private Long chatId;
+
     @Enumerated(EnumType.STRING)
     private List<UserRole> userRoles;
 

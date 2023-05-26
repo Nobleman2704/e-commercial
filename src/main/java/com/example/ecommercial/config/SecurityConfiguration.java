@@ -19,7 +19,8 @@ public class SecurityConfiguration {
     private final PasswordEncoder passwordEncoder;
     private final UserDetailsService userDetailsService;
     private final String[] WHITE_LIST = {
-            "/test/add"
+            "/test/add",
+            "/"
     };
 
     @SneakyThrows
