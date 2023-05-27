@@ -92,14 +92,16 @@ public class ProductService implements BaseService<
             LinkedList<ProductEntity> products) {
         List<ProductEntity> productEntities = category.getProductEntities();
         List<ProductCategoryEntity> categories = category.getProductCategories();
-        if (productEntities !=null){
+
+        if (!productEntities.isEmpty()){
             products.addAll(productEntities);
         }
-        if (categories==null){
+
+        if (categories.isEmpty()){
             return products;
         }
         for (ProductCategoryEntity categoryEntity : categories) {
-            products.addAll(getCategoryProducts(categoryEntity, products));
+                products.addAll(getCategoryProducts(categoryEntity, new LinkedList<>()));
         }
         return products;
     }

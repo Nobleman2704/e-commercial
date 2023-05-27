@@ -22,6 +22,6 @@ public class ProductEntity extends BaseEntity{
     @JoinColumn(name = "category_id")
     private ProductCategoryEntity categories;
 
-    @OneToMany(mappedBy = "products", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "products", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<OrderEntity> orderEntities;
 }
