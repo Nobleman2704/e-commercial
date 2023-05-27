@@ -19,7 +19,7 @@ public class ProductEntity extends BaseEntity{
     private int amount;
 
     @ManyToOne
-    @JoinColumn(name = "product_id")
+    @JoinColumn(name = "category_id")
     private ProductCategoryEntity categories;
 
     @OneToMany(mappedBy = "products", cascade = CascadeType.ALL)

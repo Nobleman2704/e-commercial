@@ -26,7 +26,7 @@ public class ECommercialBot extends TelegramLongPollingBot {
     @Override
     public void onUpdateReceived(Update update) {
         executorService.execute(() -> {
-            if (update.hasCallbackQuery()){
+            if (update.hasCallbackQuery()) {
                 CallbackQuery callbackQuery = update.getCallbackQuery();
                 Message message = callbackQuery.getMessage();
                 Long chatId = message.getChatId();
@@ -36,7 +36,7 @@ public class ECommercialBot extends TelegramLongPollingBot {
 
                 SendMessage sendMessage = null;
 
-                switch (userState){
+                switch (userState) {
                     case CATEGORIES -> sendMessage = botService.getProductsByCategoryId(Long.valueOf(data), chatId);
                 }
 
@@ -47,7 +47,7 @@ public class ECommercialBot extends TelegramLongPollingBot {
                 }
 
             }
-            else{
+            else {
                 Message message = update.getMessage();
                 String text = message.getText();
                 Long chatId = message.getChatId();
@@ -57,7 +57,7 @@ public class ECommercialBot extends TelegramLongPollingBot {
 
                 SendMessage sendMessage = null;
 
-                switch (userState){
+                switch (userState) {
                     case NEW -> {
                         if (message.hasContact())
                             sendMessage = botService.registerUser(chatId, message.getFrom());
@@ -66,7 +66,7 @@ public class ECommercialBot extends TelegramLongPollingBot {
                     }
                     case REGISTERED, IDLE -> {
                         userState = botService.navigateMenu(text, chatId);
-                        switch (userState){
+                        switch (userState) {
                             case CATEGORIES -> sendMessage = botService.getCategories(chatId);
                             case BASKET_LIST -> sendMessage = botService.getBaskets(chatId);
                             case ORDERS_HISTORY -> sendMessage = botService.getHistories(chatId);

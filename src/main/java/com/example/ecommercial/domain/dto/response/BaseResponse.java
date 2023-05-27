@@ -2,7 +2,8 @@ package com.example.ecommercial.domain.dto.response;
 
 import lombok.*;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
