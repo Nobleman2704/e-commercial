@@ -1,11 +1,15 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>User update</title>
+    <title>Product update</title>
 </head>
 
 <style>
+  body{
+    width: 100%;
+    height: 100%;
+  }
   .modal {
     z-index: 1;
     padding-top: 100px;
@@ -106,6 +110,7 @@
 </style>
 
 <body>
+
 <div th:if="${message != null}">
   <div id="snackbar" th:text="${message}"></div>
 </div>
@@ -116,68 +121,30 @@
   setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
 </script>
 
-<form method="post" th:action="@{/user/update}">
+<form method="post" th:action="@{/product/update}">
   <div class="modal">
     <div class="modal-content">
 
       <div class="modal-header">
-        <a th:href="@{/user/get_all}" class="close">&times;</a>
-        <h4 style="font-size: 20px">Edit user</h4>
+        <a th:href="@{/product/get_all}" class="close">&times;</a>
+        <h4 style="font-size: 20px">Edit product</h4>
       </div>
 
       <div class="modal-body">
 
         <label class="table1-label">Name:</label> <br>
-        <input type="text" th:value="${user.name}" placeholder="name" class="table1-input" required name="name"> <br><br>
+        <input type="text" th:value="${product.name}" placeholder="name" class="table1-input" required name="name"> <br><br>
 
-        <label class="table1-label">Username:</label> <br>
-        <input type="text" th:value="${user.username}" placeholder="username" class="table1-input" required name="username"> <br><br>
+        <label class="table1-label">Description:</label> <br>
+        <input type="text" th:value="${product.description}" placeholder="description" class="table1-input" required> <br><br>
 
-        <label class="table1-label">Password:</label> <br>
-        <input type="text" placeholder="password" class="table1-input" required name="password"> <br><br>
+        <label class="table1-label">Price:</label> <br>
+        <input type="number" th:value="${product.price}" placeholder="name" class="table1-input" required name="name"> <br><br>
 
-        <p th:text="'Roles: ' + ${user.userRoles}"></p>
-        <p th:text="'Authorities: ' + ${user.userAuthorities}"></p> <br>
+        <label class="table1-label">Name:</label> <br>
+        <input type="number" th:value="${product.amount}" placeholder="name" class="table1-input" required name="name"> <br><br>
 
-        <select name="userRoles">
-          <option>ADMIN</option>
-          <option>ACCOUNTANT</option>
-        </select><br> <br>
-        <label> EDIT_CATEGORY
-          <input type="checkbox" name="userAuthorities" value="EDIT_CATEGORY">
-        </label><br>
-        <label> EDIT_PRODUCT
-          <input type="checkbox" name="userAuthorities" value="EDIT_PRODUCT">
-        </label><br>
-        <label> EDIT_USER
-          <input type="checkbox" name="userAuthorities" value="EDIT_USER">
-        </label><br>
-        <label> DELETE_PRODUCT
-          <input type="checkbox" name="userAuthorities" value="DELETE_PRODUCT">
-        </label><br>
-        <label> GET_CATEGORY
-          <input type="checkbox" name="userAuthorities" value="GET_CATEGORY">
-        </label><br>
-        <label> GET_PRODUCT
-          <input type="checkbox" name="userAuthorities" value="GET_PRODUCT">
-        </label><br>
-        <label> GET_ORDER
-          <input type="checkbox" name="userAuthorities" value="GET_ORDER">
-        </label><br>
-        <label> GET_USER
-          <input type="checkbox" name="userAuthorities" value="GET_USER">
-        </label><br>
-        <label> CREATE_PRODUCT
-          <input type="checkbox" name="userAuthorities" value="CREATE_PRODUCT">
-        </label><br>
-        <label> CREATE_CATEGORY
-          <input type="checkbox" name="userAuthorities" value="CREATE_CATEGORY">
-        </label><br>
-        <label> CREATE_USER
-          <input type="checkbox" name="userAuthorities" value="CREATE_USER">
-        </label><br>
-
-        <input type="hidden" th:value="${user.id}" name="id">
+        <input type="hidden" th:value="${product.id}" name="id">
       </div>
       <div class="modal-footer">
         <button type="submit" class="table1-modal-add-btn"><b>update</b></button>
@@ -185,6 +152,7 @@
     </div>
   </div>
 </form>
+
 
 </body>
 </html>

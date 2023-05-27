@@ -2,6 +2,7 @@ package com.example.ecommercial.controller;
 
 import com.example.ecommercial.domain.dto.request.ProductCreateAndUpdateRequest;
 import com.example.ecommercial.domain.dto.response.BaseResponse;
+import com.example.ecommercial.service.category.CategoryService;
 import com.example.ecommercial.service.product.ProductService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -20,32 +21,43 @@ import static com.example.ecommercial.controller.UserController.extractAllErrors
 public class ProductController {
 
     private final ProductService productService;
+    private final CategoryService categoryService;
 
     @PostMapping("/add")
     public ModelAndView addProduct(
             @Valid @ModelAttribute ProductCreateAndUpdateRequest productCreateRequest,
             BindingResult bindingResult){
-        ModelAndView modelAndView = new ModelAndView();
+        ModelAndView modelAndView = new ModelAndView("dashboard");
         if (bindingResult.hasErrors()){
             modelAndView.addObject("message", extractAllErrors(bindingResult));
         }else {
             BaseResponse response = productService.save(productCreateRequest);
             modelAndView.addObject("message", response.getMessage());
         }
+
+        modelAndView.addObject("products", productService.getALl().getData());
+        modelAndView.addObject("categories", categoryService.getALl().getData());
+        modelAndView.addObject("status", 2);
         return modelAndView;
     }
 
-    @PutMapping("/update")
+    @PostMapping("/update")
     public ModelAndView updateProduct(
             @Valid @ModelAttribute("product")ProductCreateAndUpdateRequest productUpdateRequest,
             BindingResult bindingResult
             ){
         ModelAndView modelAndView = new ModelAndView();
-        if (bindingResult.hasErrors())
+        if (bindingResult.hasErrors()){
             modelAndView.addObject("message", extractAllErrors(bindingResult));
-        else {
+            modelAndView.addObject("product", productService.getById(productUpdateRequest.getId()).getData());
+            modelAndView.setViewName("productUpdatePage");
+        } else {
             BaseResponse response = productService.update(productUpdateRequest);
             modelAndView.addObject("message", response.getMessage());
+            modelAndView.addObject("products", productService.getALl().getData());
+            modelAndView.addObject("categories", categoryService.getALl().getData());
+            modelAndView.addObject("status", 2);
+            modelAndView.setViewName("dashboard");
         }
         return modelAndView;
     }
@@ -54,15 +66,37 @@ public class ProductController {
     public ModelAndView getAllProducts(){
         ModelAndView modelAndView = new ModelAndView("dashboard");
         modelAndView.addObject("products", productService.getALl().getData());
+        modelAndView.addObject("categories", categoryService.getALl().getData());
         modelAndView.addObject("status", 2);
         return modelAndView;
     }
 
-    @DeleteMapping("/delete/{id}")
+    @GetMapping("/products-page")
+    public ModelAndView productsPage(){
+        ModelAndView modelAndView = new ModelAndView("dashboard");
+        modelAndView.addObject("products", productService.getALl().getData());
+        modelAndView.addObject("categories", categoryService.getALl().getData());
+        modelAndView.addObject("status", 2);
+        return modelAndView;
+    }
+
+    @GetMapping("/update-page/{id}")
+    public ModelAndView updatePage(@PathVariable("id") Long id){
+        ModelAndView modelAndView = new ModelAndView("productUpdatePage");
+        modelAndView.addObject("product", productService.getById(id).getData());
+        return modelAndView;
+    }
+
+    @GetMapping("/delete/{id}")
     public ModelAndView deleteProduct(
-            @PathVariable("id") Long productId
+            @PathVariable("id") Long id
     ){
-        BaseResponse response = productService.delete(productId);
-        return new ModelAndView("viewName", "message", response.getMessage());
+        BaseResponse response = productService.delete(id);
+        ModelAndView modelAndView = new ModelAndView("dashboard");
+        modelAndView.addObject("products", productService.getALl().getData());
+        modelAndView.addObject("categories", categoryService.getALl().getData());
+        modelAndView.addObject("message", response.getMessage());
+        modelAndView.addObject("status", 2);
+        return modelAndView;
     }
 }

@@ -8,6 +8,7 @@ import com.example.ecommercial.domain.dto.response.ProductGetResponse;
 import com.example.ecommercial.domain.entity.ProductCategoryEntity;
 import com.example.ecommercial.domain.entity.ProductEntity;
 import com.example.ecommercial.service.BaseService;
+import com.example.ecommercial.service.category.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -29,6 +30,9 @@ public class ProductService implements BaseService<
     @Override
     public BaseResponse save(ProductCreateAndUpdateRequest productCreateRequest) {
         ProductEntity product = modelMapper.map(productCreateRequest, ProductEntity.class);
+
+        product.setCategories(categoryDao.findById(productCreateRequest.getCategoryId()).get());
+
         try {
             productDao.save(product);
         }catch (Exception e){
@@ -49,12 +53,21 @@ public class ProductService implements BaseService<
 
     @Override
     public BaseResponse delete(Long id) {
-        return null;
+        ProductEntity data = productDao.findById(id).get();
+
+        productDao.delete(data);
+        return BaseResponse.builder()
+                .status(200)
+                .message("Success")
+                .build();
     }
 
     @Override
     public BaseResponse getById(Long id) {
-        return null;
+        ProductEntity productEntity = productDao.findById(id).get();
+        ProductGetResponse map = modelMapper.map(productEntity, ProductGetResponse.class);
+
+        return new BaseResponse<>(200, "success", map);
     }
 
     @Override

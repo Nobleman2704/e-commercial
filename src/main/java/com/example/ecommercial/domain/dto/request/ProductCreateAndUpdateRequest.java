@@ -1,5 +1,6 @@
 package com.example.ecommercial.domain.dto.request;
 
+import com.example.ecommercial.domain.entity.ProductCategoryEntity;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,4 +20,5 @@ public class ProductCreateAndUpdateRequest {
     private String description;
     private double price;
     private int amount;
+    private Long categoryId;
 }
