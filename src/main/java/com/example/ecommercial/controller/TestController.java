@@ -1,5 +1,7 @@
 package com.example.ecommercial.controller;
 
+import com.example.ecommercial.dao.ProductCategoryDao;
+import com.example.ecommercial.dao.ProductDao;
 import com.example.ecommercial.dao.UserDao;
 import com.example.ecommercial.domain.entity.UserEntity;
 import com.example.ecommercial.domain.enums.UserRole;
@@ -21,29 +23,28 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/test")
 public class TestController {
-    private final AuditingAwareImpl auditingAware;
-    private final UserDao userDao;
+
+
     private final PasswordEncoder passwordEncoder;
+    private final UserDao userDao;
 
-    @PreAuthorize("hasAnyRole('SUPER_ADMIN')")
-    @GetMapping("/home")
-    public ModelAndView test(){
-        ModelAndView modelAndView = new ModelAndView("home");
-        modelAndView.addObject("object", auditingAware.getCurrentAuditor().get());
-        return modelAndView;
-    }
+//    @GetMapping("/add")
+//    public String addUser(){
+//        UserEntity userEntity = UserEntity.builder()
+//                .name("Asadbek")
+//                .username("nobleman")
+//                .password(passwordEncoder.encode("1234"))
+//                .userRoles(List.of(UserRole.SUPER_ADMIN))
+//                .build();
+//
+//        userDao.save(userEntity);
+//        return "user added";
+//    }
 
-    @GetMapping("/add")
-    public String addUser(){
-        UserEntity userEntity = UserEntity.builder()
-                .name("Asadbek")
-                .username("nobleman")
-                .password(passwordEncoder.encode("1234"))
-                .userRoles(List.of(UserRole.SUPER_ADMIN))
-                .build();
 
-        userDao.save(userEntity);
-        return "user added";
+    @GetMapping("/dashboard-page")
+    public ModelAndView getPage(){
+        return new ModelAndView("dashboard");
     }
 
 }
