@@ -63,11 +63,12 @@ public class ProductService implements BaseService<
     }
 
     @Override
-    public BaseResponse getById(Long id) {
+    public BaseResponse<ProductGetResponse> getById(Long id) {
         ProductEntity productEntity = productDao.findById(id).get();
-        ProductGetResponse map = modelMapper.map(productEntity, ProductGetResponse.class);
-
-        return new BaseResponse<>(200, "success", map);
+        return new BaseResponse<>(
+                200,
+                "success",
+                modelMapper.map(productEntity, ProductGetResponse.class));
     }
 
     @Override
@@ -82,7 +83,13 @@ public class ProductService implements BaseService<
     public BaseResponse<List<ProductGetResponse>> getProductsByCategoryId(Long categoryId) {
         ProductCategoryEntity category = categoryDao.findById(categoryId).get();
         List<ProductEntity> products = getCategoryProducts(category, new LinkedList<>());
+        if (products.isEmpty()){
+            return BaseResponse.<List<ProductGetResponse>>builder()
+                    .status(404)
+                    .build();
+        }
         return BaseResponse.<List<ProductGetResponse>>builder()
+                .status(200)
                 .data(modelMapper.map(products, new TypeToken<List<ProductGetResponse>>(){}.getType()))
                 .build();
     }

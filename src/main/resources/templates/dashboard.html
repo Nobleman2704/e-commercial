@@ -329,23 +329,47 @@
     }
 
     @-webkit-keyframes fadein {
-        from {top: 0; opacity: 0;}
-        to {top: 30px; opacity: 1;}
+        from {
+            top: 0;
+            opacity: 0;
+        }
+        to {
+            top: 30px;
+            opacity: 1;
+        }
     }
 
     @keyframes fadein {
-        from {top: 0; opacity: 0;}
-        to {top: 30px; opacity: 1;}
+        from {
+            top: 0;
+            opacity: 0;
+        }
+        to {
+            top: 30px;
+            opacity: 1;
+        }
     }
 
     @-webkit-keyframes fadeout {
-        from {top: 30px; opacity: 1;}
-        to {top: 0; opacity: 0;}
+        from {
+            top: 30px;
+            opacity: 1;
+        }
+        to {
+            top: 0;
+            opacity: 0;
+        }
     }
 
     @keyframes fadeout {
-        from {top: 30px; opacity: 1;}
-        to {top: 0; opacity: 0;}
+        from {
+            top: 30px;
+            opacity: 1;
+        }
+        to {
+            top: 0;
+            opacity: 0;
+        }
     }
 </style>
 
@@ -356,9 +380,11 @@
 </div>
 
 <script>
-        var x = document.getElementById("snackbar");
-        x.className = "show";
-        setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+    var x = document.getElementById("snackbar");
+    x.className = "show";
+    setTimeout(function () {
+        x.className = x.className.replace("show", "");
+    }, 3000);
 </script>
 
 <div class="navbar">
@@ -553,20 +579,23 @@
                     </div>
                     <div class="modal-body">
                         <label class="table1-label">Name:</label> <br>
-                        <input type="text" placeholder="name" class="table1-input" name="name"> <br> <br>
+                        <input type="text" placeholder="name" required class="table1-input" name="name"> <br> <br>
 
                         <label class="table1-label">Description:</label> <br>
-                        <input type="text" placeholder="description" class="table1-input" name="description"> <br> <br>
+                        <input type="text" placeholder="description" required class="table1-input" name="description">
+                        <br> <br>
 
                         <label class="table1-label">Price:</label> <br>
-                        <input type="number" placeholder="price" class="table1-input" name="price"> <br> <br>
+                        <input type="number" placeholder="price" required min="1" class="table1-input" name="price">
+                        <br> <br>
 
                         <label class="table1-label">Amount:</label> <br>
-                        <input type="number" placeholder="amount" class="table1-input" name="amount"> <br> <br>
+                        <input type="number" placeholder="amount" required min="1" class="table1-input" name="amount">
+                        <br> <br>
 
                         <select name="categoryId">
                             <div th:each="category: ${categories}">
-                                    <option th:text="${category.name}" th:value="${category.id}"></option>
+                                <option th:text="${category.name}" th:value="${category.id}"></option>
                             </div>
                         </select><br>
 
@@ -621,8 +650,10 @@
                 <td th:text="${product.name}" class="tbody-td"></td>
                 <td th:text="${product.price}" class="tbody-td"></td>
                 <td th:text="${product.amount}" class="tbody-td"></td>
-                <td class="tbody-category-td"><a th:href="@{/product/update-page/{id}(id=${product.id})}" class="tbody-category-td-a">edit</a></td>
-                <td class="tbody-category-td"><a th:href="@{/product/delete/{id}(id=${product.id})}" class="tbody-category-td-a">delete</a></td>
+                <td class="tbody-category-td"><a th:href="@{/product/update-page/{id}(id=${product.id})}"
+                                                 class="tbody-category-td-a">edit</a></td>
+                <td class="tbody-category-td"><a th:href="@{/product/delete/{id}(id=${product.id})}"
+                                                 class="tbody-category-td-a">delete</a></td>
                 <td class="tbody-category-td">
                     <div class="dropdown">
                         <button class="dropbtn">info</button>
@@ -771,7 +802,9 @@
                 <td th:text="${user.name}" class="tbody-td"></td>
                 <td th:text="${user.username}" class="tbody-td"></td>
                 <td class="tbody-td">
-                    <a th:href="@{/user/delete/{id}(id=${user.id})}"><button>delete</button></a>
+                    <a th:href="@{/user/delete/{id}(id=${user.id})}">
+                        <button>delete</button>
+                    </a>
                 </td>
                 <td class="tbody-td">
                     <a th:href="@{/user/update-page/{id}(id=${user.id})}">

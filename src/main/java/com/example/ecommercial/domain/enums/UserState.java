@@ -3,11 +3,14 @@ package com.example.ecommercial.domain.enums;
 public enum UserState {
     NEW,
     CATEGORIES,
-    BASKET_LIST,
-    ORDERS_HISTORY,
+    BASKETS,
+    ORDERS,
     PRODUCTS,
     GET_BALANCE,
     ADD_BALANCE,
     IDLE,
+    PRODUCT,
+    BASKET,
+    HISTORIES,
     REGISTERED
 }

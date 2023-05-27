@@ -25,7 +25,4 @@ public class ProductCategoryEntity extends BaseEntity{
 
     @OneToMany(mappedBy = "categories", fetch = FetchType.EAGER)
     private List<ProductEntity> productEntities;
-
-    @OneToMany(mappedBy = "categories")
-    private List<HistoryEntity> historyEntities;
 }

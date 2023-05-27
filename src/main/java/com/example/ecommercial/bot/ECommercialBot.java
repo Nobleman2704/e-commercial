@@ -1,6 +1,7 @@
 package com.example.ecommercial.bot;
 
 import com.example.ecommercial.domain.enums.UserState;
+import jakarta.persistence.Cache;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Component;
@@ -11,6 +12,7 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -37,7 +39,15 @@ public class ECommercialBot extends TelegramLongPollingBot {
                 SendMessage sendMessage = null;
 
                 switch (userState) {
-                    case CATEGORIES -> sendMessage = botService.getProductsByCategoryId(Long.valueOf(data), chatId);
+                    case CATEGORIES -> sendMessage = botService
+                            .getProductsByCategoryId(Long.valueOf(data), chatId);
+                    case PRODUCTS -> sendMessage = botService
+                            .getProductById(Long.valueOf(data), chatId);
+                    case PRODUCT -> sendMessage = botService
+                            .addProductToBasket(data, chatId);
+                    case BASKETS -> sendMessage = botService
+                            .getBasketById(Long.parseLong(data), chatId);
+                    case BASKET -> sendMessage = botService.modifyBasket(data, chatId);
                 }
 
                 try {
@@ -46,8 +56,7 @@ public class ECommercialBot extends TelegramLongPollingBot {
                     throw new RuntimeException(e);
                 }
 
-            }
-            else {
+            } else {
                 Message message = update.getMessage();
                 String text = message.getText();
                 Long chatId = message.getChatId();
@@ -64,19 +73,21 @@ public class ECommercialBot extends TelegramLongPollingBot {
                         else
                             sendMessage = botService.shareContact(chatId);
                     }
-                    case REGISTERED, IDLE, CATEGORIES, PRODUCTS -> {
+                    case REGISTERED, IDLE, CATEGORIES, PRODUCTS, PRODUCT, BASKETS, ORDERS, BASKET -> {
                         userState = botService.navigateMenu(text, chatId);
                         switch (userState) {
                             case CATEGORIES -> sendMessage = botService.getCategories(chatId);
-                            case BASKET_LIST -> sendMessage = botService.getBaskets(chatId);
-                            case ORDERS_HISTORY -> sendMessage = botService.getHistories(chatId);
+                            case BASKETS -> sendMessage = botService.getBaskets(chatId);
+                            case HISTORIES -> sendMessage = botService.getHistories(chatId);
+                            case ORDERS -> sendMessage = botService.getOrders(chatId);
                         }
                     }
                 }
+
                 try {
                     execute(sendMessage);
                 } catch (TelegramApiException e) {
-                    System.out.println(e.getMessage());
+                    throw new RuntimeException(e);
                 }
             }
         });
