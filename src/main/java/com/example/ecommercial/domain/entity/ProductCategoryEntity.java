@@ -1,15 +1,13 @@
 package com.example.ecommercial.domain.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 import java.util.Queue;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -28,6 +26,6 @@ public class ProductCategoryEntity extends BaseEntity{
     @OneToMany(mappedBy = "categories", fetch = FetchType.EAGER)
     private List<ProductEntity> productEntities;
 
-    @OneToMany(mappedBy = "categories", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "categories")
     private List<HistoryEntity> historyEntities;
 }

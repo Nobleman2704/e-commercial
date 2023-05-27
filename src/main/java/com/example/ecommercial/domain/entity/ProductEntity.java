@@ -1,14 +1,12 @@
 package com.example.ecommercial.domain.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -21,7 +19,7 @@ public class ProductEntity extends BaseEntity{
     private int amount;
 
     @ManyToOne
-    @JoinColumn(name = "product_id")
+    @JoinColumn(name = "category_id")
     private ProductCategoryEntity categories;
 
     @OneToMany(mappedBy = "products", cascade = CascadeType.ALL)
