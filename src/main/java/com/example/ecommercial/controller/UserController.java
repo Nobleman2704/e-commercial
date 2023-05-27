@@ -71,14 +71,6 @@ public class UserController {
             return modelAndView;
     }
 
-    @GetMapping("/employees-page")
-    public ModelAndView employeesPage(){
-        ModelAndView modelAndView = new ModelAndView("dashboard");
-        modelAndView.addObject("users", userService.getALl().getData());
-        modelAndView.addObject("status", 4);
-        return modelAndView;
-    }
-
     @GetMapping("/delete/{id}")
     public ModelAndView delete(
             @PathVariable("id") Long userId
