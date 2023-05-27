@@ -136,4 +136,36 @@ public class UserService implements BaseService<
         userEntity.setUserState(userState);
         userDao.save(userEntity);
     }
+
+    public BaseResponse<Double> getUserBalance(Long chatId) {
+        UserEntity userEntity = userDao.findUserEntitiesByChatId(chatId).get();
+        return BaseResponse.<Double>builder()
+                .data(userEntity.getBalance())
+                .build();
+    }
+
+    public BaseResponse<Double> addBalance(String text, Long chatId) {
+        String message;
+        int status;
+        try {
+            double balance = Double.parseDouble(text);
+            if (balance<=0){
+                status = 401;
+                message = "Amount should be positive";
+            }else {
+                UserEntity userEntity = userDao.findUserEntitiesByChatId(chatId).get();
+                userEntity.setBalance(userEntity.getBalance()+balance);
+                userDao.save(userEntity);
+                message = "Balance has been changed: " + userEntity.getBalance();
+                status = 200;
+            }
+        } catch (NumberFormatException e) {
+            status = 401;
+            message = "Please only write number";
+        }
+        return BaseResponse.<Double>builder()
+                .status(status)
+                .message(message)
+                .build();
+    }
 }

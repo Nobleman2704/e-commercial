@@ -14,6 +14,7 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -90,7 +91,9 @@ public class ProductService implements BaseService<
         }
         return BaseResponse.<List<ProductGetResponse>>builder()
                 .status(200)
-                .data(modelMapper.map(products, new TypeToken<List<ProductGetResponse>>(){}.getType()))
+                .data(modelMapper
+                        .map(products, new TypeToken<List<ProductGetResponse>>(){}
+                                .getType()))
                 .build();
     }
 
@@ -103,7 +106,6 @@ public class ProductService implements BaseService<
         if (!productEntities.isEmpty()){
             products.addAll(productEntities);
         }
-
         if (categories.isEmpty()){
             return products;
         }

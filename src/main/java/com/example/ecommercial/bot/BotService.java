@@ -1,7 +1,6 @@
 package com.example.ecommercial.bot;
 
 import com.example.ecommercial.domain.dto.response.*;
-import com.example.ecommercial.domain.entity.HistoryEntity;
 import com.example.ecommercial.domain.entity.ProductEntity;
 import com.example.ecommercial.domain.enums.UserState;
 import com.example.ecommercial.service.basket.BasketService;
@@ -13,6 +12,7 @@ import com.example.ecommercial.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.User;
 
 import java.util.List;
@@ -59,9 +59,9 @@ public class BotService {
             case "📋 Categories" -> userState = UserState.CATEGORIES;
             case "🧺 Basket" -> userState = UserState.BASKETS;
             case "📪 Orders" -> userState = UserState.ORDERS;
-            case "🗒️ History" -> userState = UserState.IDLE;
-//            case "💰️ Get balance" -> userState = UserState.GET_BALANCE;
-//            case "💸 Add balance" -> userState = UserState.ADD_BALANCE;
+            case "🗒️ History" -> userState = UserState.HISTORIES;
+            case "💰️ Get balance" -> userState = UserState.GET_BALANCE;
+            case "💸 Add balance" -> userState = UserState.ADD_BALANCE;
             default -> userState = UserState.IDLE;
         }
         userService.updateState(chatId, userState);
@@ -112,7 +112,7 @@ public class BotService {
             message.setChatId(chatId);
             message.setText(historyToString(response.getData()));
         }
-        return null;
+        return message;
     }
 
     private String historyToString(List<HistoryGetResponse> histories) {
@@ -127,19 +127,21 @@ public class BotService {
         return String.format("""
                 Name: %s
                 Description: %s
-                Price: %s
                 Type: %s
                 Total price: %s
                 Amount: %s
                 Ordered date: %s
                 *******************************************""",
-                history.getName(), history.getDescription(), history.getPrice(),
-                history.getCategoryName(), history.getPrice()*history.getAmount(),
+                history.getName(), history.getDescription(),
+                history.getCategoryName(), history.getTotalPrice(),
                 history.getAmount(), history.getCreatedDate());
     }
 
-    public SendMessage getProductsByCategoryId(Long categoryId, Long chatId) {
-        SendMessage sendMessage = new SendMessage(chatId.toString(), "products");
+    public EditMessageText getProductsByCategoryId(Long categoryId, Long chatId, Integer messageId) {
+        EditMessageText sendMessage = new EditMessageText();
+        sendMessage.setMessageId(messageId);
+        sendMessage.setChatId(chatId);
+        sendMessage.setText("products");
         BaseResponse<List<ProductGetResponse>> response =
                 productService.getProductsByCategoryId(categoryId);
         if (response.getStatus()!=200){
@@ -153,10 +155,12 @@ public class BotService {
         return sendMessage;
     }
 
-    public SendMessage getProductById(Long productId, Long chatId) {
+    public EditMessageText getProductById(Long productId, Long chatId, Integer messageId) {
         userService.updateState(chatId, UserState.PRODUCT);
         ProductGetResponse product = productService.getById(productId).getData();
-        SendMessage sendMessage = new SendMessage(chatId.toString(), getProductInfo(product));
+        EditMessageText sendMessage = new EditMessageText(getProductInfo(product));
+        sendMessage.setChatId(chatId);
+        sendMessage.setMessageId(messageId);
         sendMessage.setReplyMarkup(replyKeyboardService.createNumberButton(product.getId()));
         return sendMessage;
     }
@@ -173,10 +177,11 @@ public class BotService {
                 product.getPrice(), product.getAmount(), product.getCategories().getName());
     }
 
-    public SendMessage addProductToBasket(String data, Long chatId) {
+    public EditMessageText addProductToBasket(String data, Long chatId, Integer messageId) {
         basketService.save(data, chatId);
-        SendMessage message = getMenu(chatId);
-        message.setText("Product has been added to your basket");
+        EditMessageText message = new EditMessageText("Product has been added to your basket");
+        message.setChatId(chatId);
+        message.setMessageId(messageId);
         return message;
     }
 
@@ -188,10 +193,12 @@ public class BotService {
         return sendMessage;
     }
 
-    public SendMessage getBasketById(Long basketId, Long chatId) {
+    public EditMessageText getBasketById(Long basketId, Long chatId, Integer messageId) {
         userService.updateState(chatId, UserState.BASKET);
         BasketGetResponse basket = basketService.getById(basketId).getData();
-        SendMessage message = new SendMessage(chatId.toString(), getBasketInfo(basket));
+        EditMessageText message = new EditMessageText(getBasketInfo(basket));
+        message.setChatId(chatId);
+        message.setMessageId(messageId);
         message.setReplyMarkup(replyKeyboardService.getBasketInlineKeyboardMarkup(basket.getId()));
         return message;
     }
@@ -204,27 +211,28 @@ public class BotService {
                 Price: %s
                 Amount: %s
                 Type: %s
+                Total price: %s
                 
                 Press any numbers below 👇🏻""", product.getName(), product.getDescription(),
-                product.getPrice(), basket.getProductAmount(), product.getCategories().getName());
+                product.getPrice(), basket.getProductAmount(), product.getCategories().getName(),
+                product.getPrice()*basket.getProductAmount());
     }
 
-    public SendMessage modifyBasket(String data, Long chatId) {
-        SendMessage message = new SendMessage();
+    public EditMessageText modifyBasket(String data, Long chatId, Integer messageId) {
+        EditMessageText message = new EditMessageText();
         message.setChatId(chatId);
         String[] split = data.split(" ");
         int status = Integer.parseInt(split[0]);
         Long basketId = Long.valueOf(split[1]);
+        message.setMessageId(messageId);
 
         if (status==0){
-            message = getMenu(chatId);
             basketService.delete(basketId);
             message.setText("Basket has been deleted");
         } else if (status==2) {
             BaseResponse<BasketGetResponse> response = orderService
                     .orderProduct(basketId);
             if (response.getStatus()==200){
-                message = getMenu(chatId);
                 message.setText(response.getMessage());
             }else {
                 BasketGetResponse basket = response.getData();
@@ -246,6 +254,7 @@ public class BotService {
         return message;
     }
 
+
     public SendMessage getOrders(Long chatId) {
         SendMessage message = new SendMessage();
         BaseResponse<List<OrderGetResponse>> response = orderService
@@ -254,8 +263,34 @@ public class BotService {
             message = getMenu(chatId);
             message.setText("Your order is empty");
         }else {
-
+            message.setText("orders");
+            message.setChatId(chatId);
+            message.setReplyMarkup(replyKeyboardService
+                    .parseOrdersIntoInlineKeyboardMarkup(response.getData()));
         }
+        return message;
+    }
+
+    public SendMessage askUserToWriteBalance(Long chatId) {
+        return new SendMessage(chatId.toString(), "Please write amount");
+    }
+
+    public SendMessage getUserBalance(Long chatId) {
+        BaseResponse<Double> response = userService.getUserBalance(chatId);
+        return new SendMessage(chatId.toString(), "Your balance: " + response.getData());
+    }
+
+    public SendMessage addBalance(String text, Long chatId) {
+        BaseResponse<Double> response = userService.addBalance(text, chatId);
+        userService.updateState(chatId, UserState.IDLE);
+        return new SendMessage(chatId.toString(), response.getMessage());
+    }
+
+    public EditMessageText deleteUserOrder(Long orderId, Long chatId, Integer messageId) {
+        orderService.delete(orderId);
+        EditMessageText message = new EditMessageText("Order has been deleted");
+        message.setMessageId(messageId);
+        message.setChatId(chatId);
         return message;
     }
 }

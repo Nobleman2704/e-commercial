@@ -1,8 +1,10 @@
 package com.example.ecommercial.bot;
 
 import com.example.ecommercial.domain.dto.response.BasketGetResponse;
+import com.example.ecommercial.domain.dto.response.OrderGetResponse;
 import com.example.ecommercial.domain.dto.response.ProductCategoryGetResponse;
 import com.example.ecommercial.domain.dto.response.ProductGetResponse;
+import com.example.ecommercial.domain.entity.ProductEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -51,14 +53,14 @@ public class ReplyKeyboardService {
         row = new KeyboardRow();
         row.add("🗒️ History");
         keyboardRows.add(row);
-//
-//        row = new KeyboardRow();
-//        row.add("💰️ Get balance");
-//        keyboardRows.add(row);
-//
-//        row = new KeyboardRow();
-//        row.add("💸 Add balance");
-//        keyboardRows.add(row);
+
+        row = new KeyboardRow();
+        row.add("💰️ Get balance");
+        keyboardRows.add(row);
+
+        row = new KeyboardRow();
+        row.add("💸 Add balance");
+        keyboardRows.add(row);
 
         replyKeyboardMarkup.setKeyboard(keyboardRows);
         return replyKeyboardMarkup;
@@ -82,7 +84,7 @@ public class ReplyKeyboardService {
         return List.of(button);
     }
 
-    public ReplyKeyboard parseProductsIntoInlineKeyboardMarkup(
+    public InlineKeyboardMarkup parseProductsIntoInlineKeyboardMarkup(
             List<ProductGetResponse> products) {
         List<List<InlineKeyboardButton>> buttons = new LinkedList<>();
 
@@ -100,7 +102,7 @@ public class ReplyKeyboardService {
         return List.of(button);
     }
 
-    public ReplyKeyboard createNumberButton(Long productId) {
+    public InlineKeyboardMarkup createNumberButton(Long productId) {
         List<List<InlineKeyboardButton>> buttons = new LinkedList<>();
         List<InlineKeyboardButton> rows = new LinkedList<>();
         InlineKeyboardButton button = new InlineKeyboardButton("1️⃣");
@@ -158,7 +160,7 @@ public class ReplyKeyboardService {
             return List.of(button);
     }
 
-    public ReplyKeyboard getBasketInlineKeyboardMarkup(Long basketId) {
+    public InlineKeyboardMarkup getBasketInlineKeyboardMarkup(Long basketId) {
         List<List<InlineKeyboardButton>> buttons = new LinkedList<>();
         List<InlineKeyboardButton> rows = new LinkedList<>();
         InlineKeyboardButton button = new InlineKeyboardButton("➕");
@@ -169,12 +171,14 @@ public class ReplyKeyboardService {
         button.setCallbackData("-1 " + basketId);
         rows.add(button);
 
+        buttons.add(rows);
+
         rows = new LinkedList<>();
         button = new InlineKeyboardButton("❌ Remove");
         button.setCallbackData("0 " + basketId);
         rows.add(button);
 
-        button = new InlineKeyboardButton("❌ Remove");
+        button = new InlineKeyboardButton("🚢 Order");
         button.setCallbackData("2 " + basketId);
         rows.add(button);
 
@@ -182,5 +186,35 @@ public class ReplyKeyboardService {
         InlineKeyboardMarkup inline = new InlineKeyboardMarkup();
         inline.setKeyboard(buttons);
         return inline;
+    }
+
+    public ReplyKeyboard parseOrdersIntoInlineKeyboardMarkup(List<OrderGetResponse> orders) {
+        List<List<InlineKeyboardButton>> buttons = new LinkedList<>();
+        for (OrderGetResponse order : orders) {
+            buttons.add(createOrderButton(order));
+        }
+        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
+        inlineKeyboardMarkup.setKeyboard(buttons);
+        return inlineKeyboardMarkup;
+    }
+
+    private List<InlineKeyboardButton> createOrderButton(OrderGetResponse order) {
+        InlineKeyboardButton button = new InlineKeyboardButton(getOrderInfo(order));
+        button.setCallbackData(order.getId().toString());
+        return List.of(button);
+    }
+
+    private String getOrderInfo(OrderGetResponse order) {
+        ProductEntity product = order.getProducts();
+        return String.format("""
+                Name: %s
+                Description: %s
+                Type: %s
+                Total price: %s
+                Amount: %s
+                
+                PRESS THIS IF YOU WANT TO CANCEL ORDER
+                """, product.getName(), product.getDescription(), order.getTotalPrice(),
+                product.getCategories().getName(), order.getAmount());
     }
 }

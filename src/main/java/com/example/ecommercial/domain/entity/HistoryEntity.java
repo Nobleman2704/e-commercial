@@ -15,11 +15,9 @@ import lombok.*;
 public class HistoryEntity extends BaseEntity{
     private String name;
     private String description;
-    private double price;
+    private double totalPrice;
     private int amount;
-
     private String categoryName;
-
     @ManyToOne
     @JoinColumn(name = "user_id")
     private UserEntity users;
