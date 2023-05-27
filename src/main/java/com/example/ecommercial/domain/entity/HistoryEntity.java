@@ -18,9 +18,7 @@ public class HistoryEntity extends BaseEntity{
     private double price;
     private int amount;
 
-    @ManyToOne
-    @JoinColumn(name = "category_id")
-    private ProductCategoryEntity categories;
+    private String categoryName;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

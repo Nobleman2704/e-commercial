@@ -132,10 +132,8 @@ public class UserService implements BaseService<
     }
 
     public void updateState(Long chatId, UserState userState) {
-        try {
-            userDao.updateUserStateByChatId(chatId, userState.toString());
-        } catch (Exception e) {
-
-        }
+        UserEntity userEntity = userDao.findUserEntitiesByChatId(chatId).get();
+        userEntity.setUserState(userState);
+        userDao.save(userEntity);
     }
 }

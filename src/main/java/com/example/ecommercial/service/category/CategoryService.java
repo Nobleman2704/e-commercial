@@ -78,9 +78,16 @@ public class CategoryService implements BaseService<
 
     @Override
     public BaseResponse<List<ProductCategoryGetResponse>> getALl() {
+        List<ProductCategoryEntity> categories = productCategoryDao.findAll();
+        if (categories.isEmpty()){
+            return BaseResponse.<List<ProductCategoryGetResponse>>builder()
+                    .status(404)
+                    .build();
+        }
         return BaseResponse.<List<ProductCategoryGetResponse>>builder()
+                .status(200)
                 .data(modelMapper
-                        .map(productCategoryDao.findAll(),
+                        .map(categories,
                                 new TypeToken<List<ProductCategoryGetResponse>>(){}.getType()))
                 .build();
     }
