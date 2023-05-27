@@ -2,6 +2,7 @@ package com.example.ecommercial.service.order;
 
 import com.example.ecommercial.dao.BasketDao;
 import com.example.ecommercial.dao.OrderDao;
+import com.example.ecommercial.dao.ProductDao;
 import com.example.ecommercial.dao.UserDao;
 import com.example.ecommercial.domain.dto.response.BaseResponse;
 import com.example.ecommercial.domain.dto.response.BasketGetResponse;
@@ -27,6 +28,7 @@ public class OrderService implements BaseService<OrderEntity, BaseResponse> {
     private final ModelMapper modelMapper;
     private final BasketDao basketDao;
     private final UserDao userDao;
+    private final ProductDao productDao;
 
     @Override
     public BaseResponse save(OrderEntity request) {
@@ -40,7 +42,17 @@ public class OrderService implements BaseService<OrderEntity, BaseResponse> {
 
     @Override
     public BaseResponse delete(Long id) {
-        return null;
+        OrderEntity order = orderDao.findById(id).get();
+        UserEntity user = order.getUsers();
+        ProductEntity product = order.getProducts();
+
+        user.setBalance(user.getBalance()+order.getTotalPrice());
+        product.setAmount(product.getAmount()+ order.getAmount());
+
+        userDao.save(user);
+        productDao.save(product);
+        orderDao.deleteById(id);
+        return BaseResponse.builder().build();
     }
 
     @Override
@@ -90,6 +102,8 @@ public class OrderService implements BaseService<OrderEntity, BaseResponse> {
             orderDao.save(order);
             user.setBalance(user.getBalance()-totalPrice);
             product.setAmount(product.getAmount()-basketAmount);
+            userDao.save(user);
+            productDao.save(product);
             basketDao.deleteById(basket.getId());
             status = 200;
             message = "Product has been ordered";

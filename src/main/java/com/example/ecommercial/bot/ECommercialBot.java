@@ -1,12 +1,12 @@
 package com.example.ecommercial.bot;
 
 import com.example.ecommercial.domain.enums.UserState;
-import jakarta.persistence.Cache;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -31,27 +31,31 @@ public class ECommercialBot extends TelegramLongPollingBot {
             if (update.hasCallbackQuery()) {
                 CallbackQuery callbackQuery = update.getCallbackQuery();
                 Message message = callbackQuery.getMessage();
+                Integer messageId = message.getMessageId();
                 Long chatId = message.getChatId();
                 String data = callbackQuery.getData();
 
                 UserState userState = botService.checkState(chatId);
 
-                SendMessage sendMessage = null;
+                EditMessageText editMessageText = null;
 
                 switch (userState) {
-                    case CATEGORIES -> sendMessage = botService
-                            .getProductsByCategoryId(Long.valueOf(data), chatId);
-                    case PRODUCTS -> sendMessage = botService
-                            .getProductById(Long.valueOf(data), chatId);
-                    case PRODUCT -> sendMessage = botService
-                            .addProductToBasket(data, chatId);
-                    case BASKETS -> sendMessage = botService
-                            .getBasketById(Long.parseLong(data), chatId);
-                    case BASKET -> sendMessage = botService.modifyBasket(data, chatId);
+                    case CATEGORIES -> editMessageText = botService
+                            .getProductsByCategoryId(Long.valueOf(data), chatId, messageId);
+                    case PRODUCTS -> editMessageText = botService
+                            .getProductById(Long.valueOf(data), chatId, messageId);
+                    case PRODUCT -> editMessageText = botService
+                            .addProductToBasket(data, chatId, messageId);
+                    case BASKETS -> editMessageText = botService
+                            .getBasketById(Long.parseLong(data), chatId, messageId);
+                    case BASKET -> editMessageText = botService
+                            .modifyBasket(data, chatId, messageId);
+                    case ORDERS -> editMessageText = botService
+                            .deleteUserOrder(Long.valueOf(data), chatId, messageId);
                 }
 
                 try {
-                    execute(sendMessage);
+                    execute(editMessageText);
                 } catch (TelegramApiException e) {
                     throw new RuntimeException(e);
                 }
@@ -73,15 +77,20 @@ public class ECommercialBot extends TelegramLongPollingBot {
                         else
                             sendMessage = botService.shareContact(chatId);
                     }
-                    case REGISTERED, IDLE, CATEGORIES, PRODUCTS, PRODUCT, BASKETS, ORDERS, BASKET -> {
+                    case REGISTERED, IDLE, CATEGORIES, PRODUCTS, PRODUCT, BASKETS, ORDERS, BASKET,
+                            GET_BALANCE -> {
                         userState = botService.navigateMenu(text, chatId);
                         switch (userState) {
                             case CATEGORIES -> sendMessage = botService.getCategories(chatId);
                             case BASKETS -> sendMessage = botService.getBaskets(chatId);
                             case HISTORIES -> sendMessage = botService.getHistories(chatId);
                             case ORDERS -> sendMessage = botService.getOrders(chatId);
+                            case GET_BALANCE -> sendMessage = botService.getUserBalance(chatId);
+                            case ADD_BALANCE -> sendMessage = botService.askUserToWriteBalance(chatId);
+                            case IDLE -> sendMessage = botService.getMenu(chatId);
                         }
                     }
+                    case ADD_BALANCE -> sendMessage = botService.addBalance(text, chatId);
                 }
 
                 try {
