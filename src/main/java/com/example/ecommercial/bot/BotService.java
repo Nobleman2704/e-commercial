@@ -87,14 +87,14 @@ public class BotService {
     }
 
     public SendMessage getProductsByCategoryId(Long categoryId, Long chatId) {
-        SendMessage sendMessage = new SendMessage();
-        sendMessage.setChatId(chatId);
+        SendMessage sendMessage = new SendMessage(chatId.toString(), "products");
         BaseResponse<List<ProductGetResponse>> response =
                 productService.getProductsByCategoryId(categoryId);
         List<ProductGetResponse> products = response.getData();
         if (products.isEmpty()){
             sendMessage.setText("There is no products by this category");
         }else {
+            userService.updateState(chatId, UserState.PRODUCTS);
             sendMessage.setReplyMarkup(replyKeyboardService
                     .parseProductsIntoInlineKeyboardMarkup(products));
         }

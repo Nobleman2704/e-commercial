@@ -5,6 +5,7 @@ public enum UserState {
     CATEGORIES,
     BASKET_LIST,
     ORDERS_HISTORY,
+    PRODUCTS,
     GET_BALANCE,
     ADD_BALANCE,
     IDLE,

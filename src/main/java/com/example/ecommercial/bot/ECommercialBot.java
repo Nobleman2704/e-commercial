@@ -64,7 +64,7 @@ public class ECommercialBot extends TelegramLongPollingBot {
                         else
                             sendMessage = botService.shareContact(chatId);
                     }
-                    case REGISTERED, IDLE -> {
+                    case REGISTERED, IDLE, CATEGORIES, PRODUCTS -> {
                         userState = botService.navigateMenu(text, chatId);
                         switch (userState) {
                             case CATEGORIES -> sendMessage = botService.getCategories(chatId);
@@ -72,8 +72,6 @@ public class ECommercialBot extends TelegramLongPollingBot {
                             case ORDERS_HISTORY -> sendMessage = botService.getHistories(chatId);
                         }
                     }
-
-                    case CATEGORIES -> sendMessage = botService.getMenu(chatId);
                 }
                 try {
                     execute(sendMessage);
