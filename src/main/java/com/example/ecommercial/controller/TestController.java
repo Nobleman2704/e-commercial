@@ -13,6 +13,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -28,21 +29,21 @@ public class TestController {
     private final PasswordEncoder passwordEncoder;
     private final UserDao userDao;
 
-//    @GetMapping("/add")
-//    public String addUser(){
-//        UserEntity userEntity = UserEntity.builder()
-//                .name("Asadbek")
-//                .username("nobleman")
-//                .password(passwordEncoder.encode("1234"))
-//                .userRoles(List.of(UserRole.SUPER_ADMIN))
-//                .build();
-//
-//        userDao.save(userEntity);
-//        return "user added";
-//    }
+    @GetMapping("/add")
+    public String addUser(){
+        UserEntity userEntity = UserEntity.builder()
+                .name("Asadbek")
+                .username("nobleman")
+                .password(passwordEncoder.encode("1234"))
+                .userRoles(List.of(UserRole.SUPER_ADMIN))
+                .build();
+
+        userDao.save(userEntity);
+        return "user added";
+    }
 
 
-    @GetMapping("/dashboard-page")
+    @PostMapping("/dashboard-page")
     public ModelAndView getPage(){
         return new ModelAndView("dashboard");
     }

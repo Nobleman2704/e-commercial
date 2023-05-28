@@ -52,6 +52,7 @@ public class UserService implements BaseService<
         Long userId = userUpdateRequest.getId();
         UserEntity userEntity = userDao.findById(userId).get();
         modelMapper.map(userUpdateRequest, userEntity);
+        userEntity.setUserAuthorities(userUpdateRequest.getUserAuthorities());
         userEntity.setPassword(passwordEncoder.encode(userUpdateRequest.getPassword()));
         try {
             userDao.save(userEntity);

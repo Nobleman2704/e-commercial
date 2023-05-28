@@ -678,20 +678,28 @@
             <thead class="table-head">
             <tr class="table-tr">
                 <th class="table-th">id</th>
-                <th class="table-th">username</th>
+                <th class="table-th">name</th>
                 <th class="table-th">total price</th>
-                <th class="table-th">created date</th>
-                <th class="table-th">info</th>
+                <th class="table-th">orders</th>
             </tr>
             </thead>
-            <tbody class="table-body">
+            <tbody th:each="userOrder:${userOrders}" class="table-body">
 
             <tr class="tbody-tr">
-                <td class="tbody-td">1</td>
-                <td class="tbody-td">John</td>
-                <td class="tbody-td">13.000$</td>
-                <td class="tbody-td">12.05.2023</td>
-                <td class="tbody-category-td"><a href="#" class="tbody-category-td-a">info</a></td>
+                <td th:text="${userOrder.username}" class="tbody-td"></td>
+                <td th:text="${userOrder.totalSum}" class="tbody-td"></td>
+                <td class="tbody-category-td">
+                    <div class="dropdown">
+                        <button class="dropbtn">get orders</button>
+                        <div th:each="order:${userOrders.orders}" class="dropdown-content">
+                            <h6 th:text="'id: ' + ${order.id}"></h6>
+                            <h6 th:text="'product name: ' + ${order.amount} + 'x' + ${order.products.price} + '=' + ${order.totalPrice}"></h6>
+                            <h6 th:text="'total price: ' + ${order.products.name}"></h6>
+                            <h6 th:text="'created date: ' + ${order.createdDate}"></h6>
+                            <hr>
+                        </div>
+                    </div>
+                </td>
             </tr>
             </tbody>
         </table>

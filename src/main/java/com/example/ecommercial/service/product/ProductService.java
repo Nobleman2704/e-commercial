@@ -49,7 +49,14 @@ public class ProductService implements BaseService<
 
     @Override
     public BaseResponse update(ProductCreateAndUpdateRequest update) {
-        return null;
+        Long id = update.getId();
+        ProductEntity product = productDao.findById(id).get();
+        modelMapper.map(update, product);
+        productDao.save(product);
+        return BaseResponse.builder()
+                .status(200)
+                .message("Success")
+                .build();
     }
 
     @Override
