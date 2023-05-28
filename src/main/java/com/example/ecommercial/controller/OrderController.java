@@ -24,6 +24,7 @@ public class OrderController {
         ModelAndView modelAndView = new ModelAndView("dashboard");
         BaseResponse<List<OrderGetResponse>> response = orderService.getALl();
         modelAndView.addObject("orders", response.getData());
+        modelAndView.addObject("status", 3);
         return modelAndView;
     }
 }
