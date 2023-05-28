@@ -167,15 +167,15 @@
 
                 <label class="table1-label">Description:</label> <br>
                 <input type="text" th:value="${product.description}" placeholder="description" class="table1-input"
-                       required> <br><br>
+                       name="description" required> <br><br>
 
                 <label class="table1-label">Price:</label> <br>
-                <input type="number" th:value="${product.price}" placeholder="name" class="table1-input" min="1"
-                       required name="name"> <br><br>
+                <input type="number" th:value="${product.price}" placeholder="price" class="table1-input" min="1"
+                       required name="price"> <br><br>
 
-                <label class="table1-label">Name:</label> <br>
-                <input type="number" th:value="${product.amount}" placeholder="name" min="1" class="table1-input"
-                       required name="name"> <br><br>
+                <label class="table1-label">Amount:</label> <br>
+                <input type="number" th:value="${product.amount}" placeholder="amount" min="1" class="table1-input"
+                       required name="amount"> <br><br>
 
                 <input type="hidden" th:value="${product.id}" name="id">
             </div>

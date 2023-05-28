@@ -3,6 +3,7 @@ package com.example.ecommercial.service.user;
 import com.example.ecommercial.dao.UserDao;
 import com.example.ecommercial.domain.dto.response.BaseResponse;
 import com.example.ecommercial.domain.dto.response.UserGetResponse;
+import com.example.ecommercial.domain.entity.OrderEntity;
 import com.example.ecommercial.domain.entity.UserEntity;
 import com.example.ecommercial.domain.dto.request.UserCreateAndUpdateRequest;
 import com.example.ecommercial.domain.enums.UserRole;
@@ -50,7 +51,10 @@ public class UserService implements BaseService<
     public BaseResponse update(UserCreateAndUpdateRequest userUpdateRequest) {
         Long userId = userUpdateRequest.getId();
         UserEntity userEntity = userDao.findById(userId).get();
+
         modelMapper.map(userUpdateRequest, userEntity);
+
+        userEntity.setUserAuthorities(userUpdateRequest.getUserAuthorities());
         userEntity.setPassword(passwordEncoder.encode(userUpdateRequest.getPassword()));
         try {
             userDao.save(userEntity);
@@ -126,6 +130,7 @@ public class UserService implements BaseService<
                 .name(user.getUserName())
                 .username(user.getUserName())
                 .userState(UserState.REGISTERED)
+                .userRoles(List.of(UserRole.USER))
                 .chatId(chatId)
                 .build();
         userDao.save(userEntity);

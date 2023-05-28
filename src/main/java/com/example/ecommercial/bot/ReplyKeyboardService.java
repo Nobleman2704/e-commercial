@@ -35,30 +35,21 @@ public class ReplyKeyboardService {
 
     public ReplyKeyboardMarkup mainMenu() {
         ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
-
+        replyKeyboardMarkup.setResizeKeyboard(true);
         List<KeyboardRow> keyboardRows = new ArrayList<>();
 
         KeyboardRow row = new KeyboardRow();
         row.add("📋 Categories");
-        keyboardRows.add(row);
-
-        row = new KeyboardRow();
         row.add("🧺 Basket");
         keyboardRows.add(row);
 
         row = new KeyboardRow();
         row.add("📪 Orders");
-        keyboardRows.add(row);
-
-        row = new KeyboardRow();
         row.add("🗒️ History");
         keyboardRows.add(row);
 
         row = new KeyboardRow();
         row.add("💰️ Get balance");
-        keyboardRows.add(row);
-
-        row = new KeyboardRow();
         row.add("💸 Add balance");
         keyboardRows.add(row);
 

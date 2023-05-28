@@ -23,8 +23,11 @@ public class HistoryService implements BaseService<HistoryEntity, BaseResponse> 
     private final UserDao userDao;
 
     @Override
-    public BaseResponse save(HistoryEntity request) {
-        return null;
+    public BaseResponse save(HistoryEntity history) {
+        historyDao.save(history);
+        return BaseResponse.builder()
+                .message("deleted")
+                .build();
     }
 
     @Override
