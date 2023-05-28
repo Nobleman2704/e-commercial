@@ -55,7 +55,7 @@ public class CategoryController {
         return modelAndView;
     }
 
-    @GetMapping("get_all")
+    @GetMapping("/get_all")
     public ModelAndView getAllCategories(){
         ModelAndView modelAndView = new ModelAndView("dashboard");
         modelAndView.addObject("categories", categoryService.getALl().getData());
