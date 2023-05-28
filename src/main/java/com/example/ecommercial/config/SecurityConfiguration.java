@@ -37,6 +37,7 @@ public class SecurityConfiguration {
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
+                .successForwardUrl("/test/dashboard-page")
                 .and()
                 .build();
     }
