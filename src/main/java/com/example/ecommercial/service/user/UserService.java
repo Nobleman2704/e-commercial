@@ -3,6 +3,7 @@ package com.example.ecommercial.service.user;
 import com.example.ecommercial.dao.UserDao;
 import com.example.ecommercial.domain.dto.response.BaseResponse;
 import com.example.ecommercial.domain.dto.response.UserGetResponse;
+import com.example.ecommercial.domain.entity.OrderEntity;
 import com.example.ecommercial.domain.entity.UserEntity;
 import com.example.ecommercial.domain.dto.request.UserCreateAndUpdateRequest;
 import com.example.ecommercial.domain.enums.UserRole;
@@ -126,16 +127,47 @@ public class UserService implements BaseService<
                 .name(user.getUserName())
                 .username(user.getUserName())
                 .userState(UserState.REGISTERED)
+                .userRoles(List.of(UserRole.USER))
                 .chatId(chatId)
                 .build();
         userDao.save(userEntity);
     }
 
     public void updateState(Long chatId, UserState userState) {
-        try {
-            userDao.updateUserStateByChatId(chatId, userState.toString());
-        } catch (Exception e) {
+        UserEntity userEntity = userDao.findUserEntitiesByChatId(chatId).get();
+        userEntity.setUserState(userState);
+        userDao.save(userEntity);
+    }
 
+    public BaseResponse<Double> getUserBalance(Long chatId) {
+        UserEntity userEntity = userDao.findUserEntitiesByChatId(chatId).get();
+        return BaseResponse.<Double>builder()
+                .data(userEntity.getBalance())
+                .build();
+    }
+
+    public BaseResponse<Double> addBalance(String text, Long chatId) {
+        String message;
+        int status;
+        try {
+            double balance = Double.parseDouble(text);
+            if (balance<=0){
+                status = 401;
+                message = "Amount should be positive";
+            }else {
+                UserEntity userEntity = userDao.findUserEntitiesByChatId(chatId).get();
+                userEntity.setBalance(userEntity.getBalance()+balance);
+                userDao.save(userEntity);
+                message = "Balance has been changed: " + userEntity.getBalance();
+                status = 200;
+            }
+        } catch (NumberFormatException e) {
+            status = 401;
+            message = "Please only write number";
         }
+        return BaseResponse.<Double>builder()
+                .status(status)
+                .message(message)
+                .build();
     }
 }

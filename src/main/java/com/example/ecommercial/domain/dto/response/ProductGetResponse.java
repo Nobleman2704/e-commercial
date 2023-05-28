@@ -27,5 +27,4 @@ public class ProductGetResponse {
     double price;
     int amount;
     ProductCategoryEntity categories;
-    List<OrderEntity> orderEntities;
 }

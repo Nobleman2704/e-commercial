@@ -32,17 +32,22 @@ public class UserEntity extends BaseEntity implements UserDetails {
 
     private Long chatId;
 
+    private double balance;
+
     @Enumerated(EnumType.STRING)
     private List<UserRole> userRoles;
 
     @Enumerated(EnumType.STRING)
     private List<UserAuthority> userAuthorities;
 
-    @OneToMany(mappedBy = "users", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "users", fetch = FetchType.EAGER)
     private List<OrderEntity> orderEntities;
 
-    @OneToMany(mappedBy = "users", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "users", fetch = FetchType.EAGER)
     private List<HistoryEntity> historyEntities;
+
+    @OneToMany(mappedBy = "users", fetch = FetchType.EAGER)
+    private List<BasketEntity> basketEntities;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
