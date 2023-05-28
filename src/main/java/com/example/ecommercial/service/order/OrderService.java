@@ -7,17 +7,21 @@ import com.example.ecommercial.dao.UserDao;
 import com.example.ecommercial.domain.dto.response.BaseResponse;
 import com.example.ecommercial.domain.dto.response.BasketGetResponse;
 import com.example.ecommercial.domain.dto.response.OrderGetResponse;
+import com.example.ecommercial.domain.dto.response.UserOrdersGetResponse;
 import com.example.ecommercial.domain.entity.BasketEntity;
 import com.example.ecommercial.domain.entity.OrderEntity;
 import com.example.ecommercial.domain.entity.ProductEntity;
 import com.example.ecommercial.domain.entity.UserEntity;
 import com.example.ecommercial.domain.enums.OrderStatus;
+import com.example.ecommercial.domain.enums.UserRole;
 import com.example.ecommercial.service.BaseService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 @Service
@@ -61,11 +65,35 @@ public class OrderService implements BaseService<OrderEntity, BaseResponse> {
     }
 
     @Override
-    public BaseResponse<List<OrderGetResponse>> getALl() {
-        List<OrderEntity> orders = orderDao.findAll();
-        return BaseResponse.<List<OrderGetResponse>>builder()
-                .data(modelMapper.map(orders,
-                        new TypeToken<List<OrderGetResponse>>(){}.getType()))
+    public BaseResponse<List<UserOrdersGetResponse>> getALl() {
+        List<UserEntity> users = userDao.findAll()
+                .stream()
+                .filter(user -> user.getUserRoles().contains(UserRole.USER)
+                        && !user.getOrderEntities().isEmpty())
+                .toList();
+        if (users.isEmpty()){
+            return BaseResponse.<List<UserOrdersGetResponse>>builder()
+                    .status(404)
+                    .data(Collections.emptyList())
+                    .build();
+        }
+        List<UserOrdersGetResponse> allUserOrders = new LinkedList<>();
+        for (UserEntity user : users) {
+            double totalSum = 0;
+            List<OrderEntity> orderEntities = user.getOrderEntities();
+            for (OrderEntity orderEntity : orderEntities) {
+                totalSum+=orderEntity.getTotalPrice();
+            }
+            allUserOrders.add(UserOrdersGetResponse.builder()
+                            .username(user.getName())
+                            .totalSum(totalSum)
+                            .orders(modelMapper
+                                    .map(orderEntities, new TypeToken<List<OrderGetResponse>>(){}
+                                            .getType()))
+                    .build());
+        }
+        return BaseResponse.<List<UserOrdersGetResponse>>builder()
+                .data(allUserOrders)
                 .build();
     }
 
