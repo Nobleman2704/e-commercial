@@ -51,7 +51,9 @@ public class UserService implements BaseService<
     public BaseResponse update(UserCreateAndUpdateRequest userUpdateRequest) {
         Long userId = userUpdateRequest.getId();
         UserEntity userEntity = userDao.findById(userId).get();
+
         modelMapper.map(userUpdateRequest, userEntity);
+
         userEntity.setUserAuthorities(userUpdateRequest.getUserAuthorities());
         userEntity.setPassword(passwordEncoder.encode(userUpdateRequest.getPassword()));
         try {

@@ -8,13 +8,11 @@ import com.example.ecommercial.domain.dto.response.BaseResponse;
 import com.example.ecommercial.domain.dto.response.BasketGetResponse;
 import com.example.ecommercial.domain.dto.response.OrderGetResponse;
 import com.example.ecommercial.domain.dto.response.UserOrdersGetResponse;
-import com.example.ecommercial.domain.entity.BasketEntity;
-import com.example.ecommercial.domain.entity.OrderEntity;
-import com.example.ecommercial.domain.entity.ProductEntity;
-import com.example.ecommercial.domain.entity.UserEntity;
+import com.example.ecommercial.domain.entity.*;
 import com.example.ecommercial.domain.enums.OrderStatus;
 import com.example.ecommercial.domain.enums.UserRole;
 import com.example.ecommercial.service.BaseService;
+import com.example.ecommercial.service.history.HistoryService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -33,6 +31,7 @@ public class OrderService implements BaseService<OrderEntity, BaseResponse> {
     private final BasketDao basketDao;
     private final UserDao userDao;
     private final ProductDao productDao;
+    private final HistoryService historyService;
 
     @Override
     public BaseResponse save(OrderEntity request) {
@@ -53,10 +52,12 @@ public class OrderService implements BaseService<OrderEntity, BaseResponse> {
         user.setBalance(user.getBalance()+order.getTotalPrice());
         product.setAmount(product.getAmount()+ order.getAmount());
 
+        orderDao.deleteById(id);
         userDao.save(user);
         productDao.save(product);
-        orderDao.deleteById(id);
-        return BaseResponse.builder().build();
+        return BaseResponse.builder()
+                .message("deleted")
+                .build();
     }
 
     @Override
@@ -69,7 +70,8 @@ public class OrderService implements BaseService<OrderEntity, BaseResponse> {
         List<UserEntity> users = userDao.findAll()
                 .stream()
                 .filter(user -> user.getUserRoles().contains(UserRole.USER)
-                        && !user.getOrderEntities().isEmpty())
+                        && !orderDao.findOrderEntitiesByUsersId(user.getId())
+                        .get().isEmpty())
                 .toList();
         if (users.isEmpty()){
             return BaseResponse.<List<UserOrdersGetResponse>>builder()
@@ -80,7 +82,8 @@ public class OrderService implements BaseService<OrderEntity, BaseResponse> {
         List<UserOrdersGetResponse> allUserOrders = new LinkedList<>();
         for (UserEntity user : users) {
             double totalSum = 0;
-            List<OrderEntity> orderEntities = user.getOrderEntities();
+            List<OrderEntity> orderEntities = orderDao
+                    .findOrderEntitiesByUsersId(user.getId()).get();
             for (OrderEntity orderEntity : orderEntities) {
                 totalSum+=orderEntity.getTotalPrice();
             }
@@ -146,7 +149,8 @@ public class OrderService implements BaseService<OrderEntity, BaseResponse> {
 
     public BaseResponse<List<OrderGetResponse>> findUserOrders(Long chatId) {
         UserEntity userEntity = userDao.findUserEntitiesByChatId(chatId).get();
-        List<OrderEntity> orders = userEntity.getOrderEntities();
+        List<OrderEntity> orders = orderDao
+                .findOrderEntitiesByUsersId(userEntity.getId()).get();
         if (orders.isEmpty()){
             return BaseResponse.<List<OrderGetResponse>>builder()
                     .status(404)
@@ -157,5 +161,29 @@ public class OrderService implements BaseService<OrderEntity, BaseResponse> {
                 .data(modelMapper
                         .map(orders, new TypeToken<List<OrderGetResponse>>(){}.getType()))
                 .build();
+    }
+
+    public BaseResponse<List<UserOrdersGetResponse>> changeStatus(Long orderId, String status) {
+        String message;
+        if (status.equals("CANCEL")){
+            message = "Order has been cancelled";
+            delete(orderId);
+        }else {
+            message = "Product has been ordered";
+            OrderEntity orderEntity = orderDao.findById(orderId).get();
+            HistoryEntity history = HistoryEntity.builder()
+                    .amount(orderEntity.getAmount())
+                    .totalPrice(orderEntity.getTotalPrice())
+                    .name(orderEntity.getProducts().getName())
+                    .description(orderEntity.getProducts().getDescription())
+                    .users(orderEntity.getUsers())
+                    .categoryName(orderEntity.getProducts().getCategories().getName())
+                    .build();
+            historyService.save(history);
+            orderDao.deleteById(orderId);
+        }
+        BaseResponse<List<UserOrdersGetResponse>> response = getALl();
+        response.setMessage(message);
+        return response;
     }
 }

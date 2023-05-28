@@ -78,7 +78,7 @@ public class ECommercialBot extends TelegramLongPollingBot {
                             sendMessage = botService.shareContact(chatId);
                     }
                     case REGISTERED, IDLE, CATEGORIES, PRODUCTS, PRODUCT, BASKETS, ORDERS, BASKET,
-                            GET_BALANCE -> {
+                            GET_BALANCE, HISTORIES -> {
                         userState = botService.navigateMenu(text, chatId);
                         switch (userState) {
                             case CATEGORIES -> sendMessage = botService.getCategories(chatId);

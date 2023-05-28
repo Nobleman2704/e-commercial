@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -25,6 +27,20 @@ public class OrderController {
         ModelAndView modelAndView = new ModelAndView("dashboard");
         BaseResponse<List<UserOrdersGetResponse>> response = orderService.getALl();
         modelAndView.addObject("userOrders", response.getData());
+        modelAndView.addObject("status", 3);
+        return modelAndView;
+    }
+
+    @PostMapping("/change_status")
+    public ModelAndView changeStatus(
+            @ModelAttribute("status") String status,
+            @ModelAttribute("orderId") Long orderId
+    ){
+        ModelAndView modelAndView = new ModelAndView("dashboard");
+        BaseResponse<List<UserOrdersGetResponse>> response =  orderService
+                .changeStatus(orderId, status);
+        modelAndView.addObject("userOrders", response.getData());
+        modelAndView.addObject("message", response.getMessage());
         modelAndView.addObject("status", 3);
         return modelAndView;
     }

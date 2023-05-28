@@ -289,9 +289,11 @@
         display: none;
         position: absolute;
         background-color: #f9f9f9;
-        min-width: 160px;
+        width: 560px;
         box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
         z-index: 1;
+        margin-left: -300px;
+        font-size: 15px;
     }
 
     .dropdown-content a {
@@ -677,7 +679,6 @@
 
             <thead class="table-head">
             <tr class="table-tr">
-                <th class="table-th">id</th>
                 <th class="table-th">name</th>
                 <th class="table-th">total price</th>
                 <th class="table-th">orders</th>
@@ -691,13 +692,38 @@
                 <td class="tbody-category-td">
                     <div class="dropdown">
                         <button class="dropbtn">get orders</button>
-                        <div th:each="order:${userOrders.orders}" class="dropdown-content">
-                            <h6 th:text="'id: ' + ${order.id}"></h6>
-                            <h6 th:text="'product name: ' + ${order.amount} + 'x' + ${order.products.price} + '=' + ${order.totalPrice}"></h6>
-                            <h6 th:text="'total price: ' + ${order.products.name}"></h6>
-                            <h6 th:text="'created date: ' + ${order.createdDate}"></h6>
-                            <hr>
-                        </div>
+
+                        <table class="dropdown-content">
+                            <thead>
+                            <tr>
+                                <th style="margin-left: 15px">Id</th>
+                                <th style="margin-left: 15px">Total price</th>
+                                <th style="margin-left: 15px">Product name</th>
+                                <th style="margin-left: 15px">Created date</th>
+                                <th style="margin-left: 15px">Change status</th>
+                            </tr>
+                            </thead>
+
+                            <tbody th:each="order:${userOrder.orders}">
+                            <tr>
+                                <td th:text="'id: ' + ${order.id}"></td>
+                                <td th:text="'price: ' + ${order.amount} + 'x' + ${order.totalPrice/order.amount} + '=' + ${order.totalPrice}"></td>
+                                <td th:text="'product name: ' + ${order.products.name}"></td>
+                                <td th:text="'created date: ' + ${order.createdDate}"></td>
+                                <td>
+                                    <form style="display: flex; flex-direction: row" action="/order/change_status"
+                                          method="post">
+                                        <input type="hidden" th:value="${order.id}" name="orderId">
+                                        <select name="status">
+                                            <option>CANCEL</option>
+                                            <option>ORDER</option>
+                                        </select>
+                                        <button>Change</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </td>
             </tr>

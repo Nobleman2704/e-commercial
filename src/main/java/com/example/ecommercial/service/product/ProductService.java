@@ -1,5 +1,7 @@
 package com.example.ecommercial.service.product;
 
+import com.example.ecommercial.dao.BasketDao;
+import com.example.ecommercial.dao.OrderDao;
 import com.example.ecommercial.dao.ProductCategoryDao;
 import com.example.ecommercial.dao.ProductDao;
 import com.example.ecommercial.domain.dto.request.ProductCreateAndUpdateRequest;
@@ -27,6 +29,8 @@ public class ProductService implements BaseService<
     private final ProductDao productDao;
     private final ModelMapper modelMapper;
     private final ProductCategoryDao categoryDao;
+    private final OrderDao orderDao;
+    private final BasketDao basketDao;
 
     @Override
     public BaseResponse save(ProductCreateAndUpdateRequest productCreateRequest) {
@@ -61,12 +65,22 @@ public class ProductService implements BaseService<
 
     @Override
     public BaseResponse delete(Long id) {
-        ProductEntity data = productDao.findById(id).get();
-
-        productDao.delete(data);
+        ProductEntity product = productDao.findById(id).get();
+        boolean check = orderDao.existsOrderEntitiesByProducts(product);
+        String message;
+        int status;
+        if (check){
+            status = 401;
+            message = "This product exists in orders";
+        }else {
+            basketDao.deleteBasketEntitiesByProducts(product);
+            status = 200;
+            message = "product has been deleted";
+            productDao.deleteById(id);
+        }
         return BaseResponse.builder()
-                .status(200)
-                .message("Success")
+                .status(status)
+                .message(message)
                 .build();
     }
 
