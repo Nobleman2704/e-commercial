@@ -13,5 +13,5 @@ public interface BaseService<CURQ, RP> {
      RP update(CURQ update);
      RP delete(Long id);
      RP getById(Long id);
-     RP getALl();
+     RP getALl(int pageNumber);
 }

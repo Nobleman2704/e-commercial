@@ -4,22 +4,22 @@ import com.example.ecommercial.dao.BasketDao;
 import com.example.ecommercial.dao.OrderDao;
 import com.example.ecommercial.dao.ProductCategoryDao;
 import com.example.ecommercial.dao.ProductDao;
-import com.example.ecommercial.domain.dto.request.ProductCreateAndUpdateRequest;
-import com.example.ecommercial.domain.dto.response.BaseResponse;
-import com.example.ecommercial.domain.dto.response.ProductGetResponse;
+import com.example.ecommercial.controller.dto.request.ProductCreateAndUpdateRequest;
+import com.example.ecommercial.controller.dto.response.BaseResponse;
+import com.example.ecommercial.controller.dto.response.ProductGetResponse;
 import com.example.ecommercial.domain.entity.ProductCategoryEntity;
 import com.example.ecommercial.domain.entity.ProductEntity;
 import com.example.ecommercial.service.BaseService;
-import com.example.ecommercial.service.category.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
 
 @Service
 @RequiredArgsConstructor
@@ -73,7 +73,7 @@ public class ProductService implements BaseService<
             status = 401;
             message = "This product exists in orders";
         }else {
-            basketDao.deleteBasketEntitiesByProducts(product);
+            basketDao.deleteBasketEntitiesByProductsId(id);
             status = 200;
             message = "product has been deleted";
             productDao.deleteById(id);
@@ -87,17 +87,23 @@ public class ProductService implements BaseService<
     @Override
     public BaseResponse<ProductGetResponse> getById(Long id) {
         ProductEntity productEntity = productDao.findById(id).get();
-        return new BaseResponse<>(
-                200,
-                "success",
-                modelMapper.map(productEntity, ProductGetResponse.class));
+        return BaseResponse.<ProductGetResponse>builder()
+                .status(200)
+                .message("success")
+                .data(modelMapper.map(productEntity, ProductGetResponse.class))
+                .build();
+
     }
 
     @Override
-    public BaseResponse<List<ProductGetResponse>> getALl() {
+    public BaseResponse<List<ProductGetResponse>> getALl(int pageNumber) {
+        Pageable pageRequest = PageRequest.of(pageNumber, 5);
+        Page<ProductEntity> productEntityPage = productDao.findAll(pageRequest);
+        int totalPages = productEntityPage.getTotalPages();
         return BaseResponse.<List<ProductGetResponse>>builder()
+                .totalPageAmount((totalPages==0)?0:totalPages-1)
                 .data(modelMapper
-                        .map(productDao.findAll(),
+                        .map(productEntityPage.getContent(),
                                 new TypeToken<List<ProductGetResponse>>(){}.getType()))
                 .build();
     }
@@ -134,5 +140,15 @@ public class ProductService implements BaseService<
                 products.addAll(getCategoryProducts(categoryEntity, new LinkedList<>()));
         }
         return products;
+    }
+
+    public BaseResponse<List<ProductGetResponse>> changeProductAmount(Long productId, int amount) {
+        ProductEntity product = productDao.findById(productId).get();
+        product.setAmount(product.getAmount()+amount);
+        productDao.save(product);
+
+        BaseResponse<List<ProductGetResponse>> response = getALl(0);
+        response.setMessage("Amount added");
+        return response;
     }
 }

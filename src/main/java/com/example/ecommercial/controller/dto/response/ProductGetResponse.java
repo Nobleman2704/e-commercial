@@ -1,4 +1,4 @@
-package com.example.ecommercial.domain.dto.response;
+package com.example.ecommercial.controller.dto.response;
 
 import com.example.ecommercial.domain.entity.OrderEntity;
 import com.example.ecommercial.domain.entity.ProductCategoryEntity;

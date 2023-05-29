@@ -43,10 +43,10 @@ public class UserEntity extends BaseEntity implements UserDetails {
     @OneToMany(mappedBy = "users")
     private List<OrderEntity> orderEntities;
 
-    @OneToMany(mappedBy = "users", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "users")
     private List<HistoryEntity> historyEntities;
 
-    @OneToMany(mappedBy = "users", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "users")
     private List<BasketEntity> basketEntities;
 
     @Override

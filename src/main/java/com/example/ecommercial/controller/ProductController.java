@@ -1,7 +1,8 @@
 package com.example.ecommercial.controller;
 
-import com.example.ecommercial.domain.dto.request.ProductCreateAndUpdateRequest;
-import com.example.ecommercial.domain.dto.response.BaseResponse;
+import com.example.ecommercial.controller.dto.request.ProductCreateAndUpdateRequest;
+import com.example.ecommercial.controller.dto.response.BaseResponse;
+import com.example.ecommercial.controller.dto.response.ProductGetResponse;
 import com.example.ecommercial.service.category.CategoryService;
 import com.example.ecommercial.service.product.ProductService;
 import jakarta.validation.Valid;
@@ -11,6 +12,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.List;
 
 import static com.example.ecommercial.controller.UserController.extractAllErrors;
 
@@ -35,7 +38,8 @@ public class ProductController {
             modelAndView.addObject("message", response.getMessage());
         }
 
-        modelAndView.addObject("products", productService.getALl().getData());
+        modelAndView.addObject("products", productService
+                .getALl(0).getData());
         modelAndView.addObject("categories", categoryService.getALl().getData());
         modelAndView.addObject("status", 2);
         return modelAndView;
@@ -54,8 +58,10 @@ public class ProductController {
         } else {
             BaseResponse response = productService.update(productUpdateRequest);
             modelAndView.addObject("message", response.getMessage());
-            modelAndView.addObject("products", productService.getALl().getData());
-            modelAndView.addObject("categories", categoryService.getALl().getData());
+            modelAndView.addObject("products", productService
+                    .getALl(0).getData());
+            modelAndView.addObject("categories", categoryService
+                    .getALl().getData());
             modelAndView.addObject("status", 2);
             modelAndView.setViewName("dashboard");
         }
@@ -63,29 +69,46 @@ public class ProductController {
     }
 
     @GetMapping("/get_all")
-    public ModelAndView getAllProducts(){
+    public ModelAndView getAllProducts(
+            @RequestParam(name = "page", defaultValue = "0") int pageNumber
+    ){
         ModelAndView modelAndView = new ModelAndView("dashboard");
-        modelAndView.addObject("products", productService.getALl().getData());
+        modelAndView.addObject("products", productService
+                .getALl(pageNumber).getData());
         modelAndView.addObject("categories", categoryService.getALl().getData());
         modelAndView.addObject("status", 2);
         return modelAndView;
     }
 
-    @GetMapping("/products-page")
-    public ModelAndView productsPage(){
-        ModelAndView modelAndView = new ModelAndView("dashboard");
-        modelAndView.addObject("products", productService.getALl().getData());
-        modelAndView.addObject("categories", categoryService.getALl().getData());
-        modelAndView.addObject("status", 2);
-        return modelAndView;
-    }
+//    @GetMapping("/products-page")
+//    public ModelAndView productsPage(){
+//        ModelAndView modelAndView = new ModelAndView("dashboard");
+//        modelAndView.addObject("products", productService.getALl().getData());
+//        modelAndView.addObject("categories", categoryService.getALl().getData());
+//        modelAndView.addObject("status", 2);
+//        return modelAndView;
+//    }
 
     @GetMapping("/update-page/{id}")
     public ModelAndView updatePage(@PathVariable("id") Long id){
         ModelAndView modelAndView = new ModelAndView("productUpdatePage");
-        modelAndView.addObject("product", productService.getById(id).getData());
+        modelAndView.addObject("product", productService
+                .getById(id).getData());
         return modelAndView;
     }
+
+    @PostMapping("/add_amount")
+    public ModelAndView changeAmount(
+            @ModelAttribute("id") Long productId,
+            @ModelAttribute("amount") int amount){
+        ModelAndView modelAndView = new ModelAndView("dashboard");
+        BaseResponse<List<ProductGetResponse>> response = productService
+                .changeProductAmount(productId, amount);
+        modelAndView.addObject("message", response.getMessage());
+        modelAndView.addObject("products", response.getData());
+        return modelAndView;
+    }
+
 
     @GetMapping("/delete/{id}")
     public ModelAndView deleteProduct(
@@ -93,8 +116,10 @@ public class ProductController {
     ){
         BaseResponse response = productService.delete(id);
         ModelAndView modelAndView = new ModelAndView("dashboard");
-        modelAndView.addObject("products", productService.getALl().getData());
-        modelAndView.addObject("categories", categoryService.getALl().getData());
+        modelAndView.addObject("products", productService
+                .getALl(0).getData());
+        modelAndView.addObject("categories", categoryService
+                .getALl().getData());
         modelAndView.addObject("message", response.getMessage());
         modelAndView.addObject("status", 2);
         return modelAndView;

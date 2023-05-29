@@ -1,17 +1,19 @@
 package com.example.ecommercial.service.user;
 
 import com.example.ecommercial.dao.UserDao;
-import com.example.ecommercial.domain.dto.response.BaseResponse;
-import com.example.ecommercial.domain.dto.response.UserGetResponse;
-import com.example.ecommercial.domain.entity.OrderEntity;
+import com.example.ecommercial.controller.dto.response.BaseResponse;
+import com.example.ecommercial.controller.dto.response.UserGetResponse;
 import com.example.ecommercial.domain.entity.UserEntity;
-import com.example.ecommercial.domain.dto.request.UserCreateAndUpdateRequest;
+import com.example.ecommercial.controller.dto.request.UserCreateAndUpdateRequest;
 import com.example.ecommercial.domain.enums.UserRole;
 import com.example.ecommercial.domain.enums.UserState;
 import com.example.ecommercial.service.BaseService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.User;
@@ -82,17 +84,23 @@ public class UserService implements BaseService<
     @Override
     public BaseResponse<UserGetResponse> getById(Long id) {
         UserEntity userEntity = userDao.findById(id).get();
-        UserGetResponse userGetResponse = modelMapper.map(userEntity, UserGetResponse.class);
-        return new BaseResponse<>(200, "Success", userGetResponse);
+        return BaseResponse.<UserGetResponse>builder()
+                .data(modelMapper.map(userEntity, UserGetResponse.class))
+                .status(200)
+                .message("Success")
+                .build();
     }
 
     @Override
-    public BaseResponse<List<UserGetResponse>> getALl() {
-        List<UserEntity> userEntities = userDao.findAll();
+    public BaseResponse<List<UserGetResponse>> getALl(int pageNumber) {
+        Pageable pageable = PageRequest.of(pageNumber, 5);
+        Page<UserEntity> userEntityPage = userDao.findUserEntitiesByChatIdIsNull(pageable);
+        int totalPages = userEntityPage.getTotalPages();
         return BaseResponse.<List<UserGetResponse>>builder()
                 .status(200)
                 .message("success")
-                .data(modelMapper.map(userEntities,
+                .totalPageAmount((totalPages==0)?0:totalPages-1)
+                .data(modelMapper.map(userEntityPage.getContent(),
                         new TypeToken<List<UserGetResponse>>(){}.getType()))
                 .build();
     }

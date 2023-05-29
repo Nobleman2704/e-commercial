@@ -3,13 +3,11 @@ package com.example.ecommercial.service.basket;
 import com.example.ecommercial.dao.BasketDao;
 import com.example.ecommercial.dao.ProductDao;
 import com.example.ecommercial.dao.UserDao;
-import com.example.ecommercial.domain.dto.response.BaseResponse;
-import com.example.ecommercial.domain.dto.response.BasketGetResponse;
+import com.example.ecommercial.controller.dto.response.BaseResponse;
+import com.example.ecommercial.controller.dto.response.BasketGetResponse;
 import com.example.ecommercial.domain.entity.BasketEntity;
 import com.example.ecommercial.domain.entity.ProductEntity;
 import com.example.ecommercial.domain.entity.UserEntity;
-import com.example.ecommercial.service.BaseService;
-import com.example.ecommercial.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -20,7 +18,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class BasketService implements BaseService<BasketEntity, BaseResponse> {
+public class BasketService{
 
 
     private final ProductDao productDao;
@@ -28,20 +26,10 @@ public class BasketService implements BaseService<BasketEntity, BaseResponse> {
     private final BasketDao basketDao;
     private final ModelMapper modelMapper;
 
-    @Override
-    public BaseResponse save(BasketEntity request) {
-        return null;
-    }
-    @Override
-    public BaseResponse update(BasketEntity update) {
-        return null;
-    }
-    @Override
     public BaseResponse delete(Long id) {
         basketDao.deleteById(id);
         return new BaseResponse();
     }
-    @Override
     public BaseResponse<BasketGetResponse> getById(Long id) {
         BasketEntity basketEntity = basketDao.findById(id).get();
         return BaseResponse.<BasketGetResponse>builder()
@@ -49,22 +37,18 @@ public class BasketService implements BaseService<BasketEntity, BaseResponse> {
                 .build();
     }
 
-    @Override
-    public BaseResponse getALl() {
-        return null;
-    }
 
     public void save(String data, Long chatId) {
         String[] split = data.split(" ");
         int amount = Integer.parseInt(split[0]);
         Long productId = Long.valueOf(split[1]);
 
-        ProductEntity product = productDao.findById(productId).get();
-        UserEntity userEntity = userDao.findUserEntitiesByChatId(chatId).get();
         Optional<BasketEntity> optionalBasket = basketDao
-                .findBasketEntitiesByUsersAndProducts(userEntity, product);
+                .findBasketEntitiesByUsersChatIdAndProductsId(chatId, productId);
 
         if (optionalBasket.isEmpty()){
+            ProductEntity product = productDao.findById(productId).get();
+            UserEntity userEntity = userDao.findUserEntitiesByChatId(chatId).get();
             BasketEntity basketEntity = BasketEntity.builder()
                     .products(product)
                     .users(userEntity)
@@ -79,8 +63,8 @@ public class BasketService implements BaseService<BasketEntity, BaseResponse> {
     }
 
     public BaseResponse<List<BasketGetResponse>> getUserBaskets(Long chatId) {
-        UserEntity userEntity = userDao.findUserEntitiesByChatId(chatId).get();
-        List<BasketEntity> baskets = userEntity.getBasketEntities();
+        List<BasketEntity> baskets = basketDao
+                .findBasketEntitiesByUsersChatId(chatId).get();
         if (baskets.isEmpty()){
             return BaseResponse.<List<BasketGetResponse>>builder()
                     .status(404)

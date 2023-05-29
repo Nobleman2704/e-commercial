@@ -1,4 +1,4 @@
-package com.example.ecommercial.domain.dto.request;
+package com.example.ecommercial.controller.dto.request;
 
 import com.example.ecommercial.domain.enums.UserAuthority;
 import com.example.ecommercial.domain.enums.UserRole;
