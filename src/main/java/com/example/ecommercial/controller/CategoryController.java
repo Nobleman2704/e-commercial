@@ -1,8 +1,7 @@
 package com.example.ecommercial.controller;
 
-import com.example.ecommercial.domain.dto.request.CategoryCreateAndUpdateRequest;
-import com.example.ecommercial.domain.dto.request.UserCreateAndUpdateRequest;
-import com.example.ecommercial.domain.dto.response.BaseResponse;
+import com.example.ecommercial.controller.dto.request.CategoryCreateAndUpdateRequest;
+import com.example.ecommercial.controller.dto.response.BaseResponse;
 import com.example.ecommercial.service.category.CategoryService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -34,7 +33,8 @@ public class CategoryController {
             BaseResponse response = categoryService.save(createAndUpdateRequest);
             modelAndView.addObject("message", response.getMessage());
         }
-        modelAndView.addObject("categories", categoryService.getALl().getData());
+        modelAndView.addObject("categories", categoryService
+                .getALl(0).getData());
         return modelAndView;
     }
 
@@ -51,14 +51,18 @@ public class CategoryController {
             BaseResponse response = categoryService.update(categoryUpdateRequest);
             modelAndView.addObject("message", response.getMessage());
         }
-        modelAndView.addObject("categories", categoryService.getALl().getData());
+        modelAndView.addObject("categories", categoryService
+                .getALl(0).getData());
         return modelAndView;
     }
 
     @GetMapping("get_all")
-    public ModelAndView getAllCategories(){
+    public ModelAndView getAllCategories(
+            @RequestParam(defaultValue = "0", name = "page") int pageNumber
+    ){
         ModelAndView modelAndView = new ModelAndView("dashboard");
-        modelAndView.addObject("categories", categoryService.getALl().getData());
+        modelAndView.addObject("categories", categoryService
+                .getALl(pageNumber).getData());
         modelAndView.addObject("status", 1);
         return modelAndView;
     }

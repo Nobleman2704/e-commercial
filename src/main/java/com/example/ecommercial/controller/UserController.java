@@ -1,11 +1,10 @@
 package com.example.ecommercial.controller;
 
-import com.example.ecommercial.domain.dto.request.UserCreateAndUpdateRequest;
-import com.example.ecommercial.domain.dto.response.BaseResponse;
-import com.example.ecommercial.domain.dto.response.UserGetResponse;
+import com.example.ecommercial.controller.dto.request.UserCreateAndUpdateRequest;
+import com.example.ecommercial.controller.dto.response.BaseResponse;
+import com.example.ecommercial.controller.dto.response.UserGetResponse;
 import com.example.ecommercial.service.user.UserService;
 import jakarta.validation.Valid;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.validation.BindingResult;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/user")
@@ -21,11 +19,6 @@ import java.util.UUID;
 @EnableMethodSecurity
 public class UserController {
     private final UserService userService;
-
-        @GetMapping("/add_user_test")
-    public ModelAndView getUserAddPage(){
-        return new ModelAndView("user-add-test");
-    }
 
     @PostMapping("/add")
     public ModelAndView addUser(
@@ -39,7 +32,8 @@ public class UserController {
             BaseResponse response = userService.save(userCreateAndUpdateRequest);
             modelAndView.addObject("message", response.getMessage());
         }
-        modelAndView.addObject("users", userService.getALl().getData());
+        modelAndView.addObject("users", userService
+                .getALl(0).getData());
         return modelAndView;
     }
 
@@ -50,13 +44,16 @@ public class UserController {
         ModelAndView modelAndView = new ModelAndView();
         String viewName;
         if (bindingResult.hasErrors()){
+            UserGetResponse data = userService.getById(userUpdateRequest.getId()).getData();
+            modelAndView.addObject("user", data);
             modelAndView.addObject("message", extractAllErrors(bindingResult));
             viewName = "userUpdatePage";
         }else {
             BaseResponse response = userService.update(userUpdateRequest);
             modelAndView.addObject("message", response.getMessage());
             modelAndView.addObject("status", 4);
-            modelAndView.addObject("users", userService.getALl().getData());
+            modelAndView.addObject("users", userService
+                    .getALl(0).getData());
             viewName = "dashboard";
         }
         modelAndView.setViewName(viewName);
@@ -79,13 +76,15 @@ public class UserController {
 
         ModelAndView modelAndView = new ModelAndView("dashboard", "message", "deleted");
         modelAndView.addObject("status", 4);
-        modelAndView.addObject("users", userService.getALl().getData());
+        modelAndView.addObject("users", userService
+                .getALl(0).getData());
         return modelAndView;
     }
 
     @GetMapping("/get_all")
     public ModelAndView getAllUsers(){
-        BaseResponse<List<UserGetResponse>> response = userService.getALl();
+        BaseResponse<List<UserGetResponse>> response = userService
+                .getALl(0);
         ModelAndView modelAndView = new ModelAndView("dashboard");
         modelAndView.addObject("users", response.getData());
         modelAndView.addObject("status", 4);

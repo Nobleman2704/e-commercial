@@ -1,8 +1,8 @@
-package com.example.ecommercial.domain.dto.response;
+package com.example.ecommercial.controller.dto.response;
 
-import com.example.ecommercial.domain.entity.ProductEntity;
 import com.example.ecommercial.domain.entity.UserEntity;
-import com.example.ecommercial.domain.enums.OrderStatus;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,15 +14,16 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class OrderGetResponse {
+public class HistoryGetResponse {
     private Long id;
     private LocalDateTime createdDate;
     private LocalDateTime updatedDate;
     private String createdBy;
     private String lastModifiedBy;
-    private ProductEntity products;
+    private String name;
+    private String description;
     private double totalPrice;
     private int amount;
+    private String categoryName;
     private UserEntity users;
-    private OrderStatus orderStatus;
 }

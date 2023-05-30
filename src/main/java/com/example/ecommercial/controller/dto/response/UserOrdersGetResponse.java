@@ -1,4 +1,4 @@
-package com.example.ecommercial.domain.dto.response;
+package com.example.ecommercial.controller.dto.response;
 
 import lombok.*;
 

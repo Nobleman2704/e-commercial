@@ -9,6 +9,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -40,26 +41,24 @@ public class UserEntity extends BaseEntity implements UserDetails {
     @Enumerated(EnumType.STRING)
     private List<UserAuthority> userAuthorities;
 
-    @OneToMany(mappedBy = "users", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "users")
     private List<OrderEntity> orderEntities;
 
-    @OneToMany(mappedBy = "users", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "users")
     private List<HistoryEntity> historyEntities;
 
-    @OneToMany(mappedBy = "users", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "users")
     private List<BasketEntity> basketEntities;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<SimpleGrantedAuthority> userRoleAuthorities = new LinkedList<>();
-        userRoleAuthorities.addAll(userRoles
+        List<SimpleGrantedAuthority> userRoleAuthorities = new LinkedList<>(userRoles
                 .stream()
                 .map(userRole -> new SimpleGrantedAuthority("ROLE_" + userRole.name()))
                 .toList());
         if (userAuthorities != null) {
             userRoleAuthorities.addAll(
                     userAuthorities
-
                             .stream()
                             .map(userAuthority -> new SimpleGrantedAuthority(userAuthority.name()))
                             .toList()
