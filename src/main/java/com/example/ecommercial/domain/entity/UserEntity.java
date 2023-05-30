@@ -9,6 +9,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -43,10 +44,10 @@ public class UserEntity extends BaseEntity implements UserDetails {
     @OneToMany(mappedBy = "users")
     private List<OrderEntity> orderEntities;
 
-    @OneToMany(mappedBy = "users", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "users")
     private List<HistoryEntity> historyEntities;
 
-    @OneToMany(mappedBy = "users", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "users")
     private List<BasketEntity> basketEntities;
 
     @Override

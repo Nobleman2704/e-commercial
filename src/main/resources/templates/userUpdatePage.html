@@ -6,184 +6,246 @@
 </head>
 
 <style>
-  .modal {
-    z-index: 1;
-    padding-top: 100px;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgb(0, 0, 0);
-    background-color: rgba(0, 0, 0, 0.4);
-  }
+    .modal {
+        z-index: 1;
+        padding-top: 100px;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgb(0, 0, 0);
+        background-color: rgba(0, 0, 0, 0.4);
+    }
 
-  .modal-content {
-    background-color: #fefefe;
-    margin: auto;
-    padding: 0;
-    border: 1px solid #888;
-    width: 30%;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    -webkit-animation-name: animatetop;
-    -webkit-animation-duration: 0.4s;
-    animation-name: animatetop;
-    animation-duration: 0.4s
-  }
-  .close {
-    color: white;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-    margin: 0 auto;
-    text-decoration: none;
-  }
+    .modal-content {
+        background-color: #fefefe;
+        margin: auto;
+        padding: 0;
+        border: 1px solid #888;
+        width: 30%;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        -webkit-animation-name: animatetop;
+        -webkit-animation-duration: 0.4s;
+        animation-name: animatetop;
+        animation-duration: 0.4s
+    }
 
-  .close:hover,
-  .close:focus {
-    color: #000;
-    text-decoration: none;
-    cursor: pointer;
-  }
+    .close {
+        color: white;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+        margin: 0 auto;
+        text-decoration: none;
+    }
 
-  .modal-header {
-    padding: 2px 16px;
-    background-color: #3e5267;
-    color: white;
-  }
+    .close:hover,
+    .close:focus {
+        color: #000;
+        text-decoration: none;
+        cursor: pointer;
+    }
 
-  .modal-body {
-    padding: 20px 16px;
-  }
+    .modal-header {
+        padding: 2px 16px;
+        background-color: #3e5267;
+        color: white;
+    }
 
-  .modal-footer {
-    padding: 10px 16px;
-    background-color: #3e5267;
-    color: white;
-  }
-  #snackbar {
-    visibility: hidden;
-    min-width: 250px;
-    margin-left: -125px;
-    border: 2px solid #293b4d;
-    background-color: #5D6D7E;
-    color: #fff;
-    text-align: center;
-    border-radius: 5px;
-    padding: 16px;
-    position: fixed;
-    z-index: 1;
-    left: 70%;
-    top: 30px;
-    font-size: 17px;
-  }
+    .modal-body {
+        padding: 20px 16px;
+    }
 
-  #snackbar.show {
-    visibility: visible;
-    -webkit-animation: fadein 0.8s, fadeout 0.8s 4s;
-    animation: fadein 0.8s, fadeout 0.8s 4s;
-  }
+    .modal-footer {
+        padding: 10px 16px;
+        background-color: #3e5267;
+        color: white;
+    }
 
-  @-webkit-keyframes fadein {
-    from {top: 0; opacity: 0;}
-    to {top: 30px; opacity: 1;}
-  }
+    #snackbar {
+        visibility: hidden;
+        min-width: 250px;
+        margin-left: -125px;
+        border: 2px solid #293b4d;
+        background-color: #5D6D7E;
+        color: #fff;
+        text-align: center;
+        border-radius: 5px;
+        padding: 16px;
+        position: fixed;
+        z-index: 1;
+        left: 70%;
+        top: 30px;
+        font-size: 17px;
+    }
 
-  @keyframes fadein {
-    from {top: 0; opacity: 0;}
-    to {top: 30px; opacity: 1;}
-  }
+    #snackbar.show {
+        visibility: visible;
+        -webkit-animation: fadein 0.8s, fadeout 0.8s 4s;
+        animation: fadein 0.8s, fadeout 0.8s 4s;
+    }
 
-  @-webkit-keyframes fadeout {
-    from {top: 30px; opacity: 1;}
-    to {top: 0; opacity: 0;}
-  }
+    @-webkit-keyframes fadein {
+        from {
+            top: 0;
+            opacity: 0;
+        }
+        to {
+            top: 30px;
+            opacity: 1;
+        }
+    }
 
-  @keyframes fadeout {
-    from {top: 30px; opacity: 1;}
-    to {top: 0; opacity: 0;}
-  }
+    @keyframes fadein {
+        from {
+            top: 0;
+            opacity: 0;
+        }
+        to {
+            top: 30px;
+            opacity: 1;
+        }
+    }
+
+    @-webkit-keyframes fadeout {
+        from {
+            top: 30px;
+            opacity: 1;
+        }
+        to {
+            top: 0;
+            opacity: 0;
+        }
+    }
+
+    @keyframes fadeout {
+        from {
+            top: 30px;
+            opacity: 1;
+        }
+        to {
+            top: 0;
+            opacity: 0;
+        }
+    }
 </style>
 
 <body>
 <div th:if="${message != null}">
-  <div id="snackbar" th:text="${message}"></div>
+    <div id="snackbar" th:text="${message}"></div>
 </div>
 
 <script>
-  var x = document.getElementById("snackbar");
-  x.className = "show";
-  setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+    var x = document.getElementById("snackbar");
+    x.className = "show";
+    setTimeout(function () {
+        x.className = x.className.replace("show", "");
+    }, 3000);
 </script>
 
 <form method="post" th:action="@{/user/update}">
-  <div class="modal">
-    <div class="modal-content">
+    <div class="modal">
+        <div class="modal-content">
 
-      <div class="modal-header">
-        <a th:href="@{/user/get_all}" class="close">&times;</a>
-        <h4 style="font-size: 20px">Edit user</h4>
-      </div>
+            <div class="modal-header">
+                <a th:href="@{/user/get_all}" class="close">&times;</a>
+                <h4 style="font-size: 20px">Edit user</h4>
+            </div>
 
-      <div class="modal-body">
+            <div class="modal-body">
 
-        <label class="table1-label">Name:</label> <br>
-        <input type="text" th:value="${user.name}" placeholder="name" class="table1-input" required name="name"> <br><br>
+                <label class="table1-label">Name:</label> <br>
+                <input type="text" th:value="${user.name}" placeholder="name" class="table1-input" required name="name">
+                <br><br>
 
-        <label class="table1-label">Username:</label> <br>
-        <input type="text" th:value="${user.username}" placeholder="username" class="table1-input" required name="username"> <br><br>
+                <label class="table1-label">Username:</label> <br>
+                <input type="text" th:value="${user.username}" placeholder="username" class="table1-input" required
+                       name="username"> <br><br>
 
-        <label class="table1-label">Password:</label> <br>
-        <input type="text" placeholder="password" class="table1-input" required name="password"> <br><br>
+                <label class="table1-label">Password:</label> <br>
+                <input type="text" placeholder="password" class="table1-input" required name="password"> <br><br>
 
-        <p th:text="'Roles: ' + ${user.userRoles}"></p>
-        <p th:text="'Authorities: ' + ${user.userAuthorities}"></p> <br>
+                <p th:text="'Roles: ' + ${user.userRoles}"></p>
+                <p th:text="'Authorities: ' + ${user.userAuthorities}"></p> <br>
 
-        <select name="userRoles">
-          <option>ADMIN</option>
-          <option>ACCOUNTANT</option>
-        </select><br> <br>
-        <label> EDIT_CATEGORY
-          <input type="checkbox" name="userAuthorities" value="EDIT_CATEGORY">
-        </label><br>
-        <label> EDIT_PRODUCT
-          <input type="checkbox" name="userAuthorities" value="EDIT_PRODUCT">
-        </label><br>
-        <label> EDIT_USER
-          <input type="checkbox" name="userAuthorities" value="EDIT_USER">
-        </label><br>
-        <label> DELETE_PRODUCT
-          <input type="checkbox" name="userAuthorities" value="DELETE_PRODUCT">
-        </label><br>
-        <label> GET_CATEGORY
-          <input type="checkbox" name="userAuthorities" value="GET_CATEGORY">
-        </label><br>
-        <label> GET_PRODUCT
-          <input type="checkbox" name="userAuthorities" value="GET_PRODUCT">
-        </label><br>
-        <label> GET_ORDER
-          <input type="checkbox" name="userAuthorities" value="GET_ORDER">
-        </label><br>
-        <label> GET_USER
-          <input type="checkbox" name="userAuthorities" value="GET_USER">
-        </label><br>
-        <label> CREATE_PRODUCT
-          <input type="checkbox" name="userAuthorities" value="CREATE_PRODUCT">
-        </label><br>
-        <label> CREATE_CATEGORY
-          <input type="checkbox" name="userAuthorities" value="CREATE_CATEGORY">
-        </label><br>
-        <label> CREATE_USER
-          <input type="checkbox" name="userAuthorities" value="CREATE_USER">
-        </label><br>
-
-        <input type="hidden" th:value="${user.id}" name="id">
-      </div>
-      <div class="modal-footer">
-        <button type="submit" class="table1-modal-add-btn"><b>update</b></button>
-      </div>
+                <select name="userRoles">
+                    <option>ADMIN</option>
+                    <option>ACCOUNTANT</option>
+                </select><br> <br>
+                <label> EDIT_CATEGORY
+                    <input type="checkbox" checked name="userAuthorities" value="EDIT_CATEGORY"
+                           th:if="${user.userAuthorities.contains(T(com.example.ecommercial.domain.enums.UserAuthority).EDIT_CATEGORY)}">
+                    <input type="checkbox" name="userAuthorities" value="EDIT_CATEGORY"
+                           th:unless="${user.userAuthorities.contains(T(com.example.ecommercial.domain.enums.UserAuthority).EDIT_CATEGORY)}">
+                </label><br>
+                <label> EDIT_PRODUCT
+                    <input type="checkbox" checked name="userAuthorities" value="EDIT_PRODUCT"
+                           th:if="${user.userAuthorities.contains(T(com.example.ecommercial.domain.enums.UserAuthority).EDIT_PRODUCT)}">
+                    <input type="checkbox" name="userAuthorities" value="EDIT_PRODUCT"
+                           th:unless="${user.userAuthorities.contains(T(com.example.ecommercial.domain.enums.UserAuthority).EDIT_PRODUCT)}">
+                </label><br>
+                <label> EDIT_USER
+                    <input type="checkbox" checked name="userAuthorities" value="EDIT_USER"
+                           th:if="${user.userAuthorities.contains(T(com.example.ecommercial.domain.enums.UserAuthority).EDIT_USER)}">
+                    <input type="checkbox" name="userAuthorities" value="EDIT_USER"
+                           th:unless="${user.userAuthorities.contains(T(com.example.ecommercial.domain.enums.UserAuthority).EDIT_USER)}">
+                </label><br>
+                <label> DELETE_PRODUCT
+                    <input type="checkbox" checked name="userAuthorities" value="DELETE_PRODUCT"
+                           th:if="${user.userAuthorities.contains(T(com.example.ecommercial.domain.enums.UserAuthority).DELETE_PRODUCT)}">
+                    <input type="checkbox" name="userAuthorities" value="DELETE_PRODUCT"
+                           th:unless="${user.userAuthorities.contains(T(com.example.ecommercial.domain.enums.UserAuthority).DELETE_PRODUCT)}">
+                </label><br>
+                <label> GET_CATEGORY
+                    <input type="checkbox" checked name="userAuthorities" value="GET_CATEGORY"
+                           th:if="${user.userAuthorities.contains(T(com.example.ecommercial.domain.enums.UserAuthority).GET_CATEGORY)}">
+                    <input type="checkbox" name="userAuthorities" value="GET_CATEGORY"
+                           th:unless="${user.userAuthorities.contains(T(com.example.ecommercial.domain.enums.UserAuthority).GET_CATEGORY)}">
+                </label><br>
+                <label> GET_PRODUCT
+                    <input type="checkbox" checked name="userAuthorities" value="GET_PRODUCT"
+                           th:if="${user.userAuthorities.contains(T(com.example.ecommercial.domain.enums.UserAuthority).GET_PRODUCT)}">
+                    <input type="checkbox" name="userAuthorities" value="GET_PRODUCT"
+                           th:unless="${user.userAuthorities.contains(T(com.example.ecommercial.domain.enums.UserAuthority).GET_PRODUCT)}">
+                </label><br>
+                <label> GET_ORDER
+                    <input type="checkbox" checked name="userAuthorities" value="GET_ORDER"
+                           th:if="${user.userAuthorities.contains(T(com.example.ecommercial.domain.enums.UserAuthority).GET_ORDER)}">
+                    <input type="checkbox" name="userAuthorities" value="GET_ORDER"
+                           th:unless="${user.userAuthorities.contains(T(com.example.ecommercial.domain.enums.UserAuthority).GET_ORDER)}">
+                </label><br>
+                <label> GET_USER
+                    <input type="checkbox" checked name="userAuthorities" value="GET_USER"
+                           th:if="${user.userAuthorities.contains(T(com.example.ecommercial.domain.enums.UserAuthority).GET_USER)}">
+                    <input type="checkbox" name="userAuthorities" value="GET_USER"
+                           th:unless="${user.userAuthorities.contains(T(com.example.ecommercial.domain.enums.UserAuthority).GET_USER)}">
+                </label><br>
+                <label> CREATE_PRODUCT
+                    <input type="checkbox" checked name="userAuthorities" value="CREATE_PRODUCT"
+                           th:if="${user.userAuthorities.contains(T(com.example.ecommercial.domain.enums.UserAuthority).CREATE_PRODUCT)}">
+                    <input type="checkbox" name="userAuthorities" value="CREATE_PRODUCT"
+                           th:unless="${user.userAuthorities.contains(T(com.example.ecommercial.domain.enums.UserAuthority).CREATE_PRODUCT)}">
+                </label><br>
+                <label> CREATE_CATEGORY
+                    <input type="checkbox" checked name="userAuthorities" value="CREATE_CATEGORY"
+                           th:if="${user.userAuthorities.contains(T(com.example.ecommercial.domain.enums.UserAuthority).CREATE_CATEGORY)}">
+                    <input type="checkbox" name="userAuthorities" value="CREATE_CATEGORY"
+                           th:unless="${user.userAuthorities.contains(T(com.example.ecommercial.domain.enums.UserAuthority).CREATE_CATEGORY)}">
+                </label><br>
+                <label> CREATE_USER
+                    <input type="checkbox" checked name="userAuthorities" value="CREATE_USER"
+                           th:if="${user.userAuthorities.contains(T(com.example.ecommercial.domain.enums.UserAuthority).CREATE_USER)}">
+                    <input type="checkbox" name="userAuthorities" value="CREATE_USER"
+                           th:unless="${user.userAuthorities.contains(T(com.example.ecommercial.domain.enums.UserAuthority).CREATE_USER)}">
+                </label><br>
+                <input type="hidden" th:value="${user.id}" name="id">
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="table1-modal-add-btn"><b>update</b></button>
+            </div>
+        </div>
     </div>
-  </div>
 </form>
 
 </body>

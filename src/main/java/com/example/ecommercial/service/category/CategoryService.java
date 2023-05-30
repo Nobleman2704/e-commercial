@@ -1,28 +1,26 @@
 package com.example.ecommercial.service.category;
 
 import com.example.ecommercial.dao.ProductCategoryDao;
-import com.example.ecommercial.domain.dto.request.CategoryCreateAndUpdateRequest;
-import com.example.ecommercial.domain.dto.request.UserCreateAndUpdateRequest;
-import com.example.ecommercial.domain.dto.response.BaseResponse;
-import com.example.ecommercial.domain.dto.response.ProductCategoryGetResponse;
+import com.example.ecommercial.controller.dto.request.CategoryCreateAndUpdateRequest;
+import com.example.ecommercial.controller.dto.response.BaseResponse;
+import com.example.ecommercial.controller.dto.response.ProductCategoryGetResponse;
 import com.example.ecommercial.domain.entity.ProductCategoryEntity;
-import com.example.ecommercial.service.BaseService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class CategoryService implements BaseService<
-        CategoryCreateAndUpdateRequest,
-        BaseResponse> {
+public class CategoryService {
     private final ProductCategoryDao productCategoryDao;
     private final ModelMapper modelMapper;
 
-    @Override
     public BaseResponse save(CategoryCreateAndUpdateRequest createAndUpdateRequest) {
         ProductCategoryEntity productCategory = modelMapper
                 .map(createAndUpdateRequest, ProductCategoryEntity.class);
@@ -46,12 +44,12 @@ public class CategoryService implements BaseService<
                 .build();
     }
 
-    @Override
     public BaseResponse update(CategoryCreateAndUpdateRequest categoryUpdateRequest) {
         Long id = categoryUpdateRequest.getId();
         ProductCategoryEntity productCategory = productCategoryDao
                 .findById(id).get();
         modelMapper.map(categoryUpdateRequest, productCategory);
+
         try {
             productCategoryDao.save(productCategory);
         } catch (Exception e) {
@@ -66,29 +64,31 @@ public class CategoryService implements BaseService<
                 .build();
     }
 
-    @Override
-    public BaseResponse delete(Long id) {
-        return null;
+
+
+    public BaseResponse<List<ProductCategoryGetResponse>> getALl(int pageNumber) {
+        Pageable pageable = PageRequest.of(pageNumber, 5);
+        Page<ProductCategoryEntity> categoryEntityPage = productCategoryDao
+                .findAll(pageable);
+        int totalPages = categoryEntityPage.getTotalPages();
+
+        return BaseResponse.<List<ProductCategoryGetResponse>>builder()
+                .totalPageAmount((totalPages==0)?0:totalPages-1)
+                .status(200)
+                .data(modelMapper
+                        .map(categoryEntityPage.getContent(),
+                                new TypeToken<List<ProductCategoryGetResponse>>(){}
+                                        .getType()))
+                .build();
     }
 
-    @Override
-    public BaseResponse getById(Long id) {
-        return null;
-    }
-
-    @Override
     public BaseResponse<List<ProductCategoryGetResponse>> getALl() {
-        List<ProductCategoryEntity> categories = productCategoryDao.findAll();
-        if (categories.isEmpty()){
-            return BaseResponse.<List<ProductCategoryGetResponse>>builder()
-                    .status(404)
-                    .build();
-        }
         return BaseResponse.<List<ProductCategoryGetResponse>>builder()
                 .status(200)
                 .data(modelMapper
-                        .map(categories,
-                                new TypeToken<List<ProductCategoryGetResponse>>(){}.getType()))
+                        .map(productCategoryDao.findAll(),
+                                new TypeToken<List<ProductCategoryGetResponse>>(){}
+                                        .getType()))
                 .build();
     }
 }

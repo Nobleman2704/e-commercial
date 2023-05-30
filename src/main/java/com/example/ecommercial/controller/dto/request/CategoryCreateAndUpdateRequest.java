@@ -1,4 +1,4 @@
-package com.example.ecommercial.domain.dto.request;
+package com.example.ecommercial.controller.dto.request;
 
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;

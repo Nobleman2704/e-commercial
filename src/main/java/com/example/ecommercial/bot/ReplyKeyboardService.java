@@ -1,9 +1,9 @@
 package com.example.ecommercial.bot;
 
-import com.example.ecommercial.domain.dto.response.BasketGetResponse;
-import com.example.ecommercial.domain.dto.response.OrderGetResponse;
-import com.example.ecommercial.domain.dto.response.ProductCategoryGetResponse;
-import com.example.ecommercial.domain.dto.response.ProductGetResponse;
+import com.example.ecommercial.controller.dto.response.BasketGetResponse;
+import com.example.ecommercial.controller.dto.response.OrderGetResponse;
+import com.example.ecommercial.controller.dto.response.ProductCategoryGetResponse;
+import com.example.ecommercial.controller.dto.response.ProductGetResponse;
 import com.example.ecommercial.domain.entity.ProductEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

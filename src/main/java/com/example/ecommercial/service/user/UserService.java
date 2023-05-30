@@ -1,23 +1,24 @@
 package com.example.ecommercial.service.user;
 
 import com.example.ecommercial.dao.UserDao;
-import com.example.ecommercial.domain.dto.response.BaseResponse;
-import com.example.ecommercial.domain.dto.response.UserGetResponse;
-import com.example.ecommercial.domain.entity.OrderEntity;
+import com.example.ecommercial.controller.dto.response.BaseResponse;
+import com.example.ecommercial.controller.dto.response.UserGetResponse;
 import com.example.ecommercial.domain.entity.UserEntity;
-import com.example.ecommercial.domain.dto.request.UserCreateAndUpdateRequest;
+import com.example.ecommercial.controller.dto.request.UserCreateAndUpdateRequest;
 import com.example.ecommercial.domain.enums.UserRole;
 import com.example.ecommercial.domain.enums.UserState;
 import com.example.ecommercial.service.BaseService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.User;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -30,20 +31,20 @@ public class UserService implements BaseService<
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public BaseResponse save(UserCreateAndUpdateRequest CategoryCreateAndUpdateRequest){
-        UserEntity userEntity = modelMapper.map(CategoryCreateAndUpdateRequest,UserEntity.class);
+    public BaseResponse save(UserCreateAndUpdateRequest CategoryCreateAndUpdateRequest) {
+        UserEntity userEntity = modelMapper.map(CategoryCreateAndUpdateRequest, UserEntity.class);
         userEntity.setPassword(passwordEncoder.encode(userEntity.getPassword()));
         try {
             userDao.save(userEntity);
-        }catch (Exception e){
+        } catch (Exception e) {
             return BaseResponse.builder()
-                    .message(CategoryCreateAndUpdateRequest.getUsername()+" already exists")
+                    .message(CategoryCreateAndUpdateRequest.getUsername() + " already exists")
                     .status(401)
                     .build();
         }
         return BaseResponse.builder()
                 .status(200)
-                .message(CategoryCreateAndUpdateRequest.getUsername()+" successfully added")
+                .message(CategoryCreateAndUpdateRequest.getUsername() + " successfully added")
                 .build();
     }
 
@@ -60,7 +61,7 @@ public class UserService implements BaseService<
             userDao.save(userEntity);
         } catch (Exception e) {
             return BaseResponse.builder()
-                    .message(userEntity.getUsername()+" already exists")
+                    .message(userEntity.getUsername() + " already exists")
                     .status(401)
                     .build();
         }
@@ -82,22 +83,30 @@ public class UserService implements BaseService<
     @Override
     public BaseResponse<UserGetResponse> getById(Long id) {
         UserEntity userEntity = userDao.findById(id).get();
-        UserGetResponse userGetResponse = modelMapper.map(userEntity, UserGetResponse.class);
-        return new BaseResponse<>(200, "Success", userGetResponse);
-    }
-
-    @Override
-    public BaseResponse<List<UserGetResponse>> getALl() {
-        List<UserEntity> userEntities = userDao.findAll();
-        return BaseResponse.<List<UserGetResponse>>builder()
+        return BaseResponse.<UserGetResponse>builder()
+                .data(modelMapper.map(userEntity, UserGetResponse.class))
                 .status(200)
-                .message("success")
-                .data(modelMapper.map(userEntities,
-                        new TypeToken<List<UserGetResponse>>(){}.getType()))
+                .message("Success")
                 .build();
     }
 
-    public BaseResponse<List<UserGetResponse>> getAllBotUsers(){
+    @Override
+    public BaseResponse<List<UserGetResponse>> getALl(int pageNumber) {
+        Pageable pageable = PageRequest.of(pageNumber, 5);
+        Page<UserEntity> userEntityPage = userDao.findUserEntitiesByChatIdIsNull(pageable);
+        int totalPages = userEntityPage.getTotalPages();
+        return BaseResponse.<List<UserGetResponse>>builder()
+                .totalPageAmount(totalPages)
+                .status(200)
+                .message("success")
+                .totalPageAmount((totalPages==0)?0:totalPages-1)
+                .data(modelMapper.map(userEntityPage.getContent(),
+                        new TypeToken<List<UserGetResponse>>() {
+                        }.getType()))
+                .build();
+    }
+
+    public BaseResponse<List<UserGetResponse>> getAllBotUsers() {
         List<UserEntity> botUsers = userDao.findAll()
                 .stream()
                 .filter(userEntity -> userEntity.getUserRoles().contains(UserRole.USER))
@@ -107,14 +116,15 @@ public class UserService implements BaseService<
                 .message("success")
                 .data(
                         modelMapper.map(botUsers,
-                                new TypeToken<List<UserGetResponse>>(){}.getType())
+                                new TypeToken<List<UserGetResponse>>() {
+                                }.getType())
                 )
                 .build();
     }
 
     public BaseResponse<UserState> getUserState(Long chatId) {
         Optional<UserEntity> optionalUser = userDao.findUserEntitiesByChatId(chatId);
-        if (optionalUser.isPresent()){
+        if (optionalUser.isPresent()) {
             return BaseResponse.<UserState>builder()
                     .data(optionalUser.get().getUserState())
                     .status(200)
@@ -154,12 +164,12 @@ public class UserService implements BaseService<
         int status;
         try {
             double balance = Double.parseDouble(text);
-            if (balance<=0){
+            if (balance <= 0) {
                 status = 401;
                 message = "Amount should be positive";
-            }else {
+            } else {
                 UserEntity userEntity = userDao.findUserEntitiesByChatId(chatId).get();
-                userEntity.setBalance(userEntity.getBalance()+balance);
+                userEntity.setBalance(userEntity.getBalance() + balance);
                 userDao.save(userEntity);
                 message = "Balance has been changed: " + userEntity.getBalance();
                 status = 200;
