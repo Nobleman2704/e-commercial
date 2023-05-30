@@ -44,6 +44,8 @@ public class UserController {
         ModelAndView modelAndView = new ModelAndView();
         String viewName;
         if (bindingResult.hasErrors()){
+            UserGetResponse data = userService.getById(userUpdateRequest.getId()).getData();
+            modelAndView.addObject("user", data);
             modelAndView.addObject("message", extractAllErrors(bindingResult));
             viewName = "userUpdatePage";
         }else {

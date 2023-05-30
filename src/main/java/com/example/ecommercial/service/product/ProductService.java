@@ -46,9 +46,9 @@ public class ProductService implements BaseService<
                     .message("This name already exists")
                     .build();
         }
-
-        return BaseResponse.builder()
-                .build();
+        BaseResponse<List<ProductGetResponse>> response = getALl(0);
+        response.setMessage("saved");
+        return response;
     }
 
     @Override
@@ -56,11 +56,16 @@ public class ProductService implements BaseService<
         Long id = update.getId();
         ProductEntity product = productDao.findById(id).get();
         modelMapper.map(update, product);
-        productDao.save(product);
-        return BaseResponse.builder()
-                .status(200)
-                .message("Success")
-                .build();
+        String message;
+        try {
+            productDao.save(product);
+            message = "Updated";
+        } catch (Exception e) {
+            message = update.getName() + " already exists";
+        }
+        BaseResponse<List<ProductGetResponse>> response = getALl(0);
+        response.setMessage(message);
+        return response;
     }
 
     @Override
@@ -78,10 +83,10 @@ public class ProductService implements BaseService<
             message = "product has been deleted";
             productDao.deleteById(id);
         }
-        return BaseResponse.builder()
-                .status(status)
-                .message(message)
-                .build();
+        BaseResponse<List<ProductGetResponse>> response = getALl(0);
+        response.setMessage(message);
+        response.setStatus(status);
+        return response;
     }
 
     @Override

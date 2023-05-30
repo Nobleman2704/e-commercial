@@ -37,9 +37,9 @@ public class ProductController {
             BaseResponse response = productService.save(productCreateRequest);
             modelAndView.addObject("message", response.getMessage());
         }
-
-        modelAndView.addObject("products", productService
-                .getALl(0).getData());
+        BaseResponse<List<ProductGetResponse>> response = productService.getALl(0);
+        modelAndView.addObject("products", response.getData());
+        modelAndView.addObject("pages", response.getTotalPageAmount());
         modelAndView.addObject("categories", categoryService.getALl().getData());
         modelAndView.addObject("status", 2);
         return modelAndView;
@@ -60,6 +60,7 @@ public class ProductController {
             modelAndView.addObject("message", response.getMessage());
             modelAndView.addObject("products", productService
                     .getALl(0).getData());
+            modelAndView.addObject("pages", response.getTotalPageAmount());
             modelAndView.addObject("categories", categoryService
                     .getALl().getData());
             modelAndView.addObject("status", 2);
@@ -70,11 +71,13 @@ public class ProductController {
 
     @GetMapping("/get_all")
     public ModelAndView getAllProducts(
-            @RequestParam(name = "page", defaultValue = "0") int pageNumber
+            @RequestParam(name = "pageNumber", defaultValue = "0") int pageNumber
     ){
         ModelAndView modelAndView = new ModelAndView("dashboard");
-        modelAndView.addObject("products", productService
-                .getALl(pageNumber).getData());
+        BaseResponse<List<ProductGetResponse>> response = productService
+                .getALl(pageNumber);
+        modelAndView.addObject("products", response.getData());
+        modelAndView.addObject("pages", response.getTotalPageAmount());
         modelAndView.addObject("categories", categoryService.getALl().getData());
         modelAndView.addObject("status", 2);
         return modelAndView;
@@ -120,6 +123,7 @@ public class ProductController {
                 .getALl(0).getData());
         modelAndView.addObject("categories", categoryService
                 .getALl().getData());
+        modelAndView.addObject("pages", response.getTotalPageAmount());
         modelAndView.addObject("message", response.getMessage());
         modelAndView.addObject("status", 2);
         return modelAndView;

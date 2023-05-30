@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -29,18 +30,20 @@ public class TestController {
     private final PasswordEncoder passwordEncoder;
     private final UserDao userDao;
 
-//    @GetMapping("/add")
-//    public String addUser(){
-//        UserEntity userEntity = UserEntity.builder()
-//                .name("Asadbek")
-//                .username("nobleman")
-//                .password(passwordEncoder.encode("1234"))
-//                .userRoles(List.of(UserRole.SUPER_ADMIN))
-//                .build();
-//
-//        userDao.save(userEntity);
-//        return "user added";
-//    }
+    @GetMapping("/add")
+    public String addUser(){
+        ArrayList<UserRole> userRoles = new ArrayList<>();
+        userRoles.add(UserRole.SUPER_ADMIN);
+        UserEntity userEntity = UserEntity.builder()
+                .name("Asadbek")
+                .username("nobleman")
+                .password(passwordEncoder.encode("1234"))
+                .userRoles(userRoles)
+                .build();
+
+        userDao.save(userEntity);
+        return "user added";
+    }
 
     @PostMapping("/dashboard-page")
     public String jumpToDashBoard(){

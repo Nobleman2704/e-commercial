@@ -7,6 +7,10 @@
 </head>
 
 <style>
+    form {
+        display: inline-block;
+    }
+
     .navbar {
         width: 100%;
         height: 40px;
@@ -672,6 +676,13 @@
             </tr>
             </tbody>
         </table>
+        <br><br>
+        <th:block th:each="pageNumber: ${#numbers.sequence(0, pages)}">
+            <form action="/product/get_all" method="get">
+                <input type="hidden" name="pageNumber" th:value="${pageNumber}">
+                <button th:text="${pageNumber+1}"></button>
+            </form>
+        </th:block>
     </div>
 
     <div th:if="${status == 3}" class="right-page">
@@ -835,12 +846,14 @@
                 <td th:text="${user.id}" class="tbody-td"></td>
                 <td th:text="${user.name}" class="tbody-td"></td>
                 <td th:text="${user.username}" class="tbody-td"></td>
-                <td class="tbody-td">
+                <td class="tbody-td"
+                    th:if="${!user.userRoles.contains(T(com.example.ecommercial.domain.enums.UserRole).SUPER_ADMIN)}">
                     <a th:href="@{/user/delete/{id}(id=${user.id})}">
                         <button>delete</button>
                     </a>
                 </td>
-                <td class="tbody-td">
+                <td class="tbody-td"
+                    th:if="${!user.userRoles.contains(T(com.example.ecommercial.domain.enums.UserRole).SUPER_ADMIN)}">
                     <a th:href="@{/user/update-page/{id}(id=${user.id})}">
                         <button>edit</button>
                     </a>
