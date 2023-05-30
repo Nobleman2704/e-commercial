@@ -42,10 +42,10 @@ public class UserService implements BaseService<
                     .status(401)
                     .build();
         }
-        return BaseResponse.builder()
-                .status(200)
-                .message(CategoryCreateAndUpdateRequest.getUsername() + " successfully added")
-                .build();
+        BaseResponse<List<UserGetResponse>> responce = getALl(0);
+        responce.setMessage(CategoryCreateAndUpdateRequest.getUsername() + " successfully added");
+        responce.setStatus(200);
+        return responce;
     }
 
     @Override
@@ -65,19 +65,19 @@ public class UserService implements BaseService<
                     .status(401)
                     .build();
         }
-        return BaseResponse.builder()
-                .status(200)
-                .message("updated")
-                .build();
+        BaseResponse<List<UserGetResponse>> responce = getALl(0);
+        responce.setMessage("updated");
+        responce.setStatus(200);
+        return responce;
     }
 
     @Override
     public BaseResponse delete(Long id) {
         userDao.deleteById(id);
-        return BaseResponse.builder()
-                .status(200)
-                .message("deleted")
-                .build();
+        BaseResponse<List<UserGetResponse>> response = getALl(0);
+        response.setMessage("deleted");
+        response.setStatus(200);
+        return response;
     }
 
     @Override

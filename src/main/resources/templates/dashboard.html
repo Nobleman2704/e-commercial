@@ -570,6 +570,13 @@
             </script>
 
         </table>
+        <br><br>
+        <th:block th:each="pageNumber: ${#numbers.sequence(0, pages)}">
+            <form action="/category/get_all" method="get">
+                <input type="hidden" name="pageNumber" th:value="${pageNumber}">
+                <button th:text="${pageNumber+1}"></button>
+            </form>
+        </th:block>
 
     </div>
 
@@ -740,6 +747,13 @@
             </tr>
             </tbody>
         </table>
+        <br><br>
+        <th:block th:each="pageNumber: ${#numbers.sequence(0, pages)}">
+            <form action="/order/get_all" method="get">
+                <input type="hidden" name="pageNumber" th:value="${pageNumber}">
+                <button th:text="${pageNumber+1}"></button>
+            </form>
+        </th:block>
     </div>
 
     <div th:if="${status == 4}" class="right-page">
@@ -877,6 +891,16 @@
             </tr>
             </tbody>
         </table>
+        <br><br>
+        <th:block th:each="pageNumber: ${#numbers.sequence(0,pages)}">
+            <form action="/user/get_all" method="get">
+                <input type="hidden" name="pageNumber" th:value="${pageNumber}">
+                <button th:text="${pageNumber+1}"></button>
+            </form>
+
+        </th:block>
+
+
     </div>
 
 </div>
