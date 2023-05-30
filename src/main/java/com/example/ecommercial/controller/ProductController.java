@@ -109,6 +109,9 @@ public class ProductController {
                 .changeProductAmount(productId, amount);
         modelAndView.addObject("message", response.getMessage());
         modelAndView.addObject("products", response.getData());
+        modelAndView.addObject("pages", response.getTotalPageAmount());
+
+        modelAndView.addObject("status", 2);
         return modelAndView;
     }
 
