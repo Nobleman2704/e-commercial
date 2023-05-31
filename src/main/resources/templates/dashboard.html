@@ -14,7 +14,7 @@
     .navbar {
         width: 100%;
         height: 40px;
-        background-color: #34495E;
+        background-color: #3d5670;
         text-align: center;
         color: white;
         font-family: sans-serif;
@@ -26,7 +26,7 @@
     .row {
         display: flex;
         flex-direction: row;
-        width: 1400px;
+        width: 100%;
         height: 690px;
         margin: 0 auto;
     }
@@ -34,7 +34,7 @@
     .left-page {
         width: 20%;
         height: 100%;
-        background-color: #5D6D7E;
+        background-color: #34495E;
     }
 
     .right-page {
@@ -70,7 +70,7 @@
     }
 
     .h3-a:hover {
-        color: #283747;
+        color: #789fcb;
     }
 
     .right-page {
@@ -84,20 +84,20 @@
     }
 
     .t1 {
-        width: 50%;
+        width: 90%;
     }
 
     .t2 {
-        width: 70%;
+        width: 90%;
     }
 
     .t3 {
-        width: 55%;
+        width: 75%;
         margin-top: 40px;
     }
 
     .t4 {
-        width: 60%;
+        width: 90%;
     }
 
     .h3-button {
@@ -128,49 +128,113 @@
         height: 40px;
         padding-left: 10px;
         padding-right: 10px;
+        text-align: center;
     }
 
     .table-body {
-        border-radius: 10px;
         margin: 0 auto;
     }
 
     .tbody-tr {
-        background-color: rgba(0, 0, 0, 0.11);
+        background-color: rgba(0, 0, 0, 0.2);
         font-family: Segoe UI, sans-serif;
-        font-weight: 400;
-        font-size: 24px;
+        font-weight: 600;
+        font-size: 20px;
         line-height: 20px;
-        border-radius: 10px;
         text-align: center
     }
 
     .tbody-td {
         height: 40px;
-        border-radius: 5px;
         padding-left: 25px;
         padding-right: 25px;
+        text-align: center;
+    }
+
+    .table-btn{
+        padding-right: -100px;
     }
 
     .tbody-category-td {
         height: 40px;
-        border-radius: 8px;
     }
 
     .tbody-category-td-a {
+        text-decoration: none;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        width: 80%;
         height: 30px;
-        background-color: #187cee;
+        background-color: #3d5670;
         padding-left: 30px;
         padding-right: 30px;
+        border-radius: 5px;
+        font-size: 18px;
         border: none;
         color: white;
-        border-radius: 8px;
+        text-align: center;
+    }
+
+    .dropbtn{
+        padding-right: 48px;
+        text-align: center;
+    }
+
+    .get-orders-btn{
+        width: 100%;
+        font-size: 15px;
+        padding-right: 30px;
+        text-align: center;
+    }
+
+    .change-amount-form{
+        margin: 0 auto;
+        display: flex;
+        flex-direction: row;
+        width: 129px;
+    }
+
+    .change-amount-input{
+        width: 60px;
+        border-top-left-radius: 5px;
+        border-bottom-left-radius: 5px;
+        border: none;
+    }
+
+    .change-amount-btn{
+        border-top-right-radius: 5px;
+        border-bottom-right-radius: 5px;
+        border: none;
+        padding-top: 4px;
+        padding-bottom: 4px;
+        font-size: 16px;
+        background-color: #3d5670;
+        color: white;
+    }
+
+    .get-order-select{
+        border: none;
+        border-top-left-radius: 5px;
+        border-bottom-left-radius: 5px;
+        background-color: #eaeaea;
+    }
+
+    .get-order-button{
+        border: none;
+        border-top-right-radius: 5px;
+        border-bottom-right-radius: 5px;
+        background-color: #3d5670;
+        padding-top: 4px;
+        padding-bottom: 4px;
+        font-size: 16px;
+        color: white;
     }
 
     .cat-add-btn {
+        margin-top: 20px;
         height: 40px;
-        border-radius: 8px;
-        background-color: #187cee;
+        border-radius: 5px;
+        background-color: #3d5670;
         color: white;
         font-family: Segoe UI, sans-serif;
         font-weight: 700;
@@ -293,10 +357,17 @@
         display: none;
         position: absolute;
         background-color: #f9f9f9;
-        width: 560px;
+        width: 350px;
         box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
         z-index: 1;
-        margin-left: -300px;
+        margin-left: -360px;
+        font-size: 20px;
+        text-align: left;
+    }
+
+    .order-table{
+        width: inherit;
+        height: inherit;
         font-size: 15px;
     }
 
@@ -315,8 +386,8 @@
         visibility: hidden;
         min-width: 250px;
         margin-left: -125px;
-        border: 2px solid #293b4d;
-        background-color: #5D6D7E;
+        border: 2px solid #856404;
+        background-color: #fff3cd;
         color: #fff;
         text-align: center;
         border-radius: 5px;
@@ -329,6 +400,7 @@
     }
 
     #snackbar.show {
+        color: #856404;
         visibility: visible;
         -webkit-animation: fadein 0.8s, fadeout 0.8s 4s;
         animation: fadein 0.8s, fadeout 0.8s 4s;
@@ -376,6 +448,23 @@
             top: 0;
             opacity: 0;
         }
+    }
+
+    .dropdown-info{
+        margin-top: 5px;
+        margin-left: 12px;
+    }
+    .dropdown-info-hr{
+        margin-top: -18px;
+    }
+
+    .pagination-btn{
+        background-color: #3d5670;
+        color: white;
+        border: none;
+        padding: 10px 20px 10px 20px;
+        font-size: 18px;
+        margin-left: 5px;
     }
 </style>
 
@@ -479,10 +568,10 @@
 
             <thead class="table-head">
             <tr class="table-tr">
-                <th class="table-th">id</th>
-                <th class="table-th">name</th>
-                <th class="table-th">add child category</th>
-                <th class="table-th">edit category</th>
+                <th class="table-th">Id</th>
+                <th class="table-th">Name</th>
+                <th class="table-th table-btn">Add child category</th>
+                <th class="table-th">Edit category</th>
             </tr>
             </thead>
             <tbody th:each="category:${categories}" class="table-body">
@@ -570,13 +659,14 @@
             </script>
 
         </table>
-        <br><br>
-        <th:block th:each="pageNumber: ${#numbers.sequence(0, pages)}">
-            <form action="/category/get_all" method="get">
-                <input type="hidden" name="pageNumber" th:value="${pageNumber}">
-                <button th:text="${pageNumber+1}"></button>
-            </form>
-        </th:block>
+
+<!--        <br><br><br>-->
+<!--        <th:block th:each="pageNumber: ${#numbers.sequence(0, pages)}">-->
+<!--            <form style="padding-left: 60px;" action="/category/get_all" method="get">-->
+<!--                <input type="hidden" name="pageNumber" th:value="${pageNumber}">-->
+<!--                <button class="pagination-btn" th:text="${pageNumber+1}">1</button>-->
+<!--            </form>-->
+<!--        </th:block>-->
 
     </div>
 
@@ -645,13 +735,14 @@
 
             <thead class="table-head">
             <tr class="table-tr">
-                <th class="table-th">id</th>
-                <th class="table-th">name</th>
-                <th class="table-th">price</th>
-                <th class="table-th">amount</th>
-                <th class="table-th">edit</th>
-                <th class="table-th">delete</th>
-                <th class="table-th">info</th>
+                <th class="table-th">Id</th>
+                <th class="table-th">Name</th>
+                <th class="table-th">Price</th>
+                <th class="table-th">Amount</th>
+                <th class="table-th">Change amount</th>
+                <th class="table-th">Edit</th>
+                <th class="table-th">Delete</th>
+                <th class="table-th">Info</th>
             </tr>
             </thead>
 
@@ -662,34 +753,48 @@
                 <td th:text="${product.id}" class="tbody-td"></td>
                 <td th:text="${product.name}" class="tbody-td"></td>
                 <td th:text="${product.price}" class="tbody-td"></td>
-                <td th:text="${product.amount}" class="tbody-td"></td>
+                <td th:text="${product.amount}" class="tbody-td">
+                </td>
+                <td class="tbody-td">
+                    <form action="/product/add_amount" method="post" class="change-amount-form">
+                        <input class="change-amount-input" name="amount" placeholder="amount" type="number" min="1">
+                        <input name="id" type="hidden" th:value="${product.id}">
+                        <button class="change-amount-btn">change</button>
+                    </form>
+                </td>
                 <td class="tbody-category-td"><a th:href="@{/product/update-page/{id}(id=${product.id})}"
                                                  class="tbody-category-td-a">edit</a></td>
                 <td class="tbody-category-td"><a th:href="@{/product/delete/{id}(id=${product.id})}"
                                                  class="tbody-category-td-a">delete</a></td>
                 <td class="tbody-category-td">
                     <div class="dropdown">
-                        <button class="dropbtn">info</button>
+                        <button class="dropbtn tbody-category-td-a">info</button>
                         <div class="dropdown-content">
-                            <h6 th:text="'caregory: ' + ${product.categories.name}"></h6>
-                            <h6 th:text="'description: ' + ${product.description}"></h6>
-                            <h6 th:text="'created date: ' + ${product.createdDate}"></h6>
-                            <h6 th:text="'updated date: ' + ${product.updatedDate}"></h6>
-                            <h6 th:text="'created by: ' + ${product.createdBy}"></h6>
-                            <h6 th:text="'lastModifiedBy: ' + ${product.lastModifiedBy}"></h6>
+                            <h6 class="dropdown-info" th:text="'caregory: ' + ${product.categories.name}"></h6>
+                            <hr class="dropdown-info-hr">
+                            <h6 class="dropdown-info" th:text="'description: ' + ${product.description}"></h6>
+                            <hr class="dropdown-info-hr">
+                            <h6 class="dropdown-info" th:text="'created date: ' + ${product.createdDate}"></h6>
+                            <hr class="dropdown-info-hr">
+                            <h6 class="dropdown-info" th:text="'updated date: ' + ${product.updatedDate}"></h6>
+                            <hr class="dropdown-info-hr">
+                            <h6 class="dropdown-info" th:text="'created by: ' + ${product.createdBy}"></h6>
+                            <hr class="dropdown-info-hr">
+                            <h6 class="dropdown-info" th:text="'lastModifiedBy: ' + ${product.lastModifiedBy}"></h6>
                         </div>
                     </div>
                 </td>
             </tr>
             </tbody>
         </table>
-        <br><br>
-        <th:block th:each="pageNumber: ${#numbers.sequence(0, pages)}">
-            <form action="/product/get_all" method="get">
-                <input type="hidden" name="pageNumber" th:value="${pageNumber}">
-                <button th:text="${pageNumber+1}"></button>
-            </form>
-        </th:block>
+        <br><br><br>
+            <th:block th:each="pageNumber: ${#numbers.sequence(0, pages)}">
+                    <form style="padding-left: 60px;" action="/product/get_all" method="get">
+                        <input type="hidden" name="pageNumber" th:value="${pageNumber}">
+                        <button class="pagination-btn" th:text="${pageNumber+1}">1</button>
+                    </form>
+            </th:block>
+
     </div>
 
     <div th:if="${status == 3}" class="right-page">
@@ -697,9 +802,9 @@
 
             <thead class="table-head">
             <tr class="table-tr">
-                <th class="table-th">name</th>
-                <th class="table-th">total price</th>
-                <th class="table-th">orders</th>
+                <th class="table-th">Name</th>
+                <th class="table-th">Total price</th>
+                <th class="table-th">Orders</th>
             </tr>
             </thead>
             <tbody th:each="userOrder:${userOrders}" class="table-body">
@@ -709,34 +814,34 @@
                 <td th:text="${userOrder.totalSum}" class="tbody-td"></td>
                 <td class="tbody-category-td">
                     <div class="dropdown">
-                        <button class="dropbtn">get orders</button>
+                        <button class="dropbtn tbody-category-td-a get-orders-btn">get orders</button>
 
-                        <table class="dropdown-content">
+                        <table class="dropdown-content order-table">
                             <thead>
                             <tr>
-                                <th style="margin-left: 15px">Id</th>
-                                <th style="margin-left: 15px">Total price</th>
-                                <th style="margin-left: 15px">Product name</th>
-                                <th style="margin-left: 15px">Created date</th>
-                                <th style="margin-left: 15px">Change status</th>
+                                <th class="table-th">Id</th>
+                                <th class="table-th">Total price</th>
+                                <th class="table-th">Product name</th>
+                                <th class="table-th">Created date</th>
+                                <th class="table-th">Change status</th>
                             </tr>
                             </thead>
 
                             <tbody th:each="order:${userOrder.orders}">
                             <tr>
-                                <td th:text="'id: ' + ${order.id}"></td>
-                                <td th:text="'price: ' + ${order.amount} + 'x' + ${order.totalPrice/order.amount} + '=' + ${order.totalPrice}"></td>
-                                <td th:text="'product name: ' + ${order.products.name}"></td>
-                                <td th:text="'created date: ' + ${order.createdDate}"></td>
+                                <td class="tbody-td" th:text="${order.id}"></td>
+                                <td class="tbody-td" th:text="${order.amount} + 'x' + ${order.totalPrice/order.amount} + '=' + ${order.totalPrice}"></td>
+                                <td class="tbody-td" th:text="${order.products.name}"></td>
+                                <td class="tbody-td" th:text="${order.createdDate}"></td>
                                 <td>
                                     <form style="display: flex; flex-direction: row" action="/order/change_status"
                                           method="post">
                                         <input type="hidden" th:value="${order.id}" name="orderId">
-                                        <select name="status">
-                                            <option>CANCEL</option>
-                                            <option>ORDER</option>
+                                        <select class="get-order-select" name="status">
+                                            <option class="get-order-option">CANCEL</option>
+                                            <option class="get-order-option">ORDER</option>
                                         </select>
-                                        <button>Change</button>
+                                        <button class="get-order-button">change</button>
                                     </form>
                                 </td>
                             </tr>
@@ -747,13 +852,15 @@
             </tr>
             </tbody>
         </table>
-        <br><br>
-        <th:block th:each="pageNumber: ${#numbers.sequence(0, pages)}">
-            <form action="/order/get_all" method="get">
-                <input type="hidden" name="pageNumber" th:value="${pageNumber}">
-                <button th:text="${pageNumber+1}"></button>
-            </form>
-        </th:block>
+
+<!--        <br><br><br>-->
+<!--        <th:block th:each="pageNumber: ${#numbers.sequence(0, pages)}">-->
+<!--            <form style="padding-left: 60px;" action="/order/get_all" method="get">-->
+<!--                <input type="hidden" name="pageNumber" th:value="${pageNumber}">-->
+<!--                <button class="pagination-btn" th:text="${pageNumber+1}">1</button>-->
+<!--            </form>-->
+<!--        </th:block>-->
+
     </div>
 
     <div th:if="${status == 4}" class="right-page">
@@ -863,43 +970,50 @@
                 <td class="tbody-td"
                     th:if="${!user.userRoles.contains(T(com.example.ecommercial.domain.enums.UserRole).SUPER_ADMIN)}">
                     <a th:href="@{/user/delete/{id}(id=${user.id})}">
-                        <button>delete</button>
+                        <button class="tbody-category-td-a">delete</button>
                     </a>
                 </td>
                 <td class="tbody-td"
                     th:if="${!user.userRoles.contains(T(com.example.ecommercial.domain.enums.UserRole).SUPER_ADMIN)}">
                     <a th:href="@{/user/update-page/{id}(id=${user.id})}">
-                        <button>edit</button>
+                        <button class="tbody-category-td-a">edit</button>
                     </a>
                 </td>
                 <td class="tbody-category-td">
                     <div class="dropdown">
-                        <button class="dropbtn">info</button>
+                        <button class="dropbtn tbody-category-td-a">info</button>
                         <div class="dropdown-content">
-                            <h6 th:text="'id: ' + ${user.id}"></h6>
-                            <h6 th:text="'name: ' + ${user.name}"></h6>
-                            <h6 th:text="'username: ' + ${user.username}"></h6>
-                            <h6 th:text="'roles: ' + ${user.userRoles}"></h6>
-                            <h6 th:text="'authorities: ' + ${user.userAuthorities}"></h6>
-                            <h6 th:text="'created date: ' + ${user.createdDate}"></h6>
-                            <h6 th:text="'updated date: ' + ${user.updatedDate}"></h6>
-                            <h6 th:text="'created by: ' + ${user.createdBy}"></h6>
-                            <h6 th:text="'last modified by: ' + ${user.lastModifiedBy}"></h6>
+                            <h6 class="dropdown-info" th:text="'id: ' + ${user.id}"></h6>
+                            <hr class="dropdown-info-hr">
+                            <h6 class="dropdown-info" th:text="'name: ' + ${user.name}"></h6>
+                            <hr class="dropdown-info-hr">
+                            <h6 class="dropdown-info" th:text="'username: ' + ${user.username}"></h6>
+                            <hr class="dropdown-info-hr">
+                            <h6 class="dropdown-info" th:text="'roles: ' + ${user.userRoles}"></h6>
+                            <hr class="dropdown-info-hr">
+                            <h6 class="dropdown-info" th:text="'authorities: ' + ${user.userAuthorities}"></h6>
+                            <hr class="dropdown-info-hr">
+                            <h6 class="dropdown-info" th:text="'created date: ' + ${user.createdDate}"></h6>
+                            <hr class="dropdown-info-hr">
+                            <h6 class="dropdown-info" th:text="'updated date: ' + ${user.updatedDate}"></h6>
+                            <hr class="dropdown-info-hr">
+                            <h6 class="dropdown-info" th:text="'created by: ' + ${user.createdBy}"></h6>
+                            <hr class="dropdown-info-hr">
+                            <h6 class="dropdown-info" th:text="'last modified by: ' + ${user.lastModifiedBy}"></h6>
                         </div>
                     </div>
                 </td>
             </tr>
             </tbody>
         </table>
-        <br><br>
-        <th:block th:each="pageNumber: ${#numbers.sequence(0,pages)}">
-            <form action="/user/get_all" method="get">
-                <input type="hidden" name="pageNumber" th:value="${pageNumber}">
-                <button th:text="${pageNumber+1}"></button>
-            </form>
 
-        </th:block>
-
+<!--        <br><br><br>-->
+<!--        <th:block th:each="pageNumber: ${#numbers.sequence(0, pages)}">-->
+<!--            <form style="padding-left: 60px;" action="/user/get_all" method="get">-->
+<!--                <input type="hidden" name="pageNumber" th:value="${pageNumber}">-->
+<!--                <button class="pagination-btn" th:text="${pageNumber+1}">1</button>-->
+<!--            </form>-->
+<!--        </th:block>-->
 
     </div>
 
