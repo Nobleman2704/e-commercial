@@ -28,6 +28,8 @@ public class CategoryService {
         Long categoryId = createAndUpdateRequest.getParentId();
 
         if (categoryId != null){
+            ProductCategoryEntity productCategoryEntity = productCategoryDao.findById(categoryId).get();
+            productCategoryEntity.getProductCategories().add(productCategoryEntity);
             productCategory.setCategories(productCategoryDao.findById(categoryId).get());
         }
         try {

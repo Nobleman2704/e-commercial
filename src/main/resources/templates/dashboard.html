@@ -588,6 +588,7 @@
                 <th class="table-th">Name</th>
                 <th sec:authorize="hasAuthority('CREATE_CATEGORY') or hasRole('SUPER_ADMIN')" class="table-th table-btn">Add child category</th>
                 <th sec:authorize="hasAuthority('EDIT_CATEGORY') or hasRole('SUPER_ADMIN')" class="table-th">Edit category</th>
+                <th class="table-th">View child categories</th>
             </tr>
             </thead>
             <tbody th:each="category:${categories}" class="table-body">
@@ -603,6 +604,18 @@
                     <button th:attr="edit-data-id=${category.id}" onclick="openModalEdit(this)"
                             class="tbody-category-td-a">edit
                     </button>
+                </td>
+
+                <td class="tbody-category-td">
+                    <div class="dropdown">
+                        <button class="dropbtn tbody-category-td-a">view</button>
+                        <div class="dropdown-content">
+                            <div th:each="childCategory:${category.productCategories}">
+                                <h6 class="dropdown-info" th:text="'name: ' + ${childCategory.name}"></h6>
+                                <hr class="dropdown-info-hr">
+                            </div>
+                        </div>
+                    </div>
                 </td>
             </tr>
             </tbody>
