@@ -360,7 +360,19 @@
         width: 350px;
         box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
         z-index: 1;
-        margin-left: -360px;
+        margin-left: -242px;
+        font-size: 20px;
+        text-align: left;
+    }
+
+    .dropdown-content-order{
+        display: none;
+        position: absolute;
+        background-color: #f9f9f9;
+        width: 350px;
+        box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+        z-index: 1;
+        margin-left: -400px;
         font-size: 20px;
         text-align: left;
     }
@@ -379,6 +391,10 @@
     }
 
     .dropdown:hover .dropdown-content {
+        display: block;
+    }
+
+    .dropdown:hover .dropdown-content-order {
         display: block;
     }
 
@@ -660,13 +676,13 @@
 
         </table>
 
-<!--        <br><br><br>-->
-<!--        <th:block th:each="pageNumber: ${#numbers.sequence(0, pages)}">-->
-<!--            <form style="padding-left: 60px;" action="/category/get_all" method="get">-->
-<!--                <input type="hidden" name="pageNumber" th:value="${pageNumber}">-->
-<!--                <button class="pagination-btn" th:text="${pageNumber+1}">1</button>-->
-<!--            </form>-->
-<!--        </th:block>-->
+        <br><br><br>
+        <th:block th:each="pageNumber: ${#numbers.sequence(0, pages)}">
+            <form style="padding-left: 60px;" action="/category/get_all" method="get">
+                <input type="hidden" name="pageNumber" th:value="${pageNumber}">
+                <button class="pagination-btn" th:text="${pageNumber+1}">1</button>
+            </form>
+        </th:block>
 
     </div>
 
@@ -816,7 +832,7 @@
                     <div class="dropdown">
                         <button class="dropbtn tbody-category-td-a get-orders-btn">get orders</button>
 
-                        <table class="dropdown-content order-table">
+                        <table class="dropdown-content-order order-table">
                             <thead>
                             <tr>
                                 <th class="table-th">Id</th>
@@ -853,13 +869,13 @@
             </tbody>
         </table>
 
-<!--        <br><br><br>-->
-<!--        <th:block th:each="pageNumber: ${#numbers.sequence(0, pages)}">-->
-<!--            <form style="padding-left: 60px;" action="/order/get_all" method="get">-->
-<!--                <input type="hidden" name="pageNumber" th:value="${pageNumber}">-->
-<!--                <button class="pagination-btn" th:text="${pageNumber+1}">1</button>-->
-<!--            </form>-->
-<!--        </th:block>-->
+        <br><br><br>
+        <th:block th:each="pageNumber: ${#numbers.sequence(0, pages)}">
+            <form style="padding-left: 150px;" action="/order/get_all" method="get">
+                <input type="hidden" name="pageNumber" th:value="${pageNumber}">
+                <button class="pagination-btn" th:text="${pageNumber+1}">1</button>
+            </form>
+        </th:block>
 
     </div>
 

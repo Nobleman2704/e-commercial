@@ -20,10 +20,11 @@ public class OrderController {
 
     @GetMapping("/get_all")
     public ModelAndView getAllOrders(
-            @RequestParam(defaultValue = "0") int pageNumber
+            @RequestParam(defaultValue = "0", name = "pageNumber") int pageNumber
     ) {
         ModelAndView modelAndView = new ModelAndView("dashboard");
         BaseResponse<List<UserOrdersGetResponse>> response = orderService.getALl(pageNumber);
+        modelAndView.addObject("pages", response.getTotalPageAmount());
         modelAndView.addObject("userOrders", response.getData());
         modelAndView.addObject("status", 3);
         return modelAndView;
