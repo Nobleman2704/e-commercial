@@ -33,6 +33,7 @@ public class CategoryService {
             ProductCategoryEntity parentCategory = productCategoryDao.findById(categoryId).get();
             try {
                 parentCategory.getProductCategories().add(productCategory);
+                productCategory.setCategories(parentCategory);
                 productCategoryDao.save(parentCategory);
                 message = "success";
                 status = 200;
