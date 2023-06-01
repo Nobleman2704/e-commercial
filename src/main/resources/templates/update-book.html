@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Update Book</title>
+</head>
+<body>
+<form action="/book/update" method="post">
+
+        <input name="title" required placeholder="title" type="text"><br>
+        <input name="author" required placeholder="author" type="text"><br>
+        <input name="price" required placeholder="price" type="number" min="1"><br>
+
+    <input type="hidden" th:value="${book.id}" name="id">
+    <button>Update</button>
+</form>
+</body>
+</html>
