@@ -1007,13 +1007,13 @@
             </tbody>
         </table>
 
-<!--        <br><br><br>-->
-<!--        <th:block th:each="pageNumber: ${#numbers.sequence(0, pages)}">-->
-<!--            <form style="padding-left: 60px;" action="/user/get_all" method="get">-->
-<!--                <input type="hidden" name="pageNumber" th:value="${pageNumber}">-->
-<!--                <button class="pagination-btn" th:text="${pageNumber+1}">1</button>-->
-<!--            </form>-->
-<!--        </th:block>-->
+        <br><br><br>
+        <th:block th:each="pageNumber: ${#numbers.sequence(0, pages)}">
+            <form style="padding-left: 60px;" action="/user/get_all" method="get">
+                <input type="hidden" name="pageNumber" th:value="${pageNumber}">
+                <button class="pagination-btn" th:text="${pageNumber+1}">1</button>
+            </form>
+        </th:block>
 
     </div>
 
