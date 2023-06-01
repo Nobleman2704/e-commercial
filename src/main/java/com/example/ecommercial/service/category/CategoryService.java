@@ -28,7 +28,10 @@ public class CategoryService {
         Long categoryId = createAndUpdateRequest.getParentId();
 
         if (categoryId != null){
-            productCategory.setCategories(productCategoryDao.findById(categoryId).get());
+            ProductCategoryEntity parentCategory = productCategoryDao.findById(categoryId).get();
+            parentCategory.getProductCategories().add(productCategory);
+            productCategoryDao.save(parentCategory);
+            productCategory.setCategories(parentCategory);
         }
         try {
             productCategoryDao.save(productCategory);
