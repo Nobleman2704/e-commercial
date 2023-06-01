@@ -45,9 +45,10 @@ public class OrderService {
         orderDao.deleteById(id);
         userDao.save(user);
         productDao.save(product);
-        return BaseResponse.builder()
-                .message("deleted")
-                .build();
+        BaseResponse<List<UserOrdersGetResponse>> responce = getALl(0);
+        responce.setMessage("deleted");
+
+        return responce;
     }
 
 
