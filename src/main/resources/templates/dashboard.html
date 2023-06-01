@@ -677,14 +677,12 @@
         </table>
 
         <br><br><br>
-        <div style="display: flex; margin: 0 auto; background-color: #73a5d9">
-            <div style="flex: 1; display: inline-block; flex-direction: row; margin: 0 auto" th:each="pageNumber: ${#numbers.sequence(0, pages)}">
+            <th:block  th:each="pageNumber: ${#numbers.sequence(0, pages)}">
                 <form style="padding-left: 5px;" action="/category/get_all" method="get">
                     <input type="hidden" name="pageNumber" th:value="${pageNumber}">
                     <button class="pagination-btn" th:text="${pageNumber+1}">1</button>
                 </form>
-            </div>
-        </div>
+            </th:block>
 
     </div>
 
