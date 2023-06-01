@@ -38,10 +38,10 @@ public class CategoryService {
                     .message("product name already exists: " + productCategory.getName())
                     .build();
         }
-        return BaseResponse.builder()
-                .status(200)
-                .message("success")
-                .build();
+        BaseResponse<List<ProductCategoryGetResponse>> response = getALl(0);
+        response.setMessage("success");
+
+        return response;
     }
 
     public BaseResponse update(CategoryCreateAndUpdateRequest categoryUpdateRequest) {
@@ -58,10 +58,9 @@ public class CategoryService {
                     .status(401)
                     .build();
         }
-        return BaseResponse.builder()
-                .message("success")
-                .status(200)
-                .build();
+        BaseResponse<List<ProductCategoryGetResponse>> response = getALl(0);
+        response.setMessage("updated");
+        return response;
     }
 
 

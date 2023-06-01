@@ -32,8 +32,8 @@ public class UserController {
             BaseResponse response = userService.save(userCreateAndUpdateRequest);
             modelAndView.addObject("message", response.getMessage());
         }
-        modelAndView.addObject("users", userService
-                .getALl(0).getData());
+        modelAndView.addObject("pages", userService.getALl(0).getTotalPageAmount());
+        modelAndView.addObject("users", userService.getALl(0).getData());
         return modelAndView;
     }
 
@@ -50,6 +50,7 @@ public class UserController {
             viewName = "userUpdatePage";
         }else {
             BaseResponse response = userService.update(userUpdateRequest);
+            modelAndView.addObject("pages", response.getTotalPageAmount());
             modelAndView.addObject("message", response.getMessage());
             modelAndView.addObject("status", 4);
             modelAndView.addObject("users", userService
@@ -72,20 +73,25 @@ public class UserController {
     public ModelAndView delete(
             @PathVariable("id") Long userId
     ){
-        userService.delete(userId);
+        BaseResponse responce = userService.delete(userId);
 
         ModelAndView modelAndView = new ModelAndView("dashboard", "message", "deleted");
         modelAndView.addObject("status", 4);
+        modelAndView.addObject("pages", responce.getTotalPageAmount());
+
         modelAndView.addObject("users", userService
                 .getALl(0).getData());
         return modelAndView;
     }
 
     @GetMapping("/get_all")
-    public ModelAndView getAllUsers(){
+    public ModelAndView getAllUsers(
+            @RequestParam(name = "pageNumber", defaultValue = "0") int pageNumber
+    ){
         BaseResponse<List<UserGetResponse>> response = userService
-                .getALl(0);
+                .getALl(pageNumber);
         ModelAndView modelAndView = new ModelAndView("dashboard");
+        modelAndView.addObject("pages", response.getTotalPageAmount());
         modelAndView.addObject("users", response.getData());
         modelAndView.addObject("status", 4);
         return modelAndView;

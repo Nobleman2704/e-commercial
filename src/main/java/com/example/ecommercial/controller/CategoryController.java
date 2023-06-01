@@ -2,6 +2,8 @@ package com.example.ecommercial.controller;
 
 import com.example.ecommercial.controller.dto.request.CategoryCreateAndUpdateRequest;
 import com.example.ecommercial.controller.dto.response.BaseResponse;
+import com.example.ecommercial.controller.dto.response.ProductCategoryGetResponse;
+import com.example.ecommercial.controller.dto.response.ProductGetResponse;
 import com.example.ecommercial.service.category.CategoryService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +12,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.List;
 
 import static com.example.ecommercial.controller.UserController.extractAllErrors;
 
@@ -33,6 +37,7 @@ public class CategoryController {
             BaseResponse response = categoryService.save(createAndUpdateRequest);
             modelAndView.addObject("message", response.getMessage());
         }
+        modelAndView.addObject("pages", categoryService.getALl(0).getTotalPageAmount());
         modelAndView.addObject("categories", categoryService
                 .getALl(0).getData());
         return modelAndView;
@@ -51,6 +56,7 @@ public class CategoryController {
             BaseResponse response = categoryService.update(categoryUpdateRequest);
             modelAndView.addObject("message", response.getMessage());
         }
+        modelAndView.addObject("pages", categoryService.getALl(0).getTotalPageAmount());
         modelAndView.addObject("categories", categoryService
                 .getALl(0).getData());
         return modelAndView;
@@ -58,11 +64,13 @@ public class CategoryController {
 
     @GetMapping("get_all")
     public ModelAndView getAllCategories(
-            @RequestParam(defaultValue = "0", name = "page") int pageNumber
+            @RequestParam(defaultValue = "0", name = "pageNumber") int pageNumber
     ){
+        BaseResponse<List<ProductCategoryGetResponse>> response =
+                categoryService.getALl(pageNumber);
         ModelAndView modelAndView = new ModelAndView("dashboard");
-        modelAndView.addObject("categories", categoryService
-                .getALl(pageNumber).getData());
+        modelAndView.addObject("pages",response.getTotalPageAmount());
+        modelAndView.addObject("categories", response.getData());
         modelAndView.addObject("status", 1);
         return modelAndView;
     }
