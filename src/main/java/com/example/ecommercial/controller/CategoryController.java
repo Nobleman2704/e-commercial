@@ -34,13 +34,13 @@ public class CategoryController {
         if (bindingResult.hasErrors())
             modelAndView.addObject("message", extractAllErrors(bindingResult));
         else{
-            BaseResponse response = categoryService.save(createAndUpdateRequest);
+            BaseResponse<List<ProductCategoryGetResponse>> response = categoryService.save(createAndUpdateRequest);
             modelAndView.addObject("message", response.getMessage());
+            List<ProductCategoryGetResponse> categoryGetResponses = response.getData();
+            modelAndView.addObject("categories", categoryGetResponses);
         }
-        List<ProductCategoryGetResponse> categoryGetResponses = categoryService.getALl(0).getData();
 
         modelAndView.addObject("pages", categoryService.getALl(0).getTotalPageAmount());
-        modelAndView.addObject("categories", categoryGetResponses);
         return modelAndView;
     }
 

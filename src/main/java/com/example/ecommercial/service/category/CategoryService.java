@@ -21,29 +21,38 @@ public class CategoryService {
     private final ProductCategoryDao productCategoryDao;
     private final ModelMapper modelMapper;
 
-    public BaseResponse save(CategoryCreateAndUpdateRequest createAndUpdateRequest) {
+    public BaseResponse<List<ProductCategoryGetResponse>> save(CategoryCreateAndUpdateRequest createAndUpdateRequest) {
         ProductCategoryEntity productCategory = modelMapper
                 .map(createAndUpdateRequest, ProductCategoryEntity.class);
 
         Long categoryId = createAndUpdateRequest.getParentId();
+        String message;
+        int status;
 
         if (categoryId != null){
             ProductCategoryEntity parentCategory = productCategoryDao.findById(categoryId).get();
-            parentCategory.getProductCategories().add(productCategory);
-            productCategoryDao.save(parentCategory);
-            productCategory.setCategories(parentCategory);
-        }
-        try {
-            productCategoryDao.save(productCategory);
-        } catch (Exception e) {
-            return BaseResponse.builder()
-                    .status(401)
-                    .message("product name already exists: " + productCategory.getName())
-                    .build();
+            try {
+                parentCategory.getProductCategories().add(productCategory);
+                productCategoryDao.save(parentCategory);
+                message = "success";
+                status = 200;
+            } catch (Exception e) {
+                message = "product name already exists:" + productCategory.getName();
+                status = 401;
+            }
+        }else {
+            try {
+                productCategoryDao.save(productCategory);
+                message = "success";
+                status = 200;
+            } catch (Exception e) {
+                message = "product name already exists:" + productCategory.getName();
+                status = 401;
+            }
         }
         BaseResponse<List<ProductCategoryGetResponse>> response = getALl(0);
-        response.setMessage("success");
-
+        response.setMessage(message);
+        response.setStatus(status);
         return response;
     }
 

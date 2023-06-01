@@ -20,7 +20,7 @@ public class ProductCategoryEntity extends BaseEntity{
     @JoinColumn(name = "parent_id")
     private ProductCategoryEntity categories;
 
-    @OneToMany(mappedBy = "categories", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "categories", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<ProductCategoryEntity> productCategories;
 
     @OneToMany(mappedBy = "categories", fetch = FetchType.EAGER)
