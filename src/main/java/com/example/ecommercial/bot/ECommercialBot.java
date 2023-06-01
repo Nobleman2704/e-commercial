@@ -1,8 +1,11 @@
 package com.example.ecommercial.bot;
 
 import com.example.ecommercial.domain.enums.UserState;
+import jakarta.ws.rs.ext.ParamConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import org.hibernate.validator.internal.util.stereotypes.Lazy;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -12,6 +15,7 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -19,9 +23,8 @@ import java.util.concurrent.Executors;
 @Component
 @RequiredArgsConstructor
 public class ECommercialBot extends TelegramLongPollingBot {
-
-
     private final ExecutorService executorService = Executors.newCachedThreadPool();
+
     private final BotService botService;
 
     @SneakyThrows
@@ -34,6 +37,7 @@ public class ECommercialBot extends TelegramLongPollingBot {
                 Integer messageId = message.getMessageId();
                 Long chatId = message.getChatId();
                 String data = callbackQuery.getData();
+
 
                 UserState userState = botService.checkState(chatId);
 
@@ -100,6 +104,14 @@ public class ECommercialBot extends TelegramLongPollingBot {
                 }
             }
         });
+    }
+    public void sendMessageToUser(String message, Long chatId){
+        SendMessage sendMessage = new SendMessage(chatId.toString(), message);
+        try {
+            execute(sendMessage);
+        } catch (TelegramApiException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override

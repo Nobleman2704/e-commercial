@@ -6,6 +6,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.*;
 
+import java.util.Objects;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -21,4 +23,7 @@ public class HistoryEntity extends BaseEntity{
     @ManyToOne
     @JoinColumn(name = "user_id")
     private UserEntity users;
+
+
+
 }

@@ -423,6 +423,13 @@
         </h3>
         <hr class="hr">
 
+        <h3 class="left-page-h3">
+            <button class="h3-button">
+                <a href="/book/get_all" class="h3-a">Books</a>
+            </button>
+        </h3>
+        <hr class="hr">
+
         <hr class="hr hr2">
         <h3 class="left-page-h3">
             <button class="h3-button">
@@ -875,6 +882,52 @@
                     </div>
                 </td>
             </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div th:if="${status==5}" class="right-page">
+        <form action="/book/add_book" method="post">
+            <label> Title
+                <input name="title" required placeholder="title" type="text">
+            </label><br><br>
+            <label> Author
+                <input name="author" required placeholder="author" type="text">
+            </label> <br><br>
+            <label> Price
+                <input name="price" required placeholder="price" type="number" min="1">
+            </label>
+            <button>Add</button>
+        </form>
+        <br><br>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th>Price</th>
+                    <th>Created date</th>
+                    <th>Updated date</th>
+                    <th>Created by</th>
+                    <th>Last Modified by</th>
+                    <th>Delete</th>
+                    <th>Update</th>
+                </tr>
+            </thead>
+            <tbody th:each="book: ${books}">
+                <tr>
+                    <td th:text="${book.id}"></td>
+                    <td th:text="${book.title}"></td>
+                    <td th:text="${book.author}"></td>
+                    <td th:text="${book.price}"></td>
+                    <td th:text="${book.createdDate}"></td>
+                    <td th:text="${book.updatedDate}"></td>
+                    <td th:text="${book.createdBy}"></td>
+                    <td th:text="${book.lastModifiedBy}"></td>
+                    <td><a th:href="@{/book/delete/{id}(id=${book.id})}">delete</a></td>
+                    <td><a th:href="@{/book/update/{id}(id=${book.id})}">update</a></td>
+                </tr>
             </tbody>
         </table>
     </div>

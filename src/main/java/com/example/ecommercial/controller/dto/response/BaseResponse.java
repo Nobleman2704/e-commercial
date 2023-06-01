@@ -12,6 +12,8 @@ public class BaseResponse<T> {
     private int status;
 
     private String message;
+    private String messageToUser;
+    private long chatId;
 
     private T data;
     private int totalPageAmount;

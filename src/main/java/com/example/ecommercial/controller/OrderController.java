@@ -1,5 +1,6 @@
 package com.example.ecommercial.controller;
 
+import com.example.ecommercial.bot.ECommercialBot;
 import com.example.ecommercial.controller.dto.response.BaseResponse;
 import com.example.ecommercial.controller.dto.response.UserOrdersGetResponse;
 import com.example.ecommercial.service.order.OrderService;
@@ -17,6 +18,7 @@ import java.util.List;
 @EnableMethodSecurity
 public class OrderController {
     private final OrderService orderService;
+    private final ECommercialBot eCommercialBot;
 
     @GetMapping("/get_all")
     public ModelAndView getAllOrders(
@@ -40,8 +42,11 @@ public class OrderController {
         ModelAndView modelAndView = new ModelAndView("dashboard");
         BaseResponse<List<UserOrdersGetResponse>> response = orderService
                 .changeStatus(orderId, status);
+        String message = response.getMessageToUser();
+        long chatId = response.getChatId();
+        eCommercialBot.sendMessageToUser(message, chatId);
         modelAndView.addObject("userOrders", response.getData());
-        modelAndView.addObject("message", response.getMessage());
+        modelAndView.addObject("message", message);
         modelAndView.addObject("status", 3);
         return modelAndView;
     }

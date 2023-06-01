@@ -10,7 +10,7 @@ import com.example.ecommercial.controller.dto.response.OrderGetResponse;
 import com.example.ecommercial.controller.dto.response.UserOrdersGetResponse;
 import com.example.ecommercial.domain.entity.*;
 import com.example.ecommercial.domain.enums.OrderStatus;
-import com.example.ecommercial.domain.enums.UserRole;
+import com.example.ecommercial.service.SendMessage;
 import com.example.ecommercial.service.history.HistoryService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -92,7 +92,6 @@ public class OrderService {
         BasketEntity basket = basketDao.findById(basketId).get();
         UserEntity user = basket.getUsers();
         ProductEntity product = basket.getProducts();
-
         int status;
         String message;
 
@@ -154,13 +153,18 @@ public class OrderService {
     }
 
     public BaseResponse<List<UserOrdersGetResponse>> changeStatus(Long orderId, String status) {
+        OrderEntity orderEntity = orderDao.findById(orderId).get();
+        Long chatId = orderEntity.getUsers().getChatId();
         String message;
+        String userMessage;
         if (status.equals("CANCEL")) {
             message = "Order has been cancelled";
+            userMessage = "Your order has been cancelled";
             delete(orderId);
         } else {
             message = "Product has been ordered";
-            OrderEntity orderEntity = orderDao.findById(orderId).get();
+            userMessage = orderEntity.getProducts().getName() + " product name that you " +
+                    "ordered has been delivered and added to your history";
             HistoryEntity history = HistoryEntity.builder()
                     .amount(orderEntity.getAmount())
                     .totalPrice(orderEntity.getTotalPrice())
@@ -174,6 +178,8 @@ public class OrderService {
         }
         BaseResponse<List<UserOrdersGetResponse>> response = getALl(0);
         response.setMessage(message);
+        response.setMessageToUser(userMessage);
+        response.setChatId(chatId);
         return response;
     }
 }
