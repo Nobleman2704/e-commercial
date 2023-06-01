@@ -31,11 +31,9 @@ public class UserController {
         }else {
             BaseResponse response = userService.save(userCreateAndUpdateRequest);
             modelAndView.addObject("message", response.getMessage());
-            modelAndView.addObject("pages", response.getTotalPageAmount());
         }
-        modelAndView.addObject("users", userService
-                .getALl(0).getData());
-
+        modelAndView.addObject("pages", userService.getALl(0).getTotalPageAmount());
+        modelAndView.addObject("users", userService.getALl(0).getData());
         return modelAndView;
     }
 

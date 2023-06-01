@@ -8,14 +8,12 @@
 <style>
     .modal {
         z-index: 1;
-        padding-top: 100px;
+        padding-top: 40px;
         left: 0;
         top: 0;
         width: 100%;
         height: 100%;
         overflow: auto;
-        background-color: rgb(0, 0, 0);
-        background-color: rgba(0, 0, 0, 0.4);
     }
 
     .modal-content {
@@ -67,8 +65,8 @@
         visibility: hidden;
         min-width: 250px;
         margin-left: -125px;
-        border: 2px solid #293b4d;
-        background-color: #5D6D7E;
+        border: 2px solid #856404;
+        background-color: #fff3cd;
         color: #fff;
         text-align: center;
         border-radius: 5px;
@@ -173,72 +171,93 @@
                     <option>ADMIN</option>
                     <option>ACCOUNTANT</option>
                 </select><br> <br>
-                <label> EDIT_CATEGORY
-                    <input type="checkbox" checked name="userAuthorities" value="EDIT_CATEGORY"
-                           th:if="${user.userAuthorities.contains(T(com.example.ecommercial.domain.enums.UserAuthority).EDIT_CATEGORY)}">
-                    <input type="checkbox" name="userAuthorities" value="EDIT_CATEGORY"
-                           th:unless="${user.userAuthorities.contains(T(com.example.ecommercial.domain.enums.UserAuthority).EDIT_CATEGORY)}">
-                </label><br>
-                <label> EDIT_PRODUCT
-                    <input type="checkbox" checked name="userAuthorities" value="EDIT_PRODUCT"
-                           th:if="${user.userAuthorities.contains(T(com.example.ecommercial.domain.enums.UserAuthority).EDIT_PRODUCT)}">
-                    <input type="checkbox" name="userAuthorities" value="EDIT_PRODUCT"
-                           th:unless="${user.userAuthorities.contains(T(com.example.ecommercial.domain.enums.UserAuthority).EDIT_PRODUCT)}">
-                </label><br>
-                <label> EDIT_USER
-                    <input type="checkbox" checked name="userAuthorities" value="EDIT_USER"
-                           th:if="${user.userAuthorities.contains(T(com.example.ecommercial.domain.enums.UserAuthority).EDIT_USER)}">
-                    <input type="checkbox" name="userAuthorities" value="EDIT_USER"
-                           th:unless="${user.userAuthorities.contains(T(com.example.ecommercial.domain.enums.UserAuthority).EDIT_USER)}">
-                </label><br>
-                <label> DELETE_PRODUCT
-                    <input type="checkbox" checked name="userAuthorities" value="DELETE_PRODUCT"
-                           th:if="${user.userAuthorities.contains(T(com.example.ecommercial.domain.enums.UserAuthority).DELETE_PRODUCT)}">
-                    <input type="checkbox" name="userAuthorities" value="DELETE_PRODUCT"
-                           th:unless="${user.userAuthorities.contains(T(com.example.ecommercial.domain.enums.UserAuthority).DELETE_PRODUCT)}">
-                </label><br>
-                <label> GET_CATEGORY
-                    <input type="checkbox" checked name="userAuthorities" value="GET_CATEGORY"
-                           th:if="${user.userAuthorities.contains(T(com.example.ecommercial.domain.enums.UserAuthority).GET_CATEGORY)}">
-                    <input type="checkbox" name="userAuthorities" value="GET_CATEGORY"
-                           th:unless="${user.userAuthorities.contains(T(com.example.ecommercial.domain.enums.UserAuthority).GET_CATEGORY)}">
-                </label><br>
-                <label> GET_PRODUCT
-                    <input type="checkbox" checked name="userAuthorities" value="GET_PRODUCT"
-                           th:if="${user.userAuthorities.contains(T(com.example.ecommercial.domain.enums.UserAuthority).GET_PRODUCT)}">
-                    <input type="checkbox" name="userAuthorities" value="GET_PRODUCT"
-                           th:unless="${user.userAuthorities.contains(T(com.example.ecommercial.domain.enums.UserAuthority).GET_PRODUCT)}">
-                </label><br>
-                <label> GET_ORDER
-                    <input type="checkbox" checked name="userAuthorities" value="GET_ORDER"
-                           th:if="${user.userAuthorities.contains(T(com.example.ecommercial.domain.enums.UserAuthority).GET_ORDER)}">
-                    <input type="checkbox" name="userAuthorities" value="GET_ORDER"
-                           th:unless="${user.userAuthorities.contains(T(com.example.ecommercial.domain.enums.UserAuthority).GET_ORDER)}">
-                </label><br>
-                <label> GET_USER
-                    <input type="checkbox" checked name="userAuthorities" value="GET_USER"
-                           th:if="${user.userAuthorities.contains(T(com.example.ecommercial.domain.enums.UserAuthority).GET_USER)}">
-                    <input type="checkbox" name="userAuthorities" value="GET_USER"
-                           th:unless="${user.userAuthorities.contains(T(com.example.ecommercial.domain.enums.UserAuthority).GET_USER)}">
-                </label><br>
-                <label> CREATE_PRODUCT
-                    <input type="checkbox" checked name="userAuthorities" value="CREATE_PRODUCT"
-                           th:if="${user.userAuthorities.contains(T(com.example.ecommercial.domain.enums.UserAuthority).CREATE_PRODUCT)}">
-                    <input type="checkbox" name="userAuthorities" value="CREATE_PRODUCT"
-                           th:unless="${user.userAuthorities.contains(T(com.example.ecommercial.domain.enums.UserAuthority).CREATE_PRODUCT)}">
-                </label><br>
-                <label> CREATE_CATEGORY
-                    <input type="checkbox" checked name="userAuthorities" value="CREATE_CATEGORY"
-                           th:if="${user.userAuthorities.contains(T(com.example.ecommercial.domain.enums.UserAuthority).CREATE_CATEGORY)}">
-                    <input type="checkbox" name="userAuthorities" value="CREATE_CATEGORY"
-                           th:unless="${user.userAuthorities.contains(T(com.example.ecommercial.domain.enums.UserAuthority).CREATE_CATEGORY)}">
-                </label><br>
-                <label> CREATE_USER
-                    <input type="checkbox" checked name="userAuthorities" value="CREATE_USER"
-                           th:if="${user.userAuthorities.contains(T(com.example.ecommercial.domain.enums.UserAuthority).CREATE_USER)}">
-                    <input type="checkbox" name="userAuthorities" value="CREATE_USER"
-                           th:unless="${user.userAuthorities.contains(T(com.example.ecommercial.domain.enums.UserAuthority).CREATE_USER)}">
-                </label><br>
+
+
+                <div style="display: flex; flex-direction: row">
+
+                    <div style="width: 50%">
+                        <label>
+                            <input type="checkbox" checked name="userAuthorities" value="EDIT_CATEGORY"
+                                   th:if="${user.userAuthorities.contains(T(com.example.ecommercial.domain.enums.UserAuthority).EDIT_CATEGORY)}">
+                            <input type="checkbox" name="userAuthorities" value="EDIT_CATEGORY"
+                                   th:unless="${user.userAuthorities.contains(T(com.example.ecommercial.domain.enums.UserAuthority).EDIT_CATEGORY)}">
+                            EDIT_CATEGORY
+                        </label><br>
+                        <label>
+                            <input type="checkbox" checked name="userAuthorities" value="EDIT_PRODUCT"
+                                   th:if="${user.userAuthorities.contains(T(com.example.ecommercial.domain.enums.UserAuthority).EDIT_PRODUCT)}">
+                            <input type="checkbox" name="userAuthorities" value="EDIT_PRODUCT"
+                                   th:unless="${user.userAuthorities.contains(T(com.example.ecommercial.domain.enums.UserAuthority).EDIT_PRODUCT)}">
+                            EDIT_PRODUCT
+                        </label><br>
+                        <label>
+                            <input type="checkbox" checked name="userAuthorities" value="EDIT_USER"
+                                   th:if="${user.userAuthorities.contains(T(com.example.ecommercial.domain.enums.UserAuthority).EDIT_USER)}">
+                            <input type="checkbox" name="userAuthorities" value="EDIT_USER"
+                                   th:unless="${user.userAuthorities.contains(T(com.example.ecommercial.domain.enums.UserAuthority).EDIT_USER)}">
+                            EDIT_USER
+                        </label><br>
+                        <label>
+                            <input type="checkbox" checked name="userAuthorities" value="DELETE_PRODUCT"
+                                   th:if="${user.userAuthorities.contains(T(com.example.ecommercial.domain.enums.UserAuthority).DELETE_PRODUCT)}">
+                            <input type="checkbox" name="userAuthorities" value="DELETE_PRODUCT"
+                                   th:unless="${user.userAuthorities.contains(T(com.example.ecommercial.domain.enums.UserAuthority).DELETE_PRODUCT)}">
+                            DELETE_PRODUCT
+                        </label><br>
+                        <label>
+                            <input type="checkbox" checked name="userAuthorities" value="GET_CATEGORY"
+                                   th:if="${user.userAuthorities.contains(T(com.example.ecommercial.domain.enums.UserAuthority).GET_CATEGORY)}">
+                            <input type="checkbox" name="userAuthorities" value="GET_CATEGORY"
+                                   th:unless="${user.userAuthorities.contains(T(com.example.ecommercial.domain.enums.UserAuthority).GET_CATEGORY)}">
+                            GET_CATEGORY
+                        </label><br>
+                        <label>
+                            <input type="checkbox" checked name="userAuthorities" value="GET_PRODUCT"
+                                   th:if="${user.userAuthorities.contains(T(com.example.ecommercial.domain.enums.UserAuthority).GET_PRODUCT)}">
+                            <input type="checkbox" name="userAuthorities" value="GET_PRODUCT"
+                                   th:unless="${user.userAuthorities.contains(T(com.example.ecommercial.domain.enums.UserAuthority).GET_PRODUCT)}">
+                            GET_PRODUCT
+                        </label><br>
+                    </div>
+
+                    <div style="width: 50%">
+                        <label>
+                            <input type="checkbox" checked name="userAuthorities" value="GET_ORDER"
+                                   th:if="${user.userAuthorities.contains(T(com.example.ecommercial.domain.enums.UserAuthority).GET_ORDER)}">
+                            <input type="checkbox" name="userAuthorities" value="GET_ORDER"
+                                   th:unless="${user.userAuthorities.contains(T(com.example.ecommercial.domain.enums.UserAuthority).GET_ORDER)}">
+                            GET_ORDER
+                        </label><br>
+                        <label>
+                            <input type="checkbox" checked name="userAuthorities" value="GET_USER"
+                                   th:if="${user.userAuthorities.contains(T(com.example.ecommercial.domain.enums.UserAuthority).GET_USER)}">
+                            <input type="checkbox" name="userAuthorities" value="GET_USER"
+                                   th:unless="${user.userAuthorities.contains(T(com.example.ecommercial.domain.enums.UserAuthority).GET_USER)}">
+                            GET_USER
+                        </label><br>
+                        <label>
+                            <input type="checkbox" checked name="userAuthorities" value="CREATE_PRODUCT"
+                                   th:if="${user.userAuthorities.contains(T(com.example.ecommercial.domain.enums.UserAuthority).CREATE_PRODUCT)}">
+                            <input type="checkbox" name="userAuthorities" value="CREATE_PRODUCT"
+                                   th:unless="${user.userAuthorities.contains(T(com.example.ecommercial.domain.enums.UserAuthority).CREATE_PRODUCT)}">
+                            CREATE_PRODUCT
+                        </label><br>
+                        <label>
+                            <input type="checkbox" checked name="userAuthorities" value="CREATE_CATEGORY"
+                                   th:if="${user.userAuthorities.contains(T(com.example.ecommercial.domain.enums.UserAuthority).CREATE_CATEGORY)}">
+                            <input type="checkbox" name="userAuthorities" value="CREATE_CATEGORY"
+                                   th:unless="${user.userAuthorities.contains(T(com.example.ecommercial.domain.enums.UserAuthority).CREATE_CATEGORY)}">
+                            CREATE_CATEGORY
+                        </label><br>
+                        <label>
+                            <input type="checkbox" checked name="userAuthorities" value="CREATE_USER"
+                                   th:if="${user.userAuthorities.contains(T(com.example.ecommercial.domain.enums.UserAuthority).CREATE_USER)}">
+                            <input type="checkbox" name="userAuthorities" value="CREATE_USER"
+                                   th:unless="${user.userAuthorities.contains(T(com.example.ecommercial.domain.enums.UserAuthority).CREATE_USER)}">
+                            CREATE_USER
+                        </label><br>
+                    </div>
+                </div>
                 <input type="hidden" th:value="${user.id}" name="id">
             </div>
             <div class="modal-footer">

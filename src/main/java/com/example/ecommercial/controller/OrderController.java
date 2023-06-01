@@ -44,6 +44,7 @@ public class OrderController {
         modelAndView.addObject("userOrders", response.getData());
         modelAndView.addObject("message", response.getMessage());
         modelAndView.addObject("status", 3);
+        modelAndView.addObject("pages", response.getTotalPageAmount());
         return modelAndView;
     }
 }

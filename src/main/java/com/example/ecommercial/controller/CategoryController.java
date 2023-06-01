@@ -36,8 +36,8 @@ public class CategoryController {
         else{
             BaseResponse response = categoryService.save(createAndUpdateRequest);
             modelAndView.addObject("message", response.getMessage());
-            modelAndView.addObject("pages",response.getTotalPageAmount());
         }
+        modelAndView.addObject("pages", categoryService.getALl(0).getTotalPageAmount());
         modelAndView.addObject("categories", categoryService
                 .getALl(0).getData());
         return modelAndView;
@@ -55,8 +55,8 @@ public class CategoryController {
         else {
             BaseResponse response = categoryService.update(categoryUpdateRequest);
             modelAndView.addObject("message", response.getMessage());
-            modelAndView.addObject("pages",response.getTotalPageAmount());
         }
+        modelAndView.addObject("pages", categoryService.getALl(0).getTotalPageAmount());
         modelAndView.addObject("categories", categoryService
                 .getALl(0).getData());
         return modelAndView;
