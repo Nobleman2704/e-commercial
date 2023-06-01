@@ -27,4 +27,5 @@ public class ProductCategoryGetResponse {
     private String lastModifiedBy;
     private String name;
     private ProductCategoryEntity categories;
+    private List<ProductCategoryEntity> productCategories;
 }
