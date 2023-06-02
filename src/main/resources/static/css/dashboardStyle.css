@@ -1,0 +1,486 @@
+form {
+    display: inline-block;
+}
+
+.navbar {
+    width: 100%;
+    height: 40px;
+    background-color: #3d5670;
+    text-align: center;
+    color: white;
+    font-family: sans-serif;
+    font-weight: 700;
+    font-size: 32px;
+    padding-top: 6px;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 690px;
+    margin: 0 auto;
+}
+
+.left-page {
+    width: 20%;
+    height: 100%;
+    background-color: #34495E;
+}
+
+.right-page {
+    width: 80%;
+    height: 100%;
+    background-color: #e3e3e3;
+}
+
+.left-page-h1 {
+    text-align: center;
+    color: white;
+    font-weight: 700;
+    font-family: sans-serif;
+}
+
+.hr {
+    width: 90%;
+}
+
+.left-page-h3 {
+    text-align: center;
+    font-weight: 400;
+    font-family: sans-serif;
+}
+
+.hr2 {
+    margin-top: 300px;
+}
+
+.h3-a {
+    text-decoration: none;
+    color: white;
+}
+
+.h3-a:hover {
+    color: #789fcb;
+}
+
+.right-page {
+    background-color: white;
+    /*background-image: url("https://eticket.railway.uz/assets/my-images/bg.png");*/
+}
+
+.table {
+    margin: 0 auto;
+    margin-top: 20px;
+    border-radius: 10px;
+}
+
+.t1 {
+    width: 90%;
+}
+
+.t2 {
+    width: 90%;
+}
+
+.t3 {
+    width: 75%;
+    margin-top: 40px;
+}
+
+.t4 {
+    width: 90%;
+}
+
+.h3-button {
+    text-align: center;
+    font-weight: 400;
+    font-family: sans-serif;
+    font-size: 19px;
+    border: none;
+    background: none;
+}
+
+.table-head {
+    border-radius: 10px;
+    border: none;
+    background-color: #e3e3e3;
+    margin: 0 auto;
+}
+
+.table-tr {
+    font-family: Segoe UI, sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 20px;
+    border-radius: 10px;
+}
+
+.table-th {
+    height: 40px;
+    padding-left: 10px;
+    padding-right: 10px;
+    text-align: center;
+}
+
+.table-body {
+    margin: 0 auto;
+}
+
+.tbody-tr {
+    background-color: rgba(0, 0, 0, 0.06);
+    font-family: Segoe UI, sans-serif;
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 20px;
+    text-align: center
+}
+
+.tbody-td {
+    height: 40px;
+    padding-left: 25px;
+    padding-right: 25px;
+    text-align: center;
+}
+
+.table-btn{
+    padding-right: -100px;
+}
+
+.tbody-category-td {
+    height: 40px;
+}
+
+.tbody-category-td-a {
+    text-decoration: none;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    width: 80%;
+    height: 30px;
+    background-color: #3d5670;
+    padding-left: 30px;
+    padding-right: 30px;
+    border-radius: 5px;
+    font-size: 18px;
+    border: none;
+    color: white;
+    text-align: center;
+}
+
+.dropbtn{
+    padding-right: 48px;
+    text-align: center;
+}
+
+.get-orders-btn{
+    width: 100%;
+    font-size: 15px;
+    padding-right: 30px;
+    text-align: center;
+}
+
+.change-amount-form{
+    margin: 0 auto;
+    display: flex;
+    flex-direction: row;
+    width: 129px;
+}
+
+.change-amount-input{
+    width: 60px;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    border: none;
+}
+
+.change-amount-btn{
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border: none;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    font-size: 16px;
+    background-color: #3d5670;
+    color: white;
+}
+
+.get-order-select{
+    border: none;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    background-color: #eaeaea;
+}
+
+.get-order-button{
+    border: none;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    background-color: #3d5670;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    font-size: 16px;
+    color: white;
+}
+
+.cat-add-btn {
+    margin-top: 20px;
+    height: 40px;
+    border-radius: 5px;
+    background-color: #3d5670;
+    color: white;
+    font-family: Segoe UI, sans-serif;
+    font-weight: 700;
+    font-size: 22px;
+    line-height: 20px;
+    text-align: center;
+    border: none;
+    margin-bottom: 10px;
+    margin-left: 100px;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    padding-top: 100px;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0, 0, 0);
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+    position: relative;
+    background-color: #fefefe;
+    margin: auto;
+    padding: 0;
+    border: 1px solid #888;
+    width: 30%;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    -webkit-animation-name: animatetop;
+    -webkit-animation-duration: 0.4s;
+    animation-name: animatetop;
+    animation-duration: 0.4s
+}
+
+@-webkit-keyframes animatetop {
+    from {
+        top: -300px;
+        opacity: 0
+    }
+    to {
+        top: 0;
+        opacity: 1
+    }
+}
+
+@keyframes animatetop {
+    from {
+        top: -300px;
+        opacity: 0
+    }
+    to {
+        top: 0;
+        opacity: 1
+    }
+}
+
+.close {
+    color: white;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.modal-header {
+    padding: 2px 16px;
+    background-color: #3e5267;
+    color: white;
+}
+
+.modal-body {
+    padding: 20px 16px;
+}
+
+.modal-footer {
+    padding: 10px 16px;
+    background-color: #3e5267;
+    color: white;
+}
+
+.table1-label {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 15px;
+}
+
+.table1-input {
+    margin-top: 8px;
+    width: 80%;
+    font-size: 20px;
+}
+
+.table1-modal-add-btn {
+    width: 100px;
+    height: 30px;
+    border: none;
+    background-color: #ffffff;
+    color: #368aa8;
+    margin-left: 76%;
+    border-radius: 5px;
+    font-size: 15px;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    width: 350px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    margin-left: -242px;
+    font-size: 20px;
+    text-align: left;
+}
+
+.dropdown-content-order{
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    width: 350px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    margin-left: -400px;
+    font-size: 20px;
+    text-align: left;
+}
+
+.order-table{
+    width: inherit;
+    height: inherit;
+    font-size: 15px;
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.dropdown:hover .dropdown-content-order {
+    display: block;
+}
+
+#snackbar {
+    visibility: hidden;
+    min-width: 250px;
+    margin-left: -125px;
+    border: 2px solid #856404;
+    background-color: #fff3cd;
+    color: #fff;
+    text-align: center;
+    border-radius: 5px;
+    padding: 16px;
+    position: fixed;
+    z-index: 1;
+    left: 70%;
+    top: 30px;
+    font-size: 17px;
+}
+
+#snackbar.show {
+    color: #856404;
+    visibility: visible;
+    -webkit-animation: fadein 0.8s, fadeout 0.8s 4s;
+    animation: fadein 0.8s, fadeout 0.8s 4s;
+}
+
+@-webkit-keyframes fadein {
+    from {
+        top: 0;
+        opacity: 0;
+    }
+    to {
+        top: 30px;
+        opacity: 1;
+    }
+}
+
+@keyframes fadein {
+    from {
+        top: 0;
+        opacity: 0;
+    }
+    to {
+        top: 30px;
+        opacity: 1;
+    }
+}
+
+@-webkit-keyframes fadeout {
+    from {
+        top: 30px;
+        opacity: 1;
+    }
+    to {
+        top: 0;
+        opacity: 0;
+    }
+}
+
+@keyframes fadeout {
+    from {
+        top: 30px;
+        opacity: 1;
+    }
+    to {
+        top: 0;
+        opacity: 0;
+    }
+}
+
+.dropdown-info{
+    margin-top: 5px;
+    margin-left: 12px;
+}
+.dropdown-info-hr{
+    margin-top: -18px;
+}
+
+.pagination-btn{
+    background-color: #3d5670;
+    color: white;
+    border: none;
+    padding: 10px 20px 10px 20px;
+    font-size: 18px;
+    margin-left: 5px;
+}
+.pagination-div{
+    width: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+.pagination-form{
+    padding-left: 5px;
+}
