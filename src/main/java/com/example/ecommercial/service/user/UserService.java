@@ -15,7 +15,6 @@ import org.modelmapper.TypeToken;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.User;
 
@@ -43,10 +42,7 @@ public class UserService implements BaseService<
             message = userEntity.getUsername() + " already exists";
             status = 401;
         }
-        return BaseResponse.builder()
-                .status(status)
-                .message(message)
-                .build();
+        return BaseResponse.of(message, status);
     }
 
     @Override
@@ -67,10 +63,7 @@ public class UserService implements BaseService<
             message = userEntity.getUsername() + " already exists";
             status = 401;
         }
-        return BaseResponse.builder()
-                .status(status)
-                .message(message)
-                .build();
+        return BaseResponse.of(message, status);
     }
 
     @Override
@@ -84,11 +77,10 @@ public class UserService implements BaseService<
     @Override
     public BaseResponse<UserGetResponse> getById(Long id) {
         UserEntity userEntity = userDao.findById(id).get();
-        return BaseResponse.<UserGetResponse>builder()
-                .message("success")
-                .status(200)
-                .data(userConverter.toUserGetDto(userEntity))
-                .build();
+        return BaseResponse.of(
+                        "success",
+                        200,
+                        userConverter.toUserGetDto(userEntity));
     }
 
     @Override
@@ -98,14 +90,11 @@ public class UserService implements BaseService<
                 .findUserEntitiesByChatIdIsNull(pageable);
         int totalPages = userEntityPage.getTotalPages();
 
-        return BaseResponse.<List<UserGetResponse>>builder()
-                .totalPageAmount(totalPages)
-                .status(200)
-                .message("success")
-                .totalPageAmount((totalPages == 0) ? 0 : totalPages - 1)
-                .data(userConverter
-                        .toUserGetDto(userEntityPage.getContent()))
-                .build();
+        return BaseResponse.of(
+                "success",
+                200,
+                userConverter.toUserGetDto(userEntityPage.getContent()),
+                (totalPages == 0) ? 0 : totalPages - 1);
     }
 
 
@@ -128,14 +117,12 @@ public class UserService implements BaseService<
     public BaseResponse<UserState> getUserState(Long chatId) {
         Optional<UserEntity> optionalUser = userDao.findUserEntitiesByChatId(chatId);
         if (optionalUser.isPresent()) {
-            return BaseResponse.<UserState>builder()
-                    .data(optionalUser.get().getUserState())
-                    .status(200)
-                    .build();
+            return BaseResponse.of(
+                    "success",
+                    200,
+                    optionalUser.get().getUserState());
         }
-        return BaseResponse.<UserState>builder()
-                .status(404)
-                .build();
+        return BaseResponse.of("not found", 404);
     }
 
     public void saveBotUser(Long chatId, User user) {
@@ -157,12 +144,13 @@ public class UserService implements BaseService<
 
     public BaseResponse<Double> getUserBalance(Long chatId) {
         UserEntity userEntity = userDao.findUserEntitiesByChatId(chatId).get();
-        return BaseResponse.<Double>builder()
-                .data(userEntity.getBalance())
-                .build();
+        return BaseResponse.of(
+                "success",
+                200,
+                userEntity.getBalance());
     }
 
-    public BaseResponse<Double> addBalance(String text, Long chatId) {
+    public BaseResponse addBalance(String text, Long chatId) {
         String message;
         int status;
         try {
@@ -181,9 +169,6 @@ public class UserService implements BaseService<
             status = 401;
             message = "Please only write number";
         }
-        return BaseResponse.<Double>builder()
-                .status(status)
-                .message(message)
-                .build();
+        return BaseResponse.of(message, status);
     }
 }

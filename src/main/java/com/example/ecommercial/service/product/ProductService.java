@@ -38,12 +38,9 @@ public class ProductService implements BaseService<
 
     @Override
     public BaseResponse save(ProductCreateAndUpdateRequest productRequest) {
-
         ProductEntity product = productConverter.toProductEntity(productRequest);
-
         String message;
         int status;
-
         try {
             productDao.save(product);
             message = "saved";
@@ -52,10 +49,7 @@ public class ProductService implements BaseService<
             message = "This name already exists";
             status= 404;
         }
-        return BaseResponse.builder()
-                .message(message)
-                .status(status)
-                .build();
+        return BaseResponse.of(message, status);
     }
 
     @Override
@@ -77,11 +71,7 @@ public class ProductService implements BaseService<
             message = update.getName() + " already exists";
             status = 401;
         }
-
-        return BaseResponse.builder()
-                .message(message)
-                .status(status)
-                .build();
+        return BaseResponse.of(message, status);
     }
 
     @Override
@@ -109,14 +99,10 @@ public class ProductService implements BaseService<
     public BaseResponse<ProductGetResponse> getById(Long id) {
         ProductEntity product = productDao.findById(id).get();
 
-        ProductGetResponse productGetResponse = productConverter.toProductGetDto(product);
-
-        return BaseResponse.<ProductGetResponse>builder()
-                .status(200)
-                .message("success")
-                .data(productGetResponse)
-                .build();
-
+        return BaseResponse.of(
+                "success",
+                200,
+                productConverter.toProductGetDto(product));
     }
 
     @Override
@@ -124,26 +110,24 @@ public class ProductService implements BaseService<
         Pageable pageRequest = PageRequest.of(pageNumber, 5);
         Page<ProductEntity> productEntityPage = productDao.findAll(pageRequest);
         int totalPages = productEntityPage.getTotalPages();
-        return BaseResponse.<List<ProductGetResponse>>builder()
-                .totalPageAmount((totalPages==0)?0:totalPages-1)
-                .data(productConverter.toProductGetDto(productEntityPage.getContent()))
-                .build();
+
+        return BaseResponse.of(
+                "success",
+                200,
+                productConverter.toProductGetDto(productEntityPage.getContent()),
+                (totalPages==0)?0:totalPages-1);
     }
 
     public BaseResponse<List<ProductGetResponse>> getProductsByCategoryId(Long categoryId) {
         ProductCategoryEntity category = categoryDao.findById(categoryId).get();
         List<ProductEntity> products = getCategoryProducts(category, new LinkedList<>());
         if (products.isEmpty()){
-            return BaseResponse.<List<ProductGetResponse>>builder()
-                    .status(404)
-                    .build();
+            return BaseResponse.of("empty", 404);
         }
-        return BaseResponse.<List<ProductGetResponse>>builder()
-                .status(200)
-                .data(modelMapper
-                        .map(products, new TypeToken<List<ProductGetResponse>>(){}
-                                .getType()))
-                .build();
+        return BaseResponse.of(
+                "success",
+                200,
+                productConverter.toProductGetDto(products));
     }
 
     private List<ProductEntity> getCategoryProducts(
