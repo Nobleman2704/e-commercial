@@ -1,17 +1,19 @@
 package com.example.ecommercial.service;
 
+import com.example.ecommercial.domain.entity.UserEntity;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 /**
- * @param <RP> response
- * @param <CURQ> create and update request
+ * @param <BR> base response
+ * @param <CURQ> create or update request
  */
 
 @Service
-public interface BaseService<CURQ, RP> {
-     RP save(CURQ request);
-     RP update(CURQ update);
-     RP delete(Long id);
-     RP getById(Long id);
-     RP getALl(int pageNumber);
+public interface BaseService<CURQ, BR> {
+     BR save(CURQ e);
+     BR update(CURQ e);
+     BR delete(Long id);
+     BR getById(Long id);
+     BR getALl(int pageNumber);
 }

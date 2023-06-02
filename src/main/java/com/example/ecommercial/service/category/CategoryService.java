@@ -38,7 +38,7 @@ public class CategoryService {
                 message = "success";
                 status = 200;
             } catch (Exception e) {
-                message = "product name already exists:" + productCategory.getName();
+                message = "category name already exists: " + productCategory.getName();
                 status = 401;
             }
         }else {
@@ -47,7 +47,7 @@ public class CategoryService {
                 message = "success";
                 status = 200;
             } catch (Exception e) {
-                message = "product name already exists:" + productCategory.getName();
+                message = "category name already exists: " + productCategory.getName();
                 status = 401;
             }
         }
