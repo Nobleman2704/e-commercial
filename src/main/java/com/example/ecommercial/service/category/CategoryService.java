@@ -21,7 +21,7 @@ public class CategoryService {
     private final ProductCategoryDao productCategoryDao;
     private final ModelMapper modelMapper;
 
-    public BaseResponse<List<ProductCategoryGetResponse>> save(CategoryCreateAndUpdateRequest createAndUpdateRequest) {
+    public BaseResponse<List<ProductCategoryGetResponse>> save(ProductCategoryEntity category) {
         ProductCategoryEntity productCategory = modelMapper
                 .map(createAndUpdateRequest, ProductCategoryEntity.class);
 
@@ -38,7 +38,7 @@ public class CategoryService {
                 message = "success";
                 status = 200;
             } catch (Exception e) {
-                message = "product name already exists:" + productCategory.getName();
+                message = "category name already exists: " + productCategory.getName();
                 status = 401;
             }
         }else {
@@ -47,7 +47,7 @@ public class CategoryService {
                 message = "success";
                 status = 200;
             } catch (Exception e) {
-                message = "product name already exists:" + productCategory.getName();
+                message = "category name already exists: " + productCategory.getName();
                 status = 401;
             }
         }
@@ -57,11 +57,10 @@ public class CategoryService {
         return response;
     }
 
-    public BaseResponse update(CategoryCreateAndUpdateRequest categoryUpdateRequest) {
-        Long id = categoryUpdateRequest.getId();
-        ProductCategoryEntity productCategory = productCategoryDao
-                .findById(id).get();
-        modelMapper.map(categoryUpdateRequest, productCategory);
+    public BaseResponse update(ProductCategoryEntity category) {
+        Long id = category.getId();
+        ProductCategoryEntity productCategory = productCategoryDao.findById(id).get();
+        modelMapper.map(category, productCategory);
 
         try {
             productCategoryDao.save(productCategory);

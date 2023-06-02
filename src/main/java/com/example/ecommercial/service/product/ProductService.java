@@ -1,16 +1,19 @@
 package com.example.ecommercial.service.product;
 
+import com.example.ecommercial.controller.converter.ProductConverter;
+import com.example.ecommercial.controller.dto.request.ProductCreateAndUpdateRequest;
 import com.example.ecommercial.dao.BasketDao;
 import com.example.ecommercial.dao.OrderDao;
 import com.example.ecommercial.dao.ProductCategoryDao;
 import com.example.ecommercial.dao.ProductDao;
-import com.example.ecommercial.controller.dto.request.ProductCreateAndUpdateRequest;
 import com.example.ecommercial.controller.dto.response.BaseResponse;
 import com.example.ecommercial.controller.dto.response.ProductGetResponse;
 import com.example.ecommercial.domain.entity.ProductCategoryEntity;
 import com.example.ecommercial.domain.entity.ProductEntity;
+import com.example.ecommercial.domain.entity.UserEntity;
 import com.example.ecommercial.service.BaseService;
 import lombok.RequiredArgsConstructor;
+import org.glassfish.grizzly.compression.lzma.impl.Base;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.data.domain.Page;
@@ -31,41 +34,54 @@ public class ProductService implements BaseService<
     private final ProductCategoryDao categoryDao;
     private final OrderDao orderDao;
     private final BasketDao basketDao;
+    private final ProductConverter productConverter;
 
     @Override
-    public BaseResponse save(ProductCreateAndUpdateRequest productCreateRequest) {
-        ProductEntity product = modelMapper.map(productCreateRequest, ProductEntity.class);
+    public BaseResponse save(ProductCreateAndUpdateRequest productRequest) {
 
-        product.setCategories(categoryDao.findById(productCreateRequest.getCategoryId()).get());
+        ProductEntity product = productConverter.toProductEntity(productRequest);
+
+        String message;
+        int status;
 
         try {
             productDao.save(product);
-        }catch (Exception e){
-            return BaseResponse.<ProductEntity>builder()
-                    .status(404)
-                    .message("This name already exists")
-                    .build();
+            message = "saved";
+            status = 200;
+        }catch (Exception e) {
+            message = "This name already exists";
+            status= 404;
         }
-        BaseResponse<List<ProductGetResponse>> response = getALl(0);
-        response.setMessage("saved");
-        return response;
+        return BaseResponse.builder()
+                .message(message)
+                .status(status)
+                .build();
     }
 
     @Override
     public BaseResponse update(ProductCreateAndUpdateRequest update) {
-        Long id = update.getId();
-        ProductEntity product = productDao.findById(id).get();
-        modelMapper.map(update, product);
+        ProductEntity product = productConverter.toProductEntity(update);
+
+        Long id = product.getId();
+        ProductEntity product1 = productDao.findById(id).get();
+        modelMapper.map(product, product1);
+
         String message;
+        int status;
+
         try {
             productDao.save(product);
             message = "Updated";
+            status = 200;
         } catch (Exception e) {
             message = update.getName() + " already exists";
+            status = 401;
         }
-        BaseResponse<List<ProductGetResponse>> response = getALl(0);
-        response.setMessage(message);
-        return response;
+
+        return BaseResponse.builder()
+                .message(message)
+                .status(status)
+                .build();
     }
 
     @Override
@@ -91,11 +107,14 @@ public class ProductService implements BaseService<
 
     @Override
     public BaseResponse<ProductGetResponse> getById(Long id) {
-        ProductEntity productEntity = productDao.findById(id).get();
+        ProductEntity product = productDao.findById(id).get();
+
+        ProductGetResponse productGetResponse = productConverter.toProductGetDto(product);
+
         return BaseResponse.<ProductGetResponse>builder()
                 .status(200)
                 .message("success")
-                .data(modelMapper.map(productEntity, ProductGetResponse.class))
+                .data(productGetResponse)
                 .build();
 
     }
@@ -107,9 +126,7 @@ public class ProductService implements BaseService<
         int totalPages = productEntityPage.getTotalPages();
         return BaseResponse.<List<ProductGetResponse>>builder()
                 .totalPageAmount((totalPages==0)?0:totalPages-1)
-                .data(modelMapper
-                        .map(productEntityPage.getContent(),
-                                new TypeToken<List<ProductGetResponse>>(){}.getType()))
+                .data(productConverter.toProductGetDto(productEntityPage.getContent()))
                 .build();
     }
 
