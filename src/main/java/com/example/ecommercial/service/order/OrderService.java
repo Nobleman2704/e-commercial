@@ -1,5 +1,7 @@
 package com.example.ecommercial.service.order;
 
+import com.example.ecommercial.controller.converter.BasketConverter;
+import com.example.ecommercial.controller.converter.OrderConverter;
 import com.example.ecommercial.dao.BasketDao;
 import com.example.ecommercial.dao.OrderDao;
 import com.example.ecommercial.dao.ProductDao;
@@ -25,16 +27,16 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class OrderService {
-
     private final OrderDao orderDao;
-    private final ModelMapper modelMapper;
     private final BasketDao basketDao;
     private final UserDao userDao;
     private final ProductDao productDao;
     private final HistoryService historyService;
+    private final OrderConverter orderConverter;
+    private final BasketConverter basketConverter;
 
 
-    public BaseResponse delete(Long id) {
+    public BaseResponse<List<UserOrdersGetResponse>> delete(Long id) {
         OrderEntity order = orderDao.findById(id).get();
         UserEntity user = order.getUsers();
         ProductEntity product = order.getProducts();
@@ -45,10 +47,10 @@ public class OrderService {
         orderDao.deleteById(id);
         userDao.save(user);
         productDao.save(product);
-        BaseResponse<List<UserOrdersGetResponse>> responce = getALl(0);
-        responce.setMessage("deleted");
+        BaseResponse<List<UserOrdersGetResponse>> response = getALl(0);
+        response.setMessage("deleted");
 
-        return responce;
+        return response;
     }
 
 
@@ -59,11 +61,11 @@ public class OrderService {
         int totalPages = userEntityPage.getTotalPages();
         List<UserEntity> users = userEntityPage.getContent();
         if (users.isEmpty()) {
-            return BaseResponse.<List<UserOrdersGetResponse>>builder()
-                    .totalPageAmount(0)
-                    .status(404)
-                    .data(Collections.emptyList())
-                    .build();
+            return BaseResponse.of(
+                    "not found",
+                    404,
+                    Collections.emptyList(),
+                    0);
         }
         List<UserOrdersGetResponse> allUserOrders = new LinkedList<>();
         for (UserEntity user : users) {
@@ -76,17 +78,14 @@ public class OrderService {
             allUserOrders.add(UserOrdersGetResponse.builder()
                     .username(user.getName())
                     .totalSum(totalSum)
-                    .orders(modelMapper
-                            .map(orderEntities, new TypeToken<List<OrderGetResponse>>() {
-                            }
-                                    .getType()))
+                    .orders(orderConverter.toUserOrdersGetDto(orderEntities))
                     .build());
         }
-        return BaseResponse.<List<UserOrdersGetResponse>>builder()
-                .totalPageAmount((totalPages==0)?0:totalPages-1)
-                .message("Success")
-                .data(allUserOrders)
-                .build();
+        return BaseResponse.of(
+                "success",
+                200,
+                allUserOrders,
+                (totalPages==0)?0:totalPages-1);
     }
 
     public BaseResponse<BasketGetResponse> orderProduct(Long basketId) {
@@ -102,8 +101,7 @@ public class OrderService {
         int productAmount = product.getAmount();
 
         double totalPrice = price * basketAmount;
-        BasketGetResponse basketGetResponse = modelMapper
-                .map(basket, BasketGetResponse.class);
+        BasketGetResponse basketGetResponse = basketConverter.toBasketGetDto(basket);
         if (basketAmount > productAmount) {
             status = 401;
             message = "Your ordered amount is greater than total product amount";
@@ -129,11 +127,7 @@ public class OrderService {
             status = 200;
             message = "Product has been ordered";
         }
-        return BaseResponse.<BasketGetResponse>builder()
-                .status(status)
-                .message(message)
-                .data(basketGetResponse)
-                .build();
+        return BaseResponse.of(message, status, basketGetResponse);
     }
 
     public BaseResponse<List<OrderGetResponse>> findUserOrders(Long chatId) {
@@ -141,16 +135,12 @@ public class OrderService {
         List<OrderEntity> orders = orderDao
                 .findOrderEntitiesByUsersId(userEntity.getId()).get();
         if (orders.isEmpty()) {
-            return BaseResponse.<List<OrderGetResponse>>builder()
-                    .status(404)
-                    .build();
+            return BaseResponse.of("not found", 404);
         }
-        return BaseResponse.<List<OrderGetResponse>>builder()
-                .status(200)
-                .data(modelMapper
-                        .map(orders, new TypeToken<List<OrderGetResponse>>() {
-                        }.getType()))
-                .build();
+        return BaseResponse.of(
+                "success",
+                200,
+                orderConverter.toOrderGetDto(orders));
     }
 
     public BaseResponse<List<UserOrdersGetResponse>> changeStatus(Long orderId, String status) {

@@ -36,10 +36,9 @@ public class CategoryController {
         else{
             BaseResponse<List<ProductCategoryGetResponse>> response = categoryService.save(createAndUpdateRequest);
             modelAndView.addObject("message", response.getMessage());
-            List<ProductCategoryGetResponse> categoryGetResponses = response.getData();
-            modelAndView.addObject("categories", categoryGetResponses);
         }
 
+        modelAndView.addObject("categories", categoryService.getALl(0).getData());
         modelAndView.addObject("pages", categoryService.getALl(0).getTotalPageAmount());
         return modelAndView;
     }

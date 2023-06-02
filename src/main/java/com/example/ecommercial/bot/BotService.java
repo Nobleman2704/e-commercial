@@ -281,7 +281,7 @@ public class BotService {
     }
 
     public SendMessage addBalance(String text, Long chatId) {
-        BaseResponse<Double> response = userService.addBalance(text, chatId);
+        BaseResponse response = userService.addBalance(text, chatId);
         userService.updateState(chatId, UserState.IDLE);
         return new SendMessage(chatId.toString(), response.getMessage());
     }

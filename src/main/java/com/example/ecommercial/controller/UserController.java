@@ -1,5 +1,6 @@
 package com.example.ecommercial.controller;
 
+import com.example.ecommercial.controller.converter.UserConverter;
 import com.example.ecommercial.controller.dto.request.UserCreateAndUpdateRequest;
 import com.example.ecommercial.controller.dto.response.BaseResponse;
 import com.example.ecommercial.controller.dto.response.UserGetResponse;
@@ -19,6 +20,7 @@ import java.util.List;
 @EnableMethodSecurity
 public class UserController {
     private final UserService userService;
+    private final UserConverter userConverter;
 
     @PostMapping("/add")
     public ModelAndView addUser(
@@ -26,6 +28,7 @@ public class UserController {
             BindingResult bindingResult) {
         ModelAndView modelAndView = new ModelAndView("dashboard");
         modelAndView.addObject("status", 4);
+
         if (bindingResult.hasErrors()){
             modelAndView.addObject("message", extractAllErrors(bindingResult));
         }else {
@@ -73,14 +76,12 @@ public class UserController {
     public ModelAndView delete(
             @PathVariable("id") Long userId
     ){
-        BaseResponse responce = userService.delete(userId);
+        BaseResponse<List<UserGetResponse>> response = userService.delete(userId);
 
-        ModelAndView modelAndView = new ModelAndView("dashboard", "message", "deleted");
+        ModelAndView modelAndView = new ModelAndView("dashboard", "message", response.getMessage());
         modelAndView.addObject("status", 4);
-        modelAndView.addObject("pages", responce.getTotalPageAmount());
-
-        modelAndView.addObject("users", userService
-                .getALl(0).getData());
+        modelAndView.addObject("pages", response.getTotalPageAmount());
+        modelAndView.addObject("users", response.getData());
         return modelAndView;
     }
 

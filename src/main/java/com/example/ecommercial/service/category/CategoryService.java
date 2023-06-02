@@ -1,10 +1,12 @@
 package com.example.ecommercial.service.category;
 
+import com.example.ecommercial.controller.converter.CategoryConverter;
 import com.example.ecommercial.dao.ProductCategoryDao;
 import com.example.ecommercial.controller.dto.request.CategoryCreateAndUpdateRequest;
 import com.example.ecommercial.controller.dto.response.BaseResponse;
 import com.example.ecommercial.controller.dto.response.ProductCategoryGetResponse;
 import com.example.ecommercial.domain.entity.ProductCategoryEntity;
+import com.example.ecommercial.service.BaseService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -20,12 +22,12 @@ import java.util.List;
 public class CategoryService {
     private final ProductCategoryDao productCategoryDao;
     private final ModelMapper modelMapper;
+    private final CategoryConverter categoryConverter;
 
-    public BaseResponse<List<ProductCategoryGetResponse>> save(CategoryCreateAndUpdateRequest createAndUpdateRequest) {
-        ProductCategoryEntity productCategory = modelMapper
-                .map(createAndUpdateRequest, ProductCategoryEntity.class);
+    public BaseResponse<List<ProductCategoryGetResponse>> save(CategoryCreateAndUpdateRequest categoryDto) {
+        ProductCategoryEntity productCategory = categoryConverter.toCategoryEntity(categoryDto);
 
-        Long categoryId = createAndUpdateRequest.getParentId();
+        Long categoryId = categoryDto.getParentId();
         String message;
         int status;
 
@@ -38,7 +40,7 @@ public class CategoryService {
                 message = "success";
                 status = 200;
             } catch (Exception e) {
-                message = "product name already exists:" + productCategory.getName();
+                message = "category name already exists: " + productCategory.getName();
                 status = 401;
             }
         }else {
@@ -47,7 +49,7 @@ public class CategoryService {
                 message = "success";
                 status = 200;
             } catch (Exception e) {
-                message = "product name already exists:" + productCategory.getName();
+                message = "category name already exists: " + productCategory.getName();
                 status = 401;
             }
         }
@@ -57,11 +59,10 @@ public class CategoryService {
         return response;
     }
 
-    public BaseResponse update(CategoryCreateAndUpdateRequest categoryUpdateRequest) {
-        Long id = categoryUpdateRequest.getId();
-        ProductCategoryEntity productCategory = productCategoryDao
-                .findById(id).get();
-        modelMapper.map(categoryUpdateRequest, productCategory);
+    public BaseResponse update(CategoryCreateAndUpdateRequest category) {
+        Long id = category.getId();
+        ProductCategoryEntity productCategory = productCategoryDao.findById(id).get();
+        modelMapper.map(category, productCategory);
 
         try {
             productCategoryDao.save(productCategory);
@@ -76,8 +77,6 @@ public class CategoryService {
         return response;
     }
 
-
-
     public BaseResponse<List<ProductCategoryGetResponse>> getALl(int pageNumber) {
         Pageable pageable = PageRequest.of(pageNumber, 5);
         Page<ProductCategoryEntity> categoryEntityPage = productCategoryDao
@@ -87,20 +86,18 @@ public class CategoryService {
         return BaseResponse.<List<ProductCategoryGetResponse>>builder()
                 .totalPageAmount((totalPages==0)?0:totalPages-1)
                 .status(200)
-                .data(modelMapper
-                        .map(categoryEntityPage.getContent(),
-                                new TypeToken<List<ProductCategoryGetResponse>>(){}
-                                        .getType()))
+                .data(categoryConverter.toCategoryGetDto(categoryEntityPage.getContent()))
                 .build();
     }
 
     public BaseResponse<List<ProductCategoryGetResponse>> getALl() {
         return BaseResponse.<List<ProductCategoryGetResponse>>builder()
                 .status(200)
-                .data(modelMapper
-                        .map(productCategoryDao.findAll(),
-                                new TypeToken<List<ProductCategoryGetResponse>>(){}
-                                        .getType()))
+                .data(categoryConverter.toCategoryGetDto(productCategoryDao.findAll()))
                 .build();
+    }
+
+    public BaseResponse getById(Long id) {
+        return null;
     }
 }
