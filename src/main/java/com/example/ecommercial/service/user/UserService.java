@@ -98,20 +98,17 @@ public class UserService implements BaseService<
     }
 
 
-    public BaseResponse<List<UserGetResponse>> getAllBotUsers() {
-        List<UserEntity> botUsers = userDao.findAll()
-                .stream()
-                .filter(userEntity -> userEntity.getUserRoles().contains(UserRole.USER))
-                .toList();
-        return BaseResponse.<List<UserGetResponse>>builder()
-                .status(200)
-                .message("success")
-                .data(
-                        modelMapper.map(botUsers,
-                                new TypeToken<List<UserGetResponse>>() {
-                                }.getType())
-                )
-                .build();
+    public BaseResponse<List<UserGetResponse>> getAllBotUsers(int pageNumber) {
+        Pageable pageable = PageRequest.of(pageNumber, 5);
+
+        Page<UserEntity> optionalBotUsers = userDao
+                .findUserEntitiesByChatIdIsNotNull(pageable);
+        int totalPages = optionalBotUsers.getTotalPages();
+        return BaseResponse.of(
+                "success",
+                200,
+                userConverter.toUserGetDto(optionalBotUsers.getContent()),
+                (totalPages == 0) ? 0 : totalPages - 1);
     }
 
     public BaseResponse<UserState> getUserState(Long chatId) {
