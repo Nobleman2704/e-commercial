@@ -1,5 +1,7 @@
 package com.example.ecommercial.service.order;
 
+import com.example.ecommercial.controller.converter.BasketConverter;
+import com.example.ecommercial.controller.converter.OrderConverter;
 import com.example.ecommercial.dao.BasketDao;
 import com.example.ecommercial.dao.OrderDao;
 import com.example.ecommercial.dao.ProductDao;
@@ -32,6 +34,8 @@ public class OrderService {
     private final UserDao userDao;
     private final ProductDao productDao;
     private final HistoryService historyService;
+    private final OrderConverter orderConverter;
+    private final BasketConverter basketConverter;
 
 
     public BaseResponse delete(Long id) {
@@ -76,10 +80,7 @@ public class OrderService {
             allUserOrders.add(UserOrdersGetResponse.builder()
                     .username(user.getName())
                     .totalSum(totalSum)
-                    .orders(modelMapper
-                            .map(orderEntities, new TypeToken<List<OrderGetResponse>>() {
-                            }
-                                    .getType()))
+                    .orders(orderConverter.toUserOrdersGetDto(orderEntities))
                     .build());
         }
         return BaseResponse.<List<UserOrdersGetResponse>>builder()
@@ -102,8 +103,7 @@ public class OrderService {
         int productAmount = product.getAmount();
 
         double totalPrice = price * basketAmount;
-        BasketGetResponse basketGetResponse = modelMapper
-                .map(basket, BasketGetResponse.class);
+        BasketGetResponse basketGetResponse = basketConverter.toBasketGetDto(basket);
         if (basketAmount > productAmount) {
             status = 401;
             message = "Your ordered amount is greater than total product amount";
@@ -147,9 +147,7 @@ public class OrderService {
         }
         return BaseResponse.<List<OrderGetResponse>>builder()
                 .status(200)
-                .data(modelMapper
-                        .map(orders, new TypeToken<List<OrderGetResponse>>() {
-                        }.getType()))
+                .data(orderConverter.toOrderGetDto(orders))
                 .build();
     }
 
