@@ -22,6 +22,8 @@ public class UserGetResponse {
     private String name;
     private String username;
     private String password;
+    private double balance;
+    private Long chatId;
     private List<UserRole> userRoles;
     private List<UserAuthority> userAuthorities;
 }
