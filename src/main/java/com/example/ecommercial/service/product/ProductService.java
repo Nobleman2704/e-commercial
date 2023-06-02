@@ -39,6 +39,11 @@ public class ProductService implements BaseService<
     @Override
     public BaseResponse save(ProductCreateAndUpdateRequest productRequest) {
         ProductEntity product = productConverter.toProductEntity(productRequest);
+        Long categoryId = productRequest.getCategoryId();
+
+        ProductCategoryEntity category = categoryDao.findById(categoryId).get();
+        product.setCategories(category);
+
         String message;
         int status;
         try {
@@ -57,14 +62,16 @@ public class ProductService implements BaseService<
         ProductEntity product = productConverter.toProductEntity(update);
 
         Long id = product.getId();
+
         ProductEntity product1 = productDao.findById(id).get();
+
         modelMapper.map(product, product1);
 
         String message;
         int status;
 
         try {
-            productDao.save(product);
+            productDao.save(product1);
             message = "Updated";
             status = 200;
         } catch (Exception e) {

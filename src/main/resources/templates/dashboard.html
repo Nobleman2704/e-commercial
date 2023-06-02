@@ -212,7 +212,7 @@
         </table>
 
         <br><br><br>
-        <div class="pagination-div">
+        <div class="pagination-div" th:if="${pages!=0}">
             <div th:each="pageNumber: ${#numbers.sequence(0, pages)}">
                 <form class="pagination-form" action="/category/get_all" method="get">
                     <input type="hidden" name="pageNumber" th:value="${pageNumber}">
@@ -341,7 +341,7 @@
             </tbody>
         </table>
         <br><br><br>
-        <div class="pagination-div" >
+        <div class="pagination-div" th:if="${pages!=0}">
             <div th:each="pageNumber: ${#numbers.sequence(0, pages)}">
                 <form class="pagination-form" action="/product/get_all" method="get">
                     <input type="hidden" name="pageNumber" th:value="${pageNumber}">
@@ -409,7 +409,7 @@
         </table>
 
         <br><br><br>
-        <div class="pagination-div">
+        <div class="pagination-div" th:if="${pages!=0}">
             <div th:each="pageNumber: ${#numbers.sequence(0, pages)}">
             <form class="pagination-form" action="/order/get_all" method="get">
                 <input type="hidden" name="pageNumber" th:value="${pageNumber}">
@@ -584,7 +584,7 @@
         </table>
 
         <br><br><br>
-        <div class="pagination-div">
+        <div class="pagination-div" th:if="${pages!=0}">
             <div th:each="pageNumber: ${#numbers.sequence(0, pages)}">
             <form class="pagination-form" action="/user/get_all" method="get">
                 <input type="hidden" name="pageNumber" th:value="${pageNumber}">

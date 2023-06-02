@@ -22,10 +22,7 @@ public class ProductConverter {
     private final ProductCategoryDao categoryDao;
 
     public ProductEntity toProductEntity(ProductCreateAndUpdateRequest request){
-        ProductEntity product = modelMapper.map(request, ProductEntity.class);
-        ProductCategoryEntity category = categoryDao.findById(request.getCategoryId()).get();
-        product.setCategories(category);
-        return product;
+        return modelMapper.map(request, ProductEntity.class);
     }
 
     public ProductGetResponse toProductGetDto(ProductEntity product) {
