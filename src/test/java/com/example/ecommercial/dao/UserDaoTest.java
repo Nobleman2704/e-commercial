@@ -3,10 +3,12 @@ package com.example.ecommercial.dao;
 import com.example.ecommercial.ECommercialApplication;
 import com.example.ecommercial.domain.entity.UserEntity;
 import com.example.ecommercial.domain.listener.AuditingAwareImpl;
+import com.example.ecommercial.service.user.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -23,21 +25,16 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
 class UserDaoTest {
 
-    @Autowired
+        @Mock
     private UserDao userDao;
 
-    @MockBean
-    private AuditingAwareImpl auditingAware;
-
     private UserEntity user;
-
-    private Pageable pageable;
-
 
     @BeforeEach
     public void setUp() {
@@ -51,12 +48,14 @@ class UserDaoTest {
 
     @Test
     void findUserEntityByUsername() {
+        UserService userService = mock();
+
         userDao.save(user);
 
         Optional<UserEntity> optionalUserEntity = userDao
                 .findUserEntityByUsername("nobleman");
 
-        System.out.println("optionalUserEntity.get() = " + optionalUserEntity.get());
+//        System.out.println("optionalUserEntity.get() = " + optionalUserEntity.get());
 
 
         assertTrue(optionalUserEntity.isPresent());
