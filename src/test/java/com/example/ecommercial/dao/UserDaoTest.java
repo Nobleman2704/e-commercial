@@ -27,11 +27,10 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 
-@RunWith(SpringRunner.class)
 @DataJpaTest
 class UserDaoTest {
 
-        @Mock
+    @Autowired
     private UserDao userDao;
 
     private UserEntity user;
@@ -48,8 +47,6 @@ class UserDaoTest {
 
     @Test
     void findUserEntityByUsername() {
-        UserService userService = mock();
-
         userDao.save(user);
 
         Optional<UserEntity> optionalUserEntity = userDao
@@ -91,7 +88,7 @@ class UserDaoTest {
     }
 
     @Test
-    void findUserEntitiesByChatIdIsNotNull(){
+    void findUserEntitiesByChatIdIsNotNull() {
         userDao.save(user);
         Pageable pageable = PageRequest.of(0, 5);
         Page<UserEntity> optionalBotUsers = userDao
