@@ -1,41 +1,25 @@
 package com.example.ecommercial.service.user;
 
-import com.example.ecommercial.controller.converter.UserConverter;
 import com.example.ecommercial.controller.dto.request.UserCreateAndUpdateRequest;
 import com.example.ecommercial.controller.dto.response.BaseResponse;
 import com.example.ecommercial.controller.dto.response.UserGetResponse;
-import com.example.ecommercial.dao.UserDao;
-import com.example.ecommercial.domain.entity.UserEntity;
 import com.example.ecommercial.domain.enums.UserRole;
 import com.example.ecommercial.domain.enums.UserState;
-import lombok.SneakyThrows;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.test.mock.mockito.MockBeans;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.telegram.telegrambots.meta.api.objects.User;
 
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.when;
-import static org.mockito.MockitoAnnotations.initMocks;
-import static org.mockito.MockitoAnnotations.openMocks;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
