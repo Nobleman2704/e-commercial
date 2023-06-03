@@ -30,8 +30,7 @@ import static org.mockito.Mockito.mock;
 @RunWith(SpringRunner.class)
 @DataJpaTest
 class UserDaoTest {
-
-        @Mock
+    @Autowired
     private UserDao userDao;
 
     private UserEntity user;
