@@ -23,6 +23,17 @@ import java.util.List;
 public class UserEntity extends BaseEntity implements UserDetails {
     private String name;
 
+    @Override
+    public String toString() {
+        return "UserEntity{" +
+                "name='" + name + '\'' +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", createdBy='" + createdBy + '\'' +
+                ", lastModifiedBy='" + lastModifiedBy + '\'' +
+                '}';
+    }
+
     @Column(unique = true)
     private String username;
 

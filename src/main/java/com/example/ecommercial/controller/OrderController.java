@@ -47,7 +47,7 @@ public class OrderController {
         long chatId = response.getChatId();
         eCommercialBot.sendMessageToUser(message, chatId);
         modelAndView.addObject("userOrders", response.getData());
-        modelAndView.addObject("message", message);
+        modelAndView.addObject("message", response.getMessage());
         modelAndView.addObject("status", 3);
         modelAndView.addObject("pages", response.getTotalPageAmount());
         return modelAndView;

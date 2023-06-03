@@ -53,10 +53,7 @@ public class CategoryService {
                 status = 401;
             }
         }
-        BaseResponse<List<ProductCategoryGetResponse>> response = getALl(0);
-        response.setMessage(message);
-        response.setStatus(status);
-        return response;
+        return BaseResponse.of(message, status);
     }
 
     public BaseResponse update(CategoryCreateAndUpdateRequest category) {
@@ -67,14 +64,11 @@ public class CategoryService {
         try {
             productCategoryDao.save(productCategory);
         } catch (Exception e) {
-            return BaseResponse.builder()
-                    .message(productCategory.getName()+ " name already exists")
-                    .status(401)
-                    .build();
+            return BaseResponse.of(
+                    productCategory.getName()+ " name already exists",
+                    401);
         }
-        BaseResponse<List<ProductCategoryGetResponse>> response = getALl(0);
-        response.setMessage("updated");
-        return response;
+        return BaseResponse.of("updated", 200);
     }
 
     public BaseResponse<List<ProductCategoryGetResponse>> getALl(int pageNumber) {
@@ -83,18 +77,18 @@ public class CategoryService {
                 .findAll(pageable);
         int totalPages = categoryEntityPage.getTotalPages();
 
-        return BaseResponse.<List<ProductCategoryGetResponse>>builder()
-                .totalPageAmount((totalPages==0)?0:totalPages-1)
-                .status(200)
-                .data(categoryConverter.toCategoryGetDto(categoryEntityPage.getContent()))
-                .build();
+        return BaseResponse.of(
+                "success",
+                200,
+                categoryConverter.toCategoryGetDto(categoryEntityPage.getContent()),
+                (totalPages==0)?0:totalPages-1);
     }
 
     public BaseResponse<List<ProductCategoryGetResponse>> getALl() {
-        return BaseResponse.<List<ProductCategoryGetResponse>>builder()
-                .status(200)
-                .data(categoryConverter.toCategoryGetDto(productCategoryDao.findAll()))
-                .build();
+        return BaseResponse.of(
+                "success",
+                200,
+                categoryConverter.toCategoryGetDto(productCategoryDao.findAll()));
     }
 
     public BaseResponse getById(Long id) {

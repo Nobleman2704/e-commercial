@@ -24,8 +24,7 @@ public class CategoryConverter {
 
     public List<ProductCategoryGetResponse> toCategoryGetDto(List<ProductCategoryEntity> content) {
         return modelMapper
-                .map(content,
-                        new TypeToken<List<ProductCategoryGetResponse>>(){}
+                .map(content, new TypeToken<List<ProductCategoryGetResponse>>(){}
                                 .getType());
     }
 }

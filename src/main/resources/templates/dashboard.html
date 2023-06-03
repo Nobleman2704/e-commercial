@@ -51,6 +51,13 @@
         </h3>
         <hr class="hr">
 
+        <h3 class="left-page-h3">
+            <button class="h3-button">
+                <a href="/user/get_all_bot_users" class="h3-a">Bot users</a>
+            </button>
+        </h3>
+        <hr class="hr">
+
         <hr sec:authorize="hasRole('SUPER_ADMIN')" class="hr hr2">
         <h3 sec:authorize="hasRole('SUPER_ADMIN')" class="left-page-h3">
             <button class="h3-button">
@@ -212,7 +219,7 @@
         </table>
 
         <br><br><br>
-        <div class="pagination-div">
+        <div class="pagination-div" th:if="${pages!=0}">
             <div th:each="pageNumber: ${#numbers.sequence(0, pages)}">
                 <form class="pagination-form" action="/category/get_all" method="get">
                     <input type="hidden" name="pageNumber" th:value="${pageNumber}">
@@ -341,7 +348,7 @@
             </tbody>
         </table>
         <br><br><br>
-        <div class="pagination-div" >
+        <div class="pagination-div" th:if="${pages!=0}">
             <div th:each="pageNumber: ${#numbers.sequence(0, pages)}">
                 <form class="pagination-form" action="/product/get_all" method="get">
                     <input type="hidden" name="pageNumber" th:value="${pageNumber}">
@@ -409,13 +416,45 @@
         </table>
 
         <br><br><br>
-        <div class="pagination-div">
+        <div class="pagination-div" th:if="${pages!=0}">
             <div th:each="pageNumber: ${#numbers.sequence(0, pages)}">
             <form class="pagination-form" action="/order/get_all" method="get">
                 <input type="hidden" name="pageNumber" th:value="${pageNumber}">
                 <button class="pagination-btn" th:text="${pageNumber+1}">1</button>
             </form>
         </div>
+        </div>
+
+    </div>
+
+    <div th:if="${status == 5}" class="right-page">
+        <table class="table t3">
+
+            <thead class="table-head">
+            <tr class="table-tr">
+                <th class="table-th">Chat id</th>
+                <th class="table-th">Name</th>
+                <th class="table-th">Balance</th>
+            </tr>
+            </thead>
+            <tbody th:each="botUser:${botUsers}" class="table-body">
+
+            <tr class="tbody-tr">
+                <td th:text="${botUser.chatId}" class="tbody-td"></td>
+                <td th:text="${botUser.name}" class="tbody-td"></td>
+                <td th:text="${botUser.balance}" class="tbody-td"></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <br><br><br>
+        <div class="pagination-div" th:if="${pages!=0}">
+            <div th:each="pageNumber: ${#numbers.sequence(0, pages)}">
+                <form class="pagination-form" action="/user/get_all_bot_users" method="get">
+                    <input type="hidden" name="pageNumber" th:value="${pageNumber}">
+                    <button class="pagination-btn" th:text="${pageNumber+1}">1</button>
+                </form>
+            </div>
         </div>
 
     </div>
@@ -584,7 +623,7 @@
         </table>
 
         <br><br><br>
-        <div class="pagination-div">
+        <div class="pagination-div" th:if="${pages!=0}">
             <div th:each="pageNumber: ${#numbers.sequence(0, pages)}">
             <form class="pagination-form" action="/user/get_all" method="get">
                 <input type="hidden" name="pageNumber" th:value="${pageNumber}">

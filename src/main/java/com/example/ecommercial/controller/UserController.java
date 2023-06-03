@@ -98,10 +98,24 @@ public class UserController {
         return modelAndView;
     }
 
+    @GetMapping("get_all_bot_users")
+    public ModelAndView getALlBotUsers(
+            @RequestParam(name = "pageNumber", defaultValue = "0") int pageNumber
+    ){
+        BaseResponse<List<UserGetResponse>> response = userService
+                .getAllBotUsers(pageNumber);
+        ModelAndView modelAndView = new ModelAndView("dashboard");
+        modelAndView.addObject("pages", response.getTotalPageAmount());
+        modelAndView.addObject("botUsers", response.getData());
+        modelAndView.addObject("status", 5);
+        return modelAndView;
+    }
+
     public static String extractAllErrors(BindingResult bindingResult){
         StringBuilder result = new StringBuilder();
         bindingResult.getAllErrors()
                 .forEach(error -> result.append(error.getDefaultMessage()).append("\n"));
         return result.toString();
     }
+
 }
