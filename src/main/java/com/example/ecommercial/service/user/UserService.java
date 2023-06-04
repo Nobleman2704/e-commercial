@@ -11,7 +11,6 @@ import com.example.ecommercial.domain.enums.UserState;
 import com.example.ecommercial.service.BaseService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.TypeToken;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -76,11 +75,14 @@ public class UserService implements BaseService<
 
     @Override
     public BaseResponse<UserGetResponse> getById(Long id) {
-        UserEntity userEntity = userDao.findById(id).get();
+        Optional<UserEntity> optionalUserEntity = userDao.findById(id);
+        if (optionalUserEntity.isEmpty()){
+            return BaseResponse.of("empty", 404);
+        }
         return BaseResponse.of(
                         "success",
                         200,
-                        userConverter.toUserGetDto(userEntity));
+                        userConverter.toUserGetDto(optionalUserEntity.get()));
     }
 
     @Override
@@ -98,20 +100,17 @@ public class UserService implements BaseService<
     }
 
 
-    public BaseResponse<List<UserGetResponse>> getAllBotUsers() {
-        List<UserEntity> botUsers = userDao.findAll()
-                .stream()
-                .filter(userEntity -> userEntity.getUserRoles().contains(UserRole.USER))
-                .toList();
-        return BaseResponse.<List<UserGetResponse>>builder()
-                .status(200)
-                .message("success")
-                .data(
-                        modelMapper.map(botUsers,
-                                new TypeToken<List<UserGetResponse>>() {
-                                }.getType())
-                )
-                .build();
+    public BaseResponse<List<UserGetResponse>> getAllBotUsers(int pageNumber) {
+        Pageable pageable = PageRequest.of(pageNumber, 5);
+
+        Page<UserEntity> optionalBotUsers = userDao
+                .findUserEntitiesByChatIdIsNotNull(pageable);
+        int totalPages = optionalBotUsers.getTotalPages();
+        return BaseResponse.of(
+                "success",
+                200,
+                userConverter.toUserGetDto(optionalBotUsers.getContent()),
+                (totalPages == 0) ? 0 : totalPages - 1);
     }
 
     public BaseResponse<UserState> getUserState(Long chatId) {
@@ -127,7 +126,7 @@ public class UserService implements BaseService<
 
     public void saveBotUser(Long chatId, User user) {
         UserEntity userEntity = UserEntity.builder()
-                .name(user.getUserName())
+                .name(user.getFirstName())
                 .username(user.getUserName())
                 .userState(UserState.REGISTERED)
                 .userRoles(List.of(UserRole.USER))

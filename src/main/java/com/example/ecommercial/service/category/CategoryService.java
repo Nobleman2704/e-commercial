@@ -6,10 +6,8 @@ import com.example.ecommercial.controller.dto.request.CategoryCreateAndUpdateReq
 import com.example.ecommercial.controller.dto.response.BaseResponse;
 import com.example.ecommercial.controller.dto.response.ProductCategoryGetResponse;
 import com.example.ecommercial.domain.entity.ProductCategoryEntity;
-import com.example.ecommercial.service.BaseService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.TypeToken;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;

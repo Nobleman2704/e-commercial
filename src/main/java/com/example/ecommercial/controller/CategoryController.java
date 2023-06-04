@@ -3,7 +3,6 @@ package com.example.ecommercial.controller;
 import com.example.ecommercial.controller.dto.request.CategoryCreateAndUpdateRequest;
 import com.example.ecommercial.controller.dto.response.BaseResponse;
 import com.example.ecommercial.controller.dto.response.ProductCategoryGetResponse;
-import com.example.ecommercial.controller.dto.response.ProductGetResponse;
 import com.example.ecommercial.service.category.CategoryService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

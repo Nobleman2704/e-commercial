@@ -317,7 +317,7 @@
                 </td>
                 <td class="tbody-td">
                     <form action="/product/add_amount" method="post" class="change-amount-form">
-                        <input class="change-amount-input" name="amount" placeholder="amount" type="number" min="1">
+                        <input class="change-amount-input" name="amount" placeholder="amount" required type="number" min="1">
                         <input name="id" type="hidden" th:value="${product.id}">
                         <button class="change-amount-btn">change</button>
                     </form>
@@ -432,7 +432,7 @@
 
             <thead class="table-head">
             <tr class="table-tr">
-                <th class="table-th">Id</th>
+                <th class="table-th">Chat id</th>
                 <th class="table-th">Name</th>
                 <th class="table-th">Balance</th>
             </tr>
@@ -440,7 +440,7 @@
             <tbody th:each="botUser:${botUsers}" class="table-body">
 
             <tr class="tbody-tr">
-                <td th:text="${botUser.id}" class="tbody-td"></td>
+                <td th:text="${botUser.chatId}" class="tbody-td"></td>
                 <td th:text="${botUser.name}" class="tbody-td"></td>
                 <td th:text="${botUser.balance}" class="tbody-td"></td>
             </tr>
