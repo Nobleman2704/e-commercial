@@ -89,7 +89,12 @@ public class CategoryService {
                 categoryConverter.toCategoryGetDto(productCategoryDao.findAll()));
     }
 
-    public BaseResponse getById(Long id) {
-        return null;
+    public BaseResponse<ProductCategoryGetResponse>  getById(Long id) {
+        ProductCategoryEntity category = productCategoryDao.findById(id).get();
+
+        return BaseResponse.of(
+                "success",
+                200,
+                categoryConverter.toCategoryGetDto(category));
     }
 }
