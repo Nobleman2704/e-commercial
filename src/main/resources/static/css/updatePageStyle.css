@@ -95,6 +95,7 @@ body {
 }
 
 #snackbar.show {
+    color: #856404;
     visibility: visible;
     -webkit-animation: fadein 0.8s, fadeout 0.8s 4s;
     animation: fadein 0.8s, fadeout 0.8s 4s;
