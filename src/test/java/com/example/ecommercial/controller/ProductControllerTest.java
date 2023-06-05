@@ -23,11 +23,13 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 import java.util.Map;
 
+import static org.jboss.logging.NDC.get;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -148,7 +150,7 @@ class ProductControllerTest {
         productService.save(product);
 
         ModelAndView modelAndView = mockMvc.perform(
-                        post("/product/get_all")
+                        MockMvcRequestBuilders.get("/product/get_all")
                                 .with(SecurityMockMvcRequestPostProcessors
                                         .user("nobleman")
                                         .password("1234"))
@@ -166,11 +168,45 @@ class ProductControllerTest {
     void updatePage() {
     }
 
+    @SneakyThrows
     @Test
     void changeAmount() {
+        categoryDao.save(categoryEntity);
+        productService.save(product);
+
+        ModelAndView modelAndView = mockMvc.perform(
+                        post("/product/add_amount")
+                                .with(SecurityMockMvcRequestPostProcessors
+                                        .user("nobleman")
+                                        .password("1234"))
+                                .flashAttr("id", 1L)
+                                .flashAttr("amount", 6))
+                .andReturn().getModelAndView();
+
+        Map<String, Object> model = modelAndView.getModel();
+
+        String message = (String) model.get("message");
+
+        assertEquals("Amount added", message);
     }
 
+    @SneakyThrows
     @Test
     void deleteProduct() {
+        categoryDao.save(categoryEntity);
+        productService.save(product);
+
+        ModelAndView modelAndView = mockMvc.perform(
+                        MockMvcRequestBuilders.get("/product/delete/1")
+                                .with(SecurityMockMvcRequestPostProcessors
+                                        .user("nobleman")
+                                        .password("1234")))
+                .andReturn().getModelAndView();
+
+        Map<String, Object> model = modelAndView.getModel();
+
+        String message = (String) model.get("message");
+
+        assertEquals("product has been deleted", message);
     }
 }
