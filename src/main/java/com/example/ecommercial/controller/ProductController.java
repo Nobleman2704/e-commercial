@@ -28,7 +28,7 @@ public class ProductController {
 
     @PostMapping("/add")
     public ModelAndView addProduct(
-            @Valid @ModelAttribute ProductCreateAndUpdateRequest productCreateRequest,
+            @Valid @ModelAttribute("product") ProductCreateAndUpdateRequest productCreateRequest,
             BindingResult bindingResult){
         ModelAndView modelAndView = new ModelAndView("dashboard");
         if (bindingResult.hasErrors()){
