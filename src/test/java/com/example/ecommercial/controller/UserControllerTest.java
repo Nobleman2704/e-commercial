@@ -2,6 +2,8 @@ package com.example.ecommercial.controller;
 
 import com.example.ecommercial.ECommercialApplication;
 import com.example.ecommercial.controller.dto.request.UserCreateAndUpdateRequest;
+import com.example.ecommercial.controller.dto.response.BaseResponse;
+import com.example.ecommercial.controller.dto.response.UserGetResponse;
 import com.example.ecommercial.dao.UserDao;
 import com.example.ecommercial.domain.entity.UserEntity;
 import com.example.ecommercial.domain.enums.UserRole;
@@ -29,6 +31,7 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 @RunWith(SpringRunner.class)
@@ -47,7 +50,8 @@ class UserControllerTest {
     private ModelMapper modelMapper;
 
     @Autowired
-    private UserDao userDao;
+    private UserService userService;
+
 
     private UserCreateAndUpdateRequest user;
 
@@ -57,7 +61,7 @@ class UserControllerTest {
                 .name("Asadbek")
                 .username("freeman")
                 .password("Asadbek1234")
-                .userRoles(List.of(UserRole.USER))
+                .userRoles(List.of(UserRole.SUPER_ADMIN))
                 .build();
 
         objectMapper = new ObjectMapper();
@@ -103,7 +107,7 @@ class UserControllerTest {
     @Test
     @SneakyThrows
     void addUserWithExistingUsername(){
-        userDao.save(modelMapper.map(user, UserEntity.class));
+        userService.save(user);
         ModelAndView modelAndView = mockMvc.perform(
                         post("/user/add")
                                 .with(SecurityMockMvcRequestPostProcessors
@@ -119,29 +123,76 @@ class UserControllerTest {
         assertEquals(user.getUsername() + " already exists", message);
     }
 
-
-
+    @SneakyThrows
     @Test
-    void updateUser() {
+    void updateUserWithSuccess() {
+        userService.save(user);
+        user = UserCreateAndUpdateRequest.builder()
+                .id(1L)
+                .username("freeman")
+                .password("Freeman1234")
+                .build();
+        ModelAndView modelAndView = mockMvc.perform(post("/user/update")
+                        .with(SecurityMockMvcRequestPostProcessors
+                                .user("nobleman")
+                                .password("1234"))
+                        .flashAttr("user", user))
+                .andReturn().getModelAndView();
+
+        Map<String, Object> modelAndView1 = modelAndView.getModel();
+
+        String message = (String) modelAndView1.get("message");
+
+        assertEquals("updated", message);
     }
 
+    @SneakyThrows
     @Test
-    void inUpdatePage() {
+    void updateUserWithUsernameExists() {
+        userService.save(user);
+        user = UserCreateAndUpdateRequest.builder()
+                .name("Asadbek")
+                .username("nobleman")
+                .password("Freeman1234")
+                .userRoles(List.of(UserRole.ADMIN))
+                .build();
+        userService.save(user);
+        user.setUsername("freeman");
+        user.setId(2L);
+        ModelAndView modelAndView = mockMvc.perform(post("/user/update")
+                        .with(SecurityMockMvcRequestPostProcessors
+                                .user("nobleman")
+                                .password("1234"))
+                        .flashAttr("user", user))
+                .andReturn().getModelAndView();
+
+        Map<String, Object> modelAndView1 = modelAndView.getModel();
+
+        String message = (String) modelAndView1.get("message");
+
+        assertEquals(user.getUsername() + " already exists", message);
     }
 
+    @SneakyThrows
     @Test
     void delete() {
+        userService.save(user);
+        mockMvc.perform(
+                        get("/user/delete/{id}", 1L)
+                                .with(SecurityMockMvcRequestPostProcessors
+                                        .user("nobleman")
+                                        .password("1234")))
+                .andReturn().getModelAndView();
+
+        BaseResponse<UserGetResponse> response = userService.getById(1L);
+
+        assertEquals(404, response.getStatus());
     }
 
     @Test
     void getAllUsers() {
+
     }
 
-    @Test
-    void getALlBotUsers() {
-    }
 
-    @Test
-    void extractAllErrors() {
-    }
 }

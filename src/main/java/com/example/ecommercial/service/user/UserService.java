@@ -56,7 +56,7 @@ public class UserService implements BaseService<
         int status;
         try {
             userDao.save(userEntity1);
-            message = "success";
+            message = "updated";
             status = 200;
         } catch (Exception e) {
             message = userEntity.getUsername() + " already exists";
