@@ -11,6 +11,14 @@ public class BaseResponse<T> {
 
     private int status;
 
+    @Override
+    public String toString() {
+        return "BaseResponse{" +
+                "status=" + status +
+                ", message='" + message + '\'' +
+                '}';
+    }
+
     private String message;
     private String messageToUser;
     private long chatId;

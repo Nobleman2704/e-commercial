@@ -6,8 +6,6 @@ import com.example.ecommercial.controller.dto.response.BaseResponse;
 import com.example.ecommercial.controller.dto.response.HistoryGetResponse;
 import com.example.ecommercial.domain.entity.HistoryEntity;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
-import org.modelmapper.TypeToken;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

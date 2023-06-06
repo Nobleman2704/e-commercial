@@ -11,7 +11,6 @@ import com.example.ecommercial.domain.enums.UserState;
 import com.example.ecommercial.service.BaseService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.TypeToken;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -57,7 +56,7 @@ public class UserService implements BaseService<
         int status;
         try {
             userDao.save(userEntity1);
-            message = "success";
+            message = "updated";
             status = 200;
         } catch (Exception e) {
             message = userEntity.getUsername() + " already exists";
@@ -76,11 +75,14 @@ public class UserService implements BaseService<
 
     @Override
     public BaseResponse<UserGetResponse> getById(Long id) {
-        UserEntity userEntity = userDao.findById(id).get();
+        Optional<UserEntity> optionalUserEntity = userDao.findById(id);
+        if (optionalUserEntity.isEmpty()){
+            return BaseResponse.of("empty", 404);
+        }
         return BaseResponse.of(
                         "success",
                         200,
-                        userConverter.toUserGetDto(userEntity));
+                        userConverter.toUserGetDto(optionalUserEntity.get()));
     }
 
     @Override
@@ -124,7 +126,7 @@ public class UserService implements BaseService<
 
     public void saveBotUser(Long chatId, User user) {
         UserEntity userEntity = UserEntity.builder()
-                .name(user.getUserName())
+                .name(user.getFirstName())
                 .username(user.getUserName())
                 .userState(UserState.REGISTERED)
                 .userRoles(List.of(UserRole.USER))

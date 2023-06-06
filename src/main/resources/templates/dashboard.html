@@ -317,7 +317,7 @@
                 </td>
                 <td class="tbody-td">
                     <form action="/product/add_amount" method="post" class="change-amount-form">
-                        <input class="change-amount-input" name="amount" placeholder="amount" type="number" min="1">
+                        <input class="change-amount-input" name="amount" placeholder="amount" required type="number" min="1">
                         <input name="id" type="hidden" th:value="${product.id}">
                         <button class="change-amount-btn">change</button>
                     </form>

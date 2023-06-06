@@ -2,12 +2,14 @@ package com.example.ecommercial.controller.dto.request;
 
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class ProductCreateAndUpdateRequest {
     private Long id;
     @Pattern(regexp = "^([a-zA-Z0-9]|\\s){4,30}$",

@@ -6,10 +6,8 @@ import com.example.ecommercial.controller.dto.request.CategoryCreateAndUpdateReq
 import com.example.ecommercial.controller.dto.response.BaseResponse;
 import com.example.ecommercial.controller.dto.response.ProductCategoryGetResponse;
 import com.example.ecommercial.domain.entity.ProductCategoryEntity;
-import com.example.ecommercial.service.BaseService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.TypeToken;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -68,7 +66,7 @@ public class CategoryService {
                     productCategory.getName()+ " name already exists",
                     401);
         }
-        return BaseResponse.of("updated", 200);
+        return BaseResponse.of("Updated", 200);
     }
 
     public BaseResponse<List<ProductCategoryGetResponse>> getALl(int pageNumber) {
@@ -91,7 +89,12 @@ public class CategoryService {
                 categoryConverter.toCategoryGetDto(productCategoryDao.findAll()));
     }
 
-    public BaseResponse getById(Long id) {
-        return null;
+    public BaseResponse<ProductCategoryGetResponse>  getById(Long id) {
+        ProductCategoryEntity category = productCategoryDao.findById(id).get();
+
+        return BaseResponse.of(
+                "success",
+                200,
+                categoryConverter.toCategoryGetDto(category));
     }
 }
