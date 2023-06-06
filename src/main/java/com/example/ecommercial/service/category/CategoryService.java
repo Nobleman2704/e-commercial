@@ -66,7 +66,7 @@ public class CategoryService {
                     productCategory.getName()+ " name already exists",
                     401);
         }
-        return BaseResponse.of("updated", 200);
+        return BaseResponse.of("Updated", 200);
     }
 
     public BaseResponse<List<ProductCategoryGetResponse>> getALl(int pageNumber) {

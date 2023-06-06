@@ -2,6 +2,7 @@ package com.example.ecommercial.controller;
 
 import com.example.ecommercial.ECommercialApplication;
 import com.example.ecommercial.controller.dto.request.CategoryCreateAndUpdateRequest;
+import com.example.ecommercial.controller.dto.response.ProductGetResponse;
 import com.example.ecommercial.dao.ProductCategoryDao;
 import com.example.ecommercial.domain.entity.ProductCategoryEntity;
 import com.example.ecommercial.service.category.CategoryService;
@@ -16,8 +17,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -89,10 +92,14 @@ class CategoryControllerTest {
     @SneakyThrows
     @Test
     void updateCategory() {
-        categoryDto.setId(1L);
-        categoryService.save(categoryDto);
 
-        categoryDto.setName("REDMI");
+        categoryService.save(categoryDto);
+        categoryDto.setId(1L);
+        categoryDto = CategoryCreateAndUpdateRequest.builder()
+                .id(1L)
+                .name("REDMI")
+                .build();
+
 
         ModelAndView modelAndView = mockMvc.perform(
                         post("/category/update")
@@ -111,7 +118,27 @@ class CategoryControllerTest {
 
     }
 
+    @SneakyThrows
     @Test
     void getAllCategories() {
+
+        categoryService.save(categoryDto);
+        categoryDto.setName("PHONE");
+        categoryService.save(categoryDto);
+
+
+        ModelAndView modelAndView = mockMvc.perform(
+                        MockMvcRequestBuilders.get("/category/get_all")
+                                .with(SecurityMockMvcRequestPostProcessors
+                                        .user("nobleman")
+                                        .password("1234"))
+                                .flashAttr("pageNumber", 0))
+                .andReturn().getModelAndView();
+
+        Map<String, Object> model = modelAndView.getModel();
+
+        List<ProductGetResponse> response = (List<ProductGetResponse>) model.get("categories");
+        assertEquals(response.size(),2);
+
     }
 }
