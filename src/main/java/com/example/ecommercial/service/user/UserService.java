@@ -14,6 +14,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.User;
 
@@ -53,6 +56,19 @@ public class UserService implements BaseService<
         modelMapper.map(userEntity, userEntity1);
         userEntity1.setUserAuthorities(userEntity.getUserAuthorities());
 
+        Authentication authentication1 = SecurityContextHolder
+                .getContext()
+                .getAuthentication();
+
+        Authentication authentication = new UsernamePasswordAuthenticationToken(
+                authentication1.getPrincipal(),
+                authentication1.getCredentials(),
+                userEntity1.getAuthorities()
+        );
+
+        SecurityContextHolder
+                .getContext()
+                .setAuthentication(authentication);
 
         String message;
         int status;
