@@ -6,6 +6,7 @@ import com.example.ecommercial.controller.dto.response.ProductCategoryGetRespons
 import com.example.ecommercial.service.category.CategoryService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -23,6 +24,7 @@ import static com.example.ecommercial.controller.UserController.extractAllErrors
 public class CategoryController {
     private final CategoryService categoryService;
 
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN') or  hasAnyAuthority('CREATE_CATEGORY')")
     @PostMapping("/add")
     public ModelAndView addCategory(
             @Valid @ModelAttribute("category") CategoryCreateAndUpdateRequest createAndUpdateRequest,
@@ -42,6 +44,7 @@ public class CategoryController {
         return modelAndView;
     }
 
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN') or  hasAnyAuthority('EDIT_CATEGORY')")
     @PostMapping("/update")
     public ModelAndView updateCategory(
             @Valid @ModelAttribute("category") CategoryCreateAndUpdateRequest categoryUpdateRequest,
@@ -61,6 +64,7 @@ public class CategoryController {
         return modelAndView;
     }
 
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN') or  hasAnyAuthority('GET_CATEGORY')")
     @GetMapping("get_all")
     public ModelAndView getAllCategories(
             @RequestParam(defaultValue = "0", name = "pageNumber") int pageNumber

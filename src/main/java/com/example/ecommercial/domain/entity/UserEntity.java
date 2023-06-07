@@ -51,13 +51,13 @@ public class UserEntity extends BaseEntity implements UserDetails {
     @Enumerated(EnumType.STRING)
     private List<UserAuthority> userAuthorities;
 
-    @OneToMany(mappedBy = "users")
+    @OneToMany(mappedBy = "users", fetch = FetchType.LAZY)
     private List<OrderEntity> orderEntities;
 
-    @OneToMany(mappedBy = "users")
+    @OneToMany(mappedBy = "users", fetch = FetchType.LAZY)
     private List<HistoryEntity> historyEntities;
 
-    @OneToMany(mappedBy = "users")
+    @OneToMany(mappedBy = "users", fetch = FetchType.LAZY)
     private List<BasketEntity> basketEntities;
 
     @Override

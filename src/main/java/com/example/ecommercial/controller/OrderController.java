@@ -5,6 +5,7 @@ import com.example.ecommercial.controller.dto.response.BaseResponse;
 import com.example.ecommercial.controller.dto.response.UserOrdersGetResponse;
 import com.example.ecommercial.service.order.OrderService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +21,7 @@ public class OrderController {
     private final OrderService orderService;
     private final ECommercialBot eCommercialBot;
 
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN') or  hasAnyAuthority('GET_ORDER')")
     @GetMapping("/get_all")
     public ModelAndView getAllOrders(
             @RequestParam(defaultValue = "0", name = "pageNumber") int pageNumber
@@ -33,12 +35,11 @@ public class OrderController {
     }
 
 
-
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN') or  hasAnyAuthority('CHANGE_ORDER_STATUS')")
     @PostMapping("/change_status")
     public ModelAndView changeStatus(
             @ModelAttribute("status") String status,
-            @ModelAttribute("orderId") Long orderId,
-            @RequestParam(defaultValue = "0") int page
+            @ModelAttribute("orderId") Long orderId
     ) {
         ModelAndView modelAndView = new ModelAndView("dashboard");
         BaseResponse<List<UserOrdersGetResponse>> response = orderService

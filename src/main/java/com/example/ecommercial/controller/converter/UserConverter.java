@@ -20,7 +20,6 @@ public class UserConverter {
     public UserEntity toUserEntity(UserCreateAndUpdateRequest userCreateAndUpdateRequest){
         UserEntity user = modelMapper.map(userCreateAndUpdateRequest, UserEntity.class);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setUserAuthorities(userCreateAndUpdateRequest.getUserAuthorities());
         return user;
     }
 

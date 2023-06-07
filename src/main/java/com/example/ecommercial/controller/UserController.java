@@ -7,6 +7,7 @@ import com.example.ecommercial.controller.dto.response.UserGetResponse;
 import com.example.ecommercial.service.user.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +23,7 @@ public class UserController {
     private final UserService userService;
     private final UserConverter userConverter;
 
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN') or hasAnyAuthority('CREATE_USER')")
     @PostMapping("/add")
     public ModelAndView addUser(
             @Valid @ModelAttribute ("user") UserCreateAndUpdateRequest userCreateAndUpdateRequest,
@@ -40,6 +42,7 @@ public class UserController {
         return modelAndView;
     }
 
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN') or  hasAnyAuthority('EDIT_USER')")
     @PostMapping("/update")
     public ModelAndView updateUser(
             @Valid @ModelAttribute ("user") UserCreateAndUpdateRequest userUpdateRequest,
@@ -64,6 +67,7 @@ public class UserController {
         return modelAndView;
     }
 
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN') or  hasAnyAuthority('EDIT_USER')")
     @GetMapping("/update-page/{id}")
     public ModelAndView inUpdatePage(@PathVariable("id") Long id){
             ModelAndView modelAndView = new ModelAndView("userUpdatePage");
@@ -72,6 +76,7 @@ public class UserController {
             return modelAndView;
     }
 
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN')")
     @GetMapping("/delete/{id}")
     public ModelAndView delete(
             @PathVariable("id") Long userId
@@ -85,6 +90,7 @@ public class UserController {
         return modelAndView;
     }
 
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN') or  hasAnyAuthority('GET_USER')")
     @GetMapping("/get_all")
     public ModelAndView getAllUsers(
             @RequestParam(name = "pageNumber", defaultValue = "0") int pageNumber
@@ -97,6 +103,7 @@ public class UserController {
         modelAndView.addObject("status", 4);
         return modelAndView;
     }
+
 
     @GetMapping("get_all_bot_users")
     public ModelAndView getALlBotUsers(

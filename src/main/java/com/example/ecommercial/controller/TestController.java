@@ -4,6 +4,7 @@ import com.example.ecommercial.dao.UserDao;
 import com.example.ecommercial.domain.entity.UserEntity;
 import com.example.ecommercial.domain.enums.UserRole;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;

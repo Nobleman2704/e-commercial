@@ -28,23 +28,23 @@
 <div class="row">
     <div class="left-page">
         <h1 class="left-page-h1"><b>G-21</b></h1>
-        <hr class="hr">
 
-        <h3 class="left-page-h3">
+        <hr sec:authorize="hasRole('SUPER_ADMIN') or hasAnyAuthority('GET_CATEGORY')" class="hr">
+        <h3 sec:authorize="hasRole('SUPER_ADMIN') or hasAnyAuthority('GET_CATEGORY')" class="left-page-h3">
             <button class="h3-button">
                 <a href="/category/get_all" class="h3-a">Category</a>
             </button>
         </h3>
-        <hr class="hr">
+        <hr sec:authorize="hasRole('SUPER_ADMIN') or hasAnyAuthority('GET_CATEGORY')" class="hr">
 
-        <h3 class="left-page-h3">
+        <h3 sec:authorize="hasRole('SUPER_ADMIN') or hasAnyAuthority('GET_PRODUCT')" class="left-page-h3">
             <button class="h3-button">
                 <a href="/product/get_all" class="h3-a">Product</a>
             </button>
         </h3>
-        <hr class="hr">
+        <hr sec:authorize="hasRole('SUPER_ADMIN') or hasAnyAuthority('GET_PRODUCT')" class="hr">
 
-        <h3 class="left-page-h3">
+        <h3 sec:authorize="hasRole('SUPER_ADMIN') or hasAnyAuthority('GET_ORDER')" class="left-page-h3">
             <button class="h3-button">
                 <a href="/order/get_all" class="h3-a">Orders</a>
             </button>
@@ -56,10 +56,9 @@
                 <a href="/user/get_all_bot_users" class="h3-a">Bot users</a>
             </button>
         </h3>
-        <hr class="hr">
 
-        <hr sec:authorize="hasRole('SUPER_ADMIN')" class="hr hr2">
-        <h3 sec:authorize="hasRole('SUPER_ADMIN')" class="left-page-h3">
+        <hr sec:authorize="hasRole('SUPER_ADMIN') or hasAnyAuthority('GET_USER')" class="hr hr2">
+        <h3 sec:authorize="hasRole('SUPER_ADMIN') or hasAnyAuthority('GET_USER')" class="left-page-h3">
             <button class="h3-button">
                 <a href="/user/get_all" class="h3-a"> <i class="fa fa-user-circle" aria-hidden="true"></i> Employees</a>
             </button>
@@ -385,7 +384,7 @@
                                 <th class="table-th">Total price</th>
                                 <th class="table-th">Product name</th>
                                 <th class="table-th">Created date</th>
-                                <th class="table-th">Change status</th>
+                                <th sec:authorize="hasAuthority('CHANGE_ORDER_STATUS') or hasRole('SUPER_ADMIN')" class="table-th">Change status</th>
                             </tr>
                             </thead>
 
@@ -395,7 +394,7 @@
                                 <td class="tbody-td" th:text="${order.amount} + 'x' + ${order.totalPrice/order.amount} + '=' + ${order.totalPrice}"></td>
                                 <td class="tbody-td" th:text="${order.products.name}"></td>
                                 <td class="tbody-td" th:text="${order.createdDate}"></td>
-                                <td>
+                                <td sec:authorize="hasAuthority('CHANGE_ORDER_STATUS') or hasRole('SUPER_ADMIN')">
                                     <form style="display: flex; flex-direction: row" action="/order/change_status"
                                           method="post">
                                         <input type="hidden" th:value="${order.id}" name="orderId">
@@ -531,6 +530,10 @@
                                 <label>
                                     <input type="checkbox" name="userAuthorities" value="CREATE_USER">
                                     CREATE_USER
+                                </label><br>
+                                <label>
+                                    <input type="checkbox" name="userAuthorities" value="CHANGE_ORDER_STATUS">
+                                    CHANGE_ORDER_STATUS
                                 </label><br>
                             </div>
                         </div>

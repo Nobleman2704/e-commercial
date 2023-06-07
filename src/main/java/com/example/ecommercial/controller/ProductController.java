@@ -7,6 +7,8 @@ import com.example.ecommercial.service.category.CategoryService;
 import com.example.ecommercial.service.product.ProductService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.AutoConfigureBefore;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -26,14 +28,15 @@ public class ProductController {
     private final ProductService productService;
     private final CategoryService categoryService;
 
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN') or  hasAnyAuthority('CREATE_PRODUCT')")
     @PostMapping("/add")
     public ModelAndView addProduct(
             @Valid @ModelAttribute("product") ProductCreateAndUpdateRequest productCreateRequest,
-            BindingResult bindingResult){
+            BindingResult bindingResult) {
         ModelAndView modelAndView = new ModelAndView("dashboard");
-        if (bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
             modelAndView.addObject("message", extractAllErrors(bindingResult));
-        }else {
+        } else {
             BaseResponse response = productService.save(productCreateRequest);
             modelAndView.addObject("message", response.getMessage());
         }
@@ -45,13 +48,14 @@ public class ProductController {
         return modelAndView;
     }
 
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN') or  hasAnyAuthority('EDIT_PRODUCT')")
     @PostMapping("/update")
     public ModelAndView updateProduct(
-            @Valid @ModelAttribute("product")ProductCreateAndUpdateRequest productUpdateRequest,
+            @Valid @ModelAttribute("product") ProductCreateAndUpdateRequest productUpdateRequest,
             BindingResult bindingResult
-            ){
+    ) {
         ModelAndView modelAndView = new ModelAndView();
-        if (bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
             modelAndView.addObject("message", extractAllErrors(bindingResult));
             modelAndView.addObject("product", productService.getById(productUpdateRequest.getId()).getData());
             modelAndView.setViewName("productUpdatePage");
@@ -69,10 +73,12 @@ public class ProductController {
         return modelAndView;
     }
 
+
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN') or  hasAnyAuthority('GET_PRODUCT')")
     @GetMapping("/get_all")
     public ModelAndView getAllProducts(
             @RequestParam(name = "pageNumber", defaultValue = "0") int pageNumber
-    ){
+    ) {
         ModelAndView modelAndView = new ModelAndView("dashboard");
         BaseResponse<List<ProductGetResponse>> response = productService
                 .getALl(pageNumber);
@@ -92,18 +98,20 @@ public class ProductController {
 //        return modelAndView;
 //    }
 
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN') or  hasAnyAuthority('EDIT_PRODUCT')")
     @GetMapping("/update-page/{id}")
-    public ModelAndView updatePage(@PathVariable("id") Long id){
+    public ModelAndView updatePage(@PathVariable("id") Long id) {
         ModelAndView modelAndView = new ModelAndView("productUpdatePage");
         modelAndView.addObject("product", productService
                 .getById(id).getData());
         return modelAndView;
     }
 
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN') or  hasAnyAuthority('EDIT_PRODUCT')")
     @PostMapping("/add_amount")
     public ModelAndView changeAmount(
             @ModelAttribute("id") Long productId,
-            @ModelAttribute("amount") int amount){
+            @ModelAttribute("amount") int amount) {
         ModelAndView modelAndView = new ModelAndView("dashboard");
         BaseResponse<List<ProductGetResponse>> response = productService
                 .changeProductAmount(productId, amount);
@@ -117,10 +125,11 @@ public class ProductController {
     }
 
 
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN') or  hasAnyAuthority('DELETE_PRODUCT')")
     @GetMapping("/delete/{id}")
     public ModelAndView deleteProduct(
             @PathVariable("id") Long id
-    ){
+    ) {
         BaseResponse response = productService.delete(id);
         ModelAndView modelAndView = new ModelAndView("dashboard");
         modelAndView.addObject("products", productService

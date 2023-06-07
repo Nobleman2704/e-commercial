@@ -51,6 +51,8 @@ public class UserService implements BaseService<
         Long userId = userEntity.getId();
         UserEntity userEntity1 = userDao.findById(userId).get();
         modelMapper.map(userEntity, userEntity1);
+        userEntity1.setUserAuthorities(userEntity.getUserAuthorities());
+
 
         String message;
         int status;

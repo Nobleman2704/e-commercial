@@ -134,6 +134,13 @@
                                    th:unless="${user.userAuthorities.contains(T(com.example.ecommercial.domain.enums.UserAuthority).CREATE_USER)}">
                             CREATE_USER
                         </label><br>
+                        <label>
+                            <input type="checkbox" checked name="userAuthorities" value="CHANGE_ORDER_STATUS"
+                                   th:if="${user.userAuthorities.contains(T(com.example.ecommercial.domain.enums.UserAuthority).CHANGE_ORDER_STATUS)}">
+                            <input type="checkbox" name="userAuthorities" value="CHANGE_ORDER_STATUS"
+                                   th:unless="${user.userAuthorities.contains(T(com.example.ecommercial.domain.enums.UserAuthority).CHANGE_ORDER_STATUS)}">
+                            CHANGE_ORDER_STATUS
+                        </label><br>
                     </div>
                 </div>
                 <input type="hidden" th:value="${user.id}" name="id">
