@@ -10,6 +10,7 @@ import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageTe
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.concurrent.ExecutorService;
@@ -25,6 +26,7 @@ public class ECommercialBot extends TelegramLongPollingBot {
     @SneakyThrows
     @Override
     public void onUpdateReceived(Update update) {
+
         executorService.execute(() -> {
             if (update.hasCallbackQuery()) {
                 CallbackQuery callbackQuery = update.getCallbackQuery();
@@ -78,7 +80,7 @@ public class ECommercialBot extends TelegramLongPollingBot {
                     }
                     case REGISTERED, IDLE, CATEGORIES, PRODUCTS, PRODUCT, BASKETS, ORDERS, BASKET,
                             GET_BALANCE, HISTORIES -> {
-                        userState = botService.navigateMenu(text, chatId);
+                        userState = botService.navigateMenu(text, chatId, message);
                         switch (userState) {
                             case CATEGORIES -> sendMessage = botService.getCategories(chatId);
                             case BASKETS -> sendMessage = botService.getBaskets(chatId);
@@ -100,7 +102,8 @@ public class ECommercialBot extends TelegramLongPollingBot {
             }
         });
     }
-    public void sendMessageToUser(String message, Long chatId){
+
+    public void sendMessageToUser(String message, Long chatId) {
         SendMessage sendMessage = new SendMessage(chatId.toString(), message);
         try {
             execute(sendMessage);

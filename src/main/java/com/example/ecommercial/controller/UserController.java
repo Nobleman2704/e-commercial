@@ -1,6 +1,5 @@
 package com.example.ecommercial.controller;
 
-import com.example.ecommercial.controller.converter.UserConverter;
 import com.example.ecommercial.controller.dto.request.UserCreateAndUpdateRequest;
 import com.example.ecommercial.controller.dto.response.BaseResponse;
 import com.example.ecommercial.controller.dto.response.UserGetResponse;
@@ -21,7 +20,6 @@ import java.util.List;
 @EnableMethodSecurity
 public class UserController {
     private final UserService userService;
-    private final UserConverter userConverter;
 
     @PreAuthorize("hasAnyRole('SUPER_ADMIN') or hasAnyAuthority('CREATE_USER')")
     @PostMapping("/add")
@@ -124,5 +122,4 @@ public class UserController {
                 .forEach(error -> result.append(error.getDefaultMessage()).append("\n"));
         return result.toString();
     }
-
 }

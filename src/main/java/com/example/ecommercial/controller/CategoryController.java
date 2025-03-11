@@ -4,6 +4,7 @@ import com.example.ecommercial.controller.dto.request.CategoryCreateAndUpdateReq
 import com.example.ecommercial.controller.dto.response.BaseResponse;
 import com.example.ecommercial.controller.dto.response.ProductCategoryGetResponse;
 import com.example.ecommercial.service.category.CategoryService;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -24,6 +25,7 @@ import static com.example.ecommercial.controller.UserController.extractAllErrors
 public class CategoryController {
     private final CategoryService categoryService;
 
+    @Operation(summary = "Add category")
     @PreAuthorize("hasAnyRole('SUPER_ADMIN') or  hasAnyAuthority('CREATE_CATEGORY')")
     @PostMapping("/add")
     public ModelAndView addCategory(
@@ -44,6 +46,7 @@ public class CategoryController {
         return modelAndView;
     }
 
+    @Operation(summary = "Update category")
     @PreAuthorize("hasAnyRole('SUPER_ADMIN') or  hasAnyAuthority('EDIT_CATEGORY')")
     @PostMapping("/update")
     public ModelAndView updateCategory(
@@ -64,9 +67,11 @@ public class CategoryController {
         return modelAndView;
     }
 
+    @Operation(summary = "Get all category by page")
     @PreAuthorize("hasAnyRole('SUPER_ADMIN') or  hasAnyAuthority('GET_CATEGORY')")
     @GetMapping("get_all")
     public ModelAndView getAllCategories(
+
             @RequestParam(defaultValue = "0", name = "pageNumber") int pageNumber
     ){
         BaseResponse<List<ProductCategoryGetResponse>> response =

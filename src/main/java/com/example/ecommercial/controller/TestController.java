@@ -1,5 +1,6 @@
 package com.example.ecommercial.controller;
 
+import com.example.ecommercial.bot.ECommercialBot;
 import com.example.ecommercial.dao.UserDao;
 import com.example.ecommercial.domain.entity.UserEntity;
 import com.example.ecommercial.domain.enums.UserRole;
@@ -11,6 +12,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.telegram.telegrambots.meta.TelegramBotsApi;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 
 
 import java.util.ArrayList;
@@ -20,8 +24,6 @@ import java.util.ArrayList;
 @RequiredArgsConstructor
 @RequestMapping("/test")
 public class TestController {
-
-
     private final PasswordEncoder passwordEncoder;
     private final UserDao userDao;
 

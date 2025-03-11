@@ -5,6 +5,7 @@ import com.example.ecommercial.controller.dto.response.BaseResponse;
 import com.example.ecommercial.controller.dto.response.ProductGetResponse;
 import com.example.ecommercial.service.category.CategoryService;
 import com.example.ecommercial.service.product.ProductService;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
@@ -28,6 +29,7 @@ public class ProductController {
     private final ProductService productService;
     private final CategoryService categoryService;
 
+    @Operation(summary = "Add product")
     @PreAuthorize("hasAnyRole('SUPER_ADMIN') or  hasAnyAuthority('CREATE_PRODUCT')")
     @PostMapping("/add")
     public ModelAndView addProduct(
@@ -48,6 +50,7 @@ public class ProductController {
         return modelAndView;
     }
 
+    @Operation(summary = "Update product")
     @PreAuthorize("hasAnyRole('SUPER_ADMIN') or  hasAnyAuthority('EDIT_PRODUCT')")
     @PostMapping("/update")
     public ModelAndView updateProduct(
@@ -73,7 +76,7 @@ public class ProductController {
         return modelAndView;
     }
 
-
+    @Operation(summary = "Get all products by page")
     @PreAuthorize("hasAnyRole('SUPER_ADMIN') or  hasAnyAuthority('GET_PRODUCT')")
     @GetMapping("/get_all")
     public ModelAndView getAllProducts(
@@ -98,6 +101,7 @@ public class ProductController {
 //        return modelAndView;
 //    }
 
+    @Operation(summary = "Update page")
     @PreAuthorize("hasAnyRole('SUPER_ADMIN') or  hasAnyAuthority('EDIT_PRODUCT')")
     @GetMapping("/update-page/{id}")
     public ModelAndView updatePage(@PathVariable("id") Long id) {
@@ -107,6 +111,7 @@ public class ProductController {
         return modelAndView;
     }
 
+    @Operation(summary = "Update product amount")
     @PreAuthorize("hasAnyRole('SUPER_ADMIN') or  hasAnyAuthority('EDIT_PRODUCT')")
     @PostMapping("/add_amount")
     public ModelAndView changeAmount(
@@ -124,7 +129,9 @@ public class ProductController {
         return modelAndView;
     }
 
-
+    @Operation(summary = "Delete product",
+    tags = "product"
+    )
     @PreAuthorize("hasAnyRole('SUPER_ADMIN') or  hasAnyAuthority('DELETE_PRODUCT')")
     @GetMapping("/delete/{id}")
     public ModelAndView deleteProduct(

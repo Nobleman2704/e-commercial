@@ -25,7 +25,9 @@ public class SecurityConfiguration {
     private final UserDetailsService userDetailsService;
     private final String[] WHITE_LIST = {
             "/test/add",
-            "/"
+            "/swagger-ui/**",
+            "/swagger-ui.html",
+            "/swagger-ui-custom.html"
     };
 
     @SneakyThrows

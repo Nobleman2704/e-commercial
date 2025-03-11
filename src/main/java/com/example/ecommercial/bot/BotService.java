@@ -10,12 +10,16 @@ import com.example.ecommercial.service.order.OrderService;
 import com.example.ecommercial.service.product.ProductService;
 import com.example.ecommercial.service.user.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
+import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.User;
 
 import java.util.List;
+
+import static com.example.ecommercial.bot.ReplyKeyboardService.*;
 
 @Service
 @RequiredArgsConstructor
@@ -24,7 +28,7 @@ public class BotService {
     private final UserService userService;
     private final ReplyKeyboardService keyboardService;
     private final CategoryService categoryService;
-    private final ReplyKeyboardService replyKeyboardService;
+    public final ReplyKeyboardService replyKeyboardService;
     private final ProductService productService;
     private final BasketService basketService;
     private final OrderService orderService;
@@ -52,18 +56,19 @@ public class BotService {
         return sendMessage;
     }
 
-
-    public UserState navigateMenu(String request, Long chatId) {
+    @SneakyThrows
+    public UserState navigateMenu(String request, Long chatId, Message message) {
         UserState userState;
         switch (request) {
-            case "📋 Categories" -> userState = UserState.CATEGORIES;
-            case "🧺 Basket" -> userState = UserState.BASKETS;
-            case "📪 Orders" -> userState = UserState.ORDERS;
-            case "🗒️ History" -> userState = UserState.HISTORIES;
-            case "💰️ Get balance" -> userState = UserState.GET_BALANCE;
-            case "💸 Add balance" -> userState = UserState.ADD_BALANCE;
+            case CATEGORIES -> userState = UserState.CATEGORIES;
+            case BASKETS -> userState = UserState.BASKETS;
+            case ORDERS -> userState = UserState.ORDERS;
+            case HISTORIES -> userState = UserState.HISTORIES;
+            case GET_BALANCE -> userState = UserState.GET_BALANCE;
+            case ADD_BALANCE -> userState = UserState.ADD_BALANCE;
             default -> userState = UserState.IDLE;
         }
+
         userService.updateState(chatId, userState);
         return userState;
     }
@@ -73,9 +78,9 @@ public class BotService {
         sendMessage.setChatId(chatId);
         BaseResponse<List<ProductCategoryGetResponse>> response =
                 categoryService.getALl();
-        if (response.getStatus()!=200){
+        if (response.getStatus() != 200) {
             sendMessage.setText("There is no categories");
-        }else {
+        } else {
             List<ProductCategoryGetResponse> categories = response.getData();
             sendMessage.setReplyMarkup(replyKeyboardService
                     .parseCategoriesIntoInlineKeyboardMarkup(categories));
@@ -83,15 +88,16 @@ public class BotService {
         }
         return sendMessage;
     }
+
     public SendMessage getBaskets(Long chatId) {
         SendMessage message = new SendMessage();
         message.setChatId(chatId.toString());
         BaseResponse<List<BasketGetResponse>> response = basketService
                 .getUserBaskets(chatId);
 
-        if (response.getStatus()!=200){
+        if (response.getStatus() != 200) {
             message.setText("Your basket is empty");
-        }else {
+        } else {
             userService.updateState(chatId, UserState.BASKETS);
             List<BasketGetResponse> basket = response.getData();
             message.setText("basket");
@@ -105,10 +111,10 @@ public class BotService {
         SendMessage message = new SendMessage();
         BaseResponse<List<HistoryGetResponse>> response = historyService
                 .findUserHistories(chatId);
-        if (response.getStatus()!=200){
+        if (response.getStatus() != 200) {
             message = getMenu(chatId);
             message.setText("Your history is empty");
-        }else {
+        } else {
             message.setChatId(chatId);
             message.setText(historyToString(response.getData()));
         }
@@ -125,13 +131,13 @@ public class BotService {
 
     private String getHistoryInfo(HistoryGetResponse history) {
         return String.format("""
-                Name: %s
-                Description: %s
-                Type: %s
-                Total price: %s
-                Amount: %s
-                Ordered date: %s
-                *******************************************""",
+                        Name: %s
+                        Description: %s
+                        Type: %s
+                        Total price: %s
+                        Amount: %s
+                        Ordered date: %s
+                        *******************************************""",
                 history.getName(), history.getDescription(),
                 history.getCategoryName(), history.getTotalPrice(),
                 history.getAmount(), history.getCreatedDate());
@@ -144,9 +150,9 @@ public class BotService {
         sendMessage.setText("products");
         BaseResponse<List<ProductGetResponse>> response =
                 productService.getProductsByCategoryId(categoryId);
-        if (response.getStatus()!=200){
+        if (response.getStatus() != 200) {
             sendMessage.setText("There is no products by this category");
-        }else {
+        } else {
             List<ProductGetResponse> products = response.getData();
             userService.updateState(chatId, UserState.PRODUCTS);
             sendMessage.setReplyMarkup(replyKeyboardService
@@ -165,15 +171,15 @@ public class BotService {
         return sendMessage;
     }
 
-    private String getProductInfo(ProductGetResponse product){
+    private String getProductInfo(ProductGetResponse product) {
         return String.format("""
-                Name: %s
-                Description: %s
-                Price: %s
-                Total mount: %s
-                Type: %s
-                
-                Press any numbers below 👇🏻""", product.getName(), product.getDescription(),
+                        Name: %s
+                        Description: %s
+                        Price: %s
+                        Total mount: %s
+                        Type: %s
+                        
+                        Press any numbers below 👇🏻""", product.getName(), product.getDescription(),
                 product.getPrice(), product.getAmount(), product.getCategories().getName());
     }
 
@@ -206,16 +212,16 @@ public class BotService {
     private String getBasketInfo(BasketGetResponse basket) {
         ProductEntity product = basket.getProducts();
         return String.format("""
-                Name: %s
-                Description: %s
-                Price: %s
-                Amount: %s
-                Type: %s
-                Total price: %s
-                
-                Press any numbers below 👇🏻""", product.getName(), product.getDescription(),
+                        Name: %s
+                        Description: %s
+                        Price: %s
+                        Amount: %s
+                        Type: %s
+                        Total price: %s
+                        
+                        Press any numbers below 👇🏻""", product.getName(), product.getDescription(),
                 product.getPrice(), basket.getProductAmount(), product.getCategories().getName(),
-                product.getPrice()*basket.getProductAmount());
+                product.getPrice() * basket.getProductAmount());
     }
 
     public EditMessageText modifyBasket(String data, Long chatId, Integer messageId) {
@@ -226,15 +232,15 @@ public class BotService {
         Long basketId = Long.valueOf(split[1]);
         message.setMessageId(messageId);
 
-        if (status==0){
+        if (status == 0) {
             basketService.delete(basketId);
             message.setText("Basket has been deleted");
-        } else if (status==2) {
+        } else if (status == 2) {
             BaseResponse<BasketGetResponse> response = orderService
                     .orderProduct(basketId);
-            if (response.getStatus()==200){
+            if (response.getStatus() == 200) {
                 message.setText(response.getMessage());
-            }else {
+            } else {
                 BasketGetResponse basket = response.getData();
                 String basketInfo = getBasketInfo(basket) + "  " + response.getMessage();
                 message.setText(basketInfo);
@@ -259,10 +265,10 @@ public class BotService {
         SendMessage message = new SendMessage();
         BaseResponse<List<OrderGetResponse>> response = orderService
                 .findUserOrders(chatId);
-        if (response.getStatus()!=200){
+        if (response.getStatus() != 200) {
             message = getMenu(chatId);
             message.setText("Your order is empty");
-        }else {
+        } else {
             message.setText("orders");
             message.setChatId(chatId);
             message.setReplyMarkup(replyKeyboardService

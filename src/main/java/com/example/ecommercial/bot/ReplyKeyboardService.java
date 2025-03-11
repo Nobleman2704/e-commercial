@@ -6,6 +6,7 @@ import com.example.ecommercial.controller.dto.response.ProductCategoryGetRespons
 import com.example.ecommercial.controller.dto.response.ProductGetResponse;
 import com.example.ecommercial.domain.entity.ProductEntity;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
@@ -14,13 +15,25 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 
+import javax.crypto.spec.SecretKeySpec;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.LinkedList;
 import java.util.List;
+
+import javax.crypto.Cipher;
+
 
 @Service
 @RequiredArgsConstructor
 public class ReplyKeyboardService {
+    public static final String CATEGORIES = "📋 Categories";
+    public static final String ORDERS = "📪 Orders";
+    public static final String BASKETS = "🧺 Basket";
+    public static final String HISTORIES = "🗒️ History";
+    public static final String ADD_BALANCE = "💸 Add balance";
+    public static final String GET_BALANCE = "💰 Get balance";
 
     public ReplyKeyboard requestContact() {
         ReplyKeyboardMarkup markup = new ReplyKeyboardMarkup();
@@ -33,24 +46,37 @@ public class ReplyKeyboardService {
         return markup;
     }
 
+    @SneakyThrows
     public ReplyKeyboardMarkup mainMenu() {
         ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
         replyKeyboardMarkup.setResizeKeyboard(true);
         List<KeyboardRow> keyboardRows = new ArrayList<>();
-
         KeyboardRow row = new KeyboardRow();
-        row.add("📋 Categories");
-        row.add("🧺 Basket");
+        KeyboardButton button = new KeyboardButton();
+        button.setText(CATEGORIES);
+        button.setRequestContact(false);
+        row.add(button);
+        button = new KeyboardButton();
+        button.setText(BASKETS);
+        row.add(button);
         keyboardRows.add(row);
 
         row = new KeyboardRow();
-        row.add("📪 Orders");
-        row.add("🗒️ History");
+        button = new KeyboardButton();
+        button.setText(ORDERS);
+        row.add(button);
+        button = new KeyboardButton();
+        button.setText(HISTORIES);
+        row.add(button);
         keyboardRows.add(row);
 
         row = new KeyboardRow();
-        row.add("💰️ Get balance");
-        row.add("💸 Add balance");
+        button = new KeyboardButton();
+        button.setText(GET_BALANCE);
+        row.add(button);
+        button = new KeyboardButton();
+        button.setText(ADD_BALANCE);
+        row.add(button);
         keyboardRows.add(row);
 
         replyKeyboardMarkup.setKeyboard(keyboardRows);
